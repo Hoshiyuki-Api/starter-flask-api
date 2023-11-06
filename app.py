@@ -8,6 +8,11 @@ app=Flask(__name__)
 api=Api(app)
 app.config["SECRET_KEY"] = "inirahasianegara"
 
+@app.route('/')
+def redirect_to_home_index():
+    # Redirect to home/index.html
+    return redirect(url_for('static', filename='home/index.html'))
+
 def kunci_halaman(f):
     @wraps(f)
     def decorator(*args, **kwargs):
