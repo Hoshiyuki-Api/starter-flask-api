@@ -74,6 +74,6 @@ api.add_resource(LoginUser, "/apikey/login", methods=["POST"])
 api.add_resource(Dashboard, "/apikey/dashboard", methods=["GET"])
 api.add_resource(HomePage, "/apikey", methods=["GET"])
 api.add_resource(RandomUa, "/api/user-agent", methods=["GET"])
-api.add_resource(RandomUa, "/page", methods=["GET"])
+api.add_resource(Kontol, "/page", methods=["GET"])
 if __name__ == "__main__":
     app.run(debug=True)
