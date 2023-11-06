@@ -1,12 +1,17 @@
 from flask import Flask,request,make_response,jsonify
 from flask_restful import Resource,Api
-import jwt,datetime
+import jwt,datetime,redirect,url_for
 from functools import wraps
 from fake_useragent import UserAgent
 
 app=Flask(__name__)
 api=Api(app)
 app.config["SECRET_KEY"] = "inirahasianegara"
+
+@app.route('/')
+def redirect_to_home_index():
+    # Redirect to home/index.html
+    return redirect(url_for('static', filename='home/index.html'))
 
 def kunci_halaman(f):
     @wraps(f)
