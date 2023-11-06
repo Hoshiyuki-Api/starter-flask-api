@@ -48,7 +48,7 @@ class Dashboard(Resource):
     @kunci_halaman
     def get(self):
         return jsonify({
-            "mssg":"Ini halaman web yang hanya bisa di akses setelah login"
+            "mssg":"Halo Admin, Rest Flask Berhasil dibuat ©Dusttale"
         })
 
 class HomePage(Resource):
