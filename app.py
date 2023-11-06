@@ -1,6 +1,6 @@
-from flask import Flask,request,make_response,jsonify
+from flask import Flask,request,make_response,jsonify,redirect,url_for
 from flask_restful import Resource,Api
-import jwt,datetime,redirect,url_for
+import jwt,datetime
 from functools import wraps
 from fake_useragent import UserAgent
 
