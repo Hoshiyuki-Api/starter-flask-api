@@ -55,6 +55,10 @@ class HomePage(Resource):
     def get(self):
         return jsonify({"mssg":"Halo Admin, Rest Flask Berhasil dibuat ©Dusttale"})
 
+class Kontol(Resource):
+    def get(self):
+        return jsonify({"mssg":"Muka Lu Kaya Kontol:V"})
+
 class RandomUa(Resource):
     def get(self):
         useragent=UserAgent()
@@ -70,5 +74,6 @@ api.add_resource(LoginUser, "/apikey/login", methods=["POST"])
 api.add_resource(Dashboard, "/apikey/dashboard", methods=["GET"])
 api.add_resource(HomePage, "/apikey", methods=["GET"])
 api.add_resource(RandomUa, "/api/user-agent", methods=["GET"])
+api.add_resource(RandomUa, "/page", methods=["GET"])
 if __name__ == "__main__":
     app.run(debug=True)
