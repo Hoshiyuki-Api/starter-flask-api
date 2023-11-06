@@ -9,7 +9,7 @@ api=Api(app)
 app.config["SECRET_KEY"] = "inirahasianegara"
 
 @app.route('/')
-def redirect_to_home_index():
+def index():
     # Redirect to home/index.html
     return redirect(url_for('static', filename='home/index.html'))
 
