@@ -53,7 +53,7 @@ class Dashboard(Resource):
 
 class HomePage(Resource):
     def get(self):
-        return jsonify({"mssg":"Ini Adalah halaman public"})
+        return jsonify({"mssg":"Halo Admin, Rest Flask Berhasil dibuat ©Dusttale"})
 
 class RandomUa(Resource):
     def get(self):
