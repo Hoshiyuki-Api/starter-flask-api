@@ -39,7 +39,7 @@ class SpamCall(Resource):
 				"message":f"Gagal Mengirim Call ke {nomor}",
 				"creator":"AmmarBN"
 			})
-@app.route('/api/call-tools', methods=['GET'])
+@app.route('/api/call-tools', methods=['POST'])
 def get(self):
 	nomor=request.args.get("nomor")
 	if not nomor:
