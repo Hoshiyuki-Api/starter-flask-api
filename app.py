@@ -41,7 +41,7 @@ class SpamCall(Resource):
 			})
 
 class SpamCall1(Resource):
-	def post(self):
+	def get(self):
 		nomor=request.args.get("nomor")
 		if not nomor:
 			return ({
