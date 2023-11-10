@@ -43,10 +43,7 @@ class SpamCall(Resource):
 class PinterestDl(Resource):
     def post(self):
 #        url = request.form.get("url")
-        parser = reqparse.RequestParser()
-        parser.add_argument('url', type=str, help='URL parameter is required', required=True)
-        args = parser.parse_args()
-        url = args['url']
+        url = request.form.get('url')
         # Menggunakan .json() untuk mendapatkan respons sebagai objek Python
         post_pinterest = requests.get("https://api.betabotz.org/api/download/pinterest?url=" + url + "&apikey=Kontolodon").json()
         # Memastikan bahwa 'image' ada dalam respons JSON sebelum mencoba mengaksesnya
