@@ -115,6 +115,6 @@ api.add_resource(RandomUa, "/api/user-agent", methods=["GET"])
 api.add_resource(Kontol, "/testing", methods=["GET"])
 api.add_resource(SpamCall, "/api/call", methods=["POST"])
 api.add_resource(SpamCall1, "/api/call-tools", methods=["POST"])
-api.add_resource(PinterestDl, "/api/pinterest", methods=["POST"])
+api.add_resource(PinterestDl, "/api/pinterest", methods=["GET"])
 if __name__ == "__main__":
     app.run(debug=True)
