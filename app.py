@@ -14,6 +14,10 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
+@app.route('/')
+def index_bak():
+	return render_template('index_bak.html')
+
 class SpamCall(Resource):
 	def post(self):
 		nomor=request.form.get("nomor")
