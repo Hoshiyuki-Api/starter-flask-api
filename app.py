@@ -15,6 +15,18 @@ def index():
 	#return render_template('index.html')
 
 @app.route('/')
+def display_image():
+    api_url = 'https://api.lolhuman.xyz/api/random/sfw/waifu?apikey=Ichanzx'
+    
+    # Fetch image URL from the API
+    response = requests.get(api_url)
+    data = response.json()
+    image_url = data.get('result', {}).get('image', '')
+
+    # Render template with the image URL
+    return render_template('waifu/waifu.html', image_url=image_url)
+
+@app.route('/')
 def index_bak():
 	return render_template('index_bak.html')
 
