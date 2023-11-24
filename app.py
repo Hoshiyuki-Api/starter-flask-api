@@ -11,7 +11,7 @@ app.config["SECRET_KEY"] = "inirahasianegara"
 @app.route('/')
 def index():
     # Redirect to home/index.html
-    return redirect(url_for('static', filename='index.html'))
+    return redirect(url_for('templates', filename='index_bak.html'))
 	#return render_template('index.html')
 
 @app.route('/')
