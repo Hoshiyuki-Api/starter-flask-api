@@ -24,7 +24,7 @@ def display_image():
     image_url = data.get('result', {}).get('image', '')
 
     # Render template with the image URL
-    return render_template('waifu/waifu.html', image_url=image_url)
+    return render_template('waifu/waifu.html')
 
 @app.route('/')
 def index_bak():
