@@ -23,29 +23,30 @@ def download_igdl():
             "creator": "AmmarBN",
             "message": "Masukkan parameter URL"
         })
+
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
 
     if 'result' in api_response:
-         result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
+        result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
-         return jsonify({
-             "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
-             "creator": "AmmarBN",
-             "result": [
-                 {
-                     "wm": result_data.get('wm', ''),
-                     "thumbnail": result_data.get('thumbnail', ''),
-                     "url": result_data.get('url', '')
-                 }
-             ]
-             "status": "success"
-         })
-     else:
+        return jsonify({
+            "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
+            "creator": "AmmarBN",
+            "result": [
+                {
+                    "wm": result_data.get('wm', ''),
+                    "thumbnail": result_data.get('thumbnail', ''),
+                    "url": result_data.get('url', '')
+                }
+            ],
+            "status": "success"
+        })
+    else:
         # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
-         return jsonify({
-             "message": "Format respons API tidak valid",
-             "status": "error"
-         })
+        return jsonify({
+            "message": "Format respons API tidak valid",
+            "status": "error"
+        })
 
 @app.route('/')
 def display_image():
