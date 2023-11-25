@@ -1,6 +1,6 @@
 from flask import Flask,request,make_response,jsonify,redirect,url_for,render_template
 from flask_restful import Resource,Api,reqparse
-import jwt,datetime,requests,json,validators
+import jwt,datetime,requests,json,validators,random
 from functools import wraps
 from fake_useragent import UserAgent
 from io import BytesIO
@@ -49,21 +49,27 @@ def download_igdl():
         }), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
 @app.route('/anime/waifu', methods=["GET"])
-def show_waifu():
-    api_url = "https://api.lolhuman.xyz/api/random/sfw/waifu?apikey=Ichanzx"
-    response = requests.get(api_url)
-    
-    if response.status_code == 200:
-        image_url = response.json().get('result', {}).get('image', '')
-        
-        if image_url:
-            image_response = requests.get(image_url)
+def show_random_image():
+    json_url = "https://raw.githubusercontent.com/AmmarrBN/dbbot/main/nsfw/nsfwml.json"
+    try:
+        response = requests.get(json_url)
+        if response.status_code == 200:
+            json_data = response.json()
+            images = json_data.get('images', [])
             
-            if image_response.status_code == 200:
-                image_bytes = BytesIO(image_response.content)
-                return send_file(image_bytes, mimetype='image/jpeg')
-    
-    return "Failed to retrieve and display the image."
+            if images:
+                random_image_url = random.choice(images)
+                image_response = requests.get(random_image_url)
+                
+                if image_response.status_code == 200:
+                    image_bytes = image_response.content
+                    return send_file(BytesIO(image_bytes), mimetype='image/jpeg')
+        
+        return jsonify({"error": "Failed to retrieve and display the image."}), 500
+
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+		
 
 @app.route('/')
 def index_bak():
