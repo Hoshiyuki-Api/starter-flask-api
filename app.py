@@ -25,8 +25,6 @@ def download_igdl():
         })
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
-
-    # Pastikan bahwa respons dari API memiliki kunci 'result'
     if 'result' in api_response:
         result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
