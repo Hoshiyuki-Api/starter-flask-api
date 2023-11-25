@@ -34,7 +34,6 @@ def download_igdl():
             "creator": "AmmarBN",
             "result": [
                 {
-                    "wm": result_data.get('wm', ''),
                     "thumbnail": result_data.get('thumbnail', ''),
                     "url": result_data.get('url', '')
                 }
