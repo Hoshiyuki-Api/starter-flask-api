@@ -20,7 +20,7 @@ def download_igdl():
     if not url:
         return jsonify({
             "status": "error",
-            "code": 404
+            "code": 404,
             "message": "Masukkan Url"
         })
     api_response = requests.get("https://aemt.me/download/igdl?url=" + url).json()
