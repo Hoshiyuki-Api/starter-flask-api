@@ -14,38 +14,40 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
-@app.route('/download/igdl')
-def digdl():
+@app.route('/download/igdl', methods=['GET'])
+def download_igdl():
     url = request.args.get('url')
     if not url:
         return jsonify({
             "status": "error",
             "code": 404,
-            "message": "Masukkan Url"
+            "message": "Masukkan URL"
         })
-    api_response = requests.get("https://aemt.me/download/igdl?url=" + url).json()
-        # Pastikan bahwa respons dari API memiliki kunci 'result'
-     if 'result' in api_response:
-          result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
-          return jsonify({
-              "status": "success",
-              "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
-              "creator": "AmmarBN",
-              "result": [
-                  {
-                      "wm": result_data.get('wm', ''),
-                      "thumbnail": result_data.get('thumbnail', ''),
-                      "url": result_data.get('url', '')
-                  }
-              ]
-          })
-     else:
-            # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
-          return jsonify({
-              "status": "error",
-              "message": "Invalid API response format"
-          })
+    api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
+
+    # Pastikan bahwa respons dari API memiliki kunci 'result'
+    if 'result' in api_response:
+        result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
+
+        return jsonify({
+            "status": "success",
+            "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
+            "creator": "AmmarBN",
+            "result": [
+                {
+                    "wm": result_data.get('wm', ''),
+                    "thumbnail": result_data.get('thumbnail', ''),
+                    "url": result_data.get('url', '')
+                }
+            ]
+        })
+    else:
+        # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
+        return jsonify({
+            "status": "error",
+            "message": "Format respons API tidak valid"
+        })
 
 @app.route('/')
 def display_image():
