@@ -17,15 +17,15 @@ def index():
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
     url = request.args.get('url')
-    if not url:
+    if not url or not validators.url(url):
         return jsonify({
-            "code": 404,
+            "code": 400,
             "creator": "AmmarBN",
-            "message": "Masukkan parameter URL"
-        })
+            "message": "URL tidak valid",
+            "status": "error"
+        }), 400
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
-
     if 'result' in api_response:
         result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
@@ -34,18 +34,19 @@ def download_igdl():
             "creator": "AmmarBN",
             "result": [
                 {
+                    "wm": result_data.get('wm', ''),
                     "thumbnail": result_data.get('thumbnail', ''),
                     "url": result_data.get('url', '')
                 }
             ],
             "status": "success"
-        })
+        }), 200, {'Content-Type': 'application/json; charset=utf-8'}
     else:
         # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
         return jsonify({
             "message": "Format respons API tidak valid",
             "status": "error"
-        })
+        }), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
 @app.route('/')
 def display_image():
