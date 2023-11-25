@@ -50,14 +50,13 @@ def download_igdl():
 
 @app.route('/anime/waifu', methods=["GET"])
 def show_random_image():
-    json_url = "https://raw.githubusercontent.com/AmmarrBN/dbbot/main/nsfw/nsfwml.json"
     try:
         response = requests.get(json_url)
         if response.status_code == 200:
             json_data = response.json()
             images = json_data.get('images', [])
             
-            if images:
+            if images and isinstance(images, list):
                 random_image_url = random.choice(images)
                 image_response = requests.get(random_image_url)
                 
@@ -69,7 +68,6 @@ def show_random_image():
 
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-		
 
 @app.route('/')
 def index_bak():
