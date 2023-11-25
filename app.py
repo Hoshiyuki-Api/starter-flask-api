@@ -14,8 +14,8 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
-@app.route('/download/igdl', methods=['GET'])
-def download_igdl():
+@app.route('/download/igdl'
+def digdl():
     url = request.args.get('url')
     if not url:
         return jsonify({
