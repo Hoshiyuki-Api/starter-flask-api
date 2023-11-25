@@ -17,13 +17,12 @@ def index():
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
     url = request.args.get('url')
-    if not url or not validators.url(url):
+    if not url:
         return jsonify({
-            "code": 400,
+            "code": 404,
             "creator": "AmmarBN",
-            "message": "URL tidak valid",
-            "status": "error"
-        }), 400
+            "message": "Masukkan parameter URL"
+        })
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
     if 'result' in api_response:
