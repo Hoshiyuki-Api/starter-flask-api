@@ -21,10 +21,10 @@ def download_igdl():
         return jsonify({
             "code": 404,
             "creator": "AmmarBN"
-            "message": "Masukkan URL",
-            "status": "error"
+            "message": "Masukkan parameter URL"
         })
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
+    
     if 'result' in api_response:
         result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
