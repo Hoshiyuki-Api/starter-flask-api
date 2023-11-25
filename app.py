@@ -3,6 +3,7 @@ from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators
 from functools import wraps
 from fake_useragent import UserAgent
+from io import BytesIO
 
 app=Flask(__name__)
 api=Api(app)
@@ -47,17 +48,22 @@ def download_igdl():
             "status": "error"
         }), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
-@app.route('/')
-def display_image():
-    api_url = 'https://api.lolhuman.xyz/api/random/sfw/waifu?apikey=Ichanzx'
-    
-    # Fetch image URL from the API
+@app.route('/anime/waifu', methods=["GET"])
+def show_waifu():
+    api_url = "https://api.lolhuman.xyz/api/random/sfw/waifu?apikey=Ichanzx"
     response = requests.get(api_url)
-    data = response.json()
-    image_url = data.get('result', {}).get('image', '')
-
-    # Render template with the image URL
-    return render_template('waifu/waifu.html', image_url=image_url)
+    
+    if response.status_code == 200:
+        image_url = response.json().get('result', {}).get('image', '')
+        
+        if image_url:
+            image_response = requests.get(image_url)
+            
+            if image_response.status_code == 200:
+                image_bytes = BytesIO(image_response.content)
+                return send_file(image_bytes, mimetype='image/jpeg')
+    
+    return "Failed to retrieve and display the image."
 
 @app.route('/')
 def index_bak():
