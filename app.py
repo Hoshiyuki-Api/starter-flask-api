@@ -40,7 +40,7 @@ def download_igdl():
                 }
             ],
             "status": "success"
-        }, indent=2)
+        }, indent=3)
     else:
         # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
         return jsonify({
