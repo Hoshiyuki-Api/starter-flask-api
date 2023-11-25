@@ -19,9 +19,10 @@ def download_igdl():
     url = request.args.get('url')
     if not url:
         return jsonify({
-            "status": "error",
             "code": 404,
-            "message": "Masukkan URL"
+            "creator": "AmmarBN"
+            "message": "Masukkan URL",
+            "status": "error"
         })
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
@@ -29,7 +30,6 @@ def download_igdl():
         result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
 
         return jsonify({
-            "status": "success",
             "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
             "creator": "AmmarBN",
             "result": [
@@ -39,12 +39,13 @@ def download_igdl():
                     "url": result_data.get('url', '')
                 }
             ]
+            "status": "success"
         })
     else:
         # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
         return jsonify({
-            "status": "error",
-            "message": "Format respons API tidak valid"
+            "message": "Format respons API tidak valid",
+            "status": "error"
         })
 
 @app.route('/')
