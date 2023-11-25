@@ -154,7 +154,7 @@ class RandomUa(Resource):
             "creator": "Ammar-Excuted"
         })
 
-api.add_resource(IgDl, '/igdl')
+#api.add_resource(IgDl, '/igdl')
 api.add_resource(HomePage, "/apikey", methods=["GET"])
 api.add_resource(RandomUa, "/api/user-agent", methods=["GET"])
 api.add_resource(Kontol, "/testing", methods=["GET"])
