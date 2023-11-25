@@ -50,6 +50,7 @@ def download_igdl():
 
 @app.route('/anime/waifu', methods=["GET"])
 def show_random_image():
+    json_url = "https://raw.githubusercontent.com/AmmarrBN/dbbot/main/nsfw/nsfwml.json"
     try:
         response = requests.get(json_url)
         if response.status_code == 200:
