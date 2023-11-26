@@ -117,7 +117,7 @@ class PinterestDl(Resource):
 
 @app.route('/api/call', methods=['POST'])
 def spam_call():
-    nomor=request.args.get("nomor")
+    nomor = request.args.get("nomor")
     if not nomor: 
         return jsonify({
             "message": "nomor tidak valid (8xxxx)",
