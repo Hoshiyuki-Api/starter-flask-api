@@ -115,7 +115,7 @@ class PinterestDl(Resource):
                 "mssg": 404
             }
 
-@app.route('/api/call', methods=['POST'])
+@app.route('/api/spam-call', methods=['POST'])
 def spam_call():
 	nomor = request.args.get("nomor")
 	if not nomor:
