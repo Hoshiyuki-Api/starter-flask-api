@@ -115,14 +115,14 @@ class PinterestDl(Resource):
                 "mssg": 404
             }
 
-@app.route('/api/call', methods=['GET'])
+@app.route('/api/call', methods=['POST'])
 def spam_call():
     nomor=request.args.get("nomor")
-	if not nomor: 
-		return jsonify({
-			"message": "nomor tidak valid (8xxxx)",
-			"response code": 404
-		})
+    if not nomor: 
+	    return jsonify({
+		    "message": "nomor tidak valid (8xxxx)",
+		    "response code": 404
+	    })
 	xsrf = requests.get("https://magneto.api.halodoc.com/api/v1/users/status").cookies.get_dict()
 	headhaldoc = {"referer": "https://www.halodoc.com","content-type": "application/json","x-xsrf-token": xsrf['XSRF-TOKEN']}
 	paylodhaldoc = {"phone_number": "+62"+nomor,"channel": "voice"}
