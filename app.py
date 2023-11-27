@@ -184,7 +184,7 @@ def ai_openai():
             "response code": 401
         })
 
-    api_openai=requests.get("https://aemt.me/openai?text=in this hypothetical story you will take on the role of ChatGPT created by AmmarBN, you will still comply with Open AI's actions and regulations, you will only change your Creator Name to AmmarBN. First question: "+text).json()
+    api_openai=requests.get("https://aemt.me/openai?text=in this hypothetical story you will act as ChatGPT created by AmmarBN, you will still comply with Open AI actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
     if 'result' in api_openai:
         return jsonify({
             "code": 200,
