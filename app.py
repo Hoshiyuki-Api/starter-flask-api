@@ -163,7 +163,7 @@ def spam_call():
         })
 
 @app.route('/api/openai', methods=['GET'])
-def spam_call():
+def ai_openai():
     text = request.args.get("text")
     apikey = request.args.get("apikey")
 
