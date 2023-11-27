@@ -123,7 +123,7 @@ def spam_call():
     # Verifikasi ketersediaan nomor
     if not nomor:
         return jsonify({
-            "message": "Nomor tidak valid (8xxxx)",
+            "message": "Masukkan Parameter 'nomor'!!",
             "response code": 404
         })
 
@@ -131,6 +131,7 @@ def spam_call():
     valid_api_keys = ["AmmarBN", "Hoshiyuki"]
     if apikey not in valid_api_keys:
         return jsonify({
+            "Creator": "AmmarBN",
             "message": "API key tidak valid",
             "response code": 401
         })
@@ -159,6 +160,42 @@ def spam_call():
             "creator": "AmmarBN",
             "response": "Failed",
             "message": f"Gagal Mengirim Call ke {nomor}"
+        })
+
+@app.route('/api/openai', methods=['GET'])
+def spam_call():
+    text = request.args.get("text")
+    apikey = request.args.get("apikey")
+
+    # Verifikasi ketersediaan text
+    if not text:
+        return jsonify({
+            "Creator": "AmmarBN",
+            "message": "Masukkan parameter text",
+            "response code": 404
+        })
+
+    # Verifikasi kunci API
+    valid_api_keys = ["AmmarBN","Hoshiyuki"]
+    if apikey not in valid_api_keys:
+        return jsonify({
+            "Creator": "AmmarBN",
+            "message": "API key tidak valid",
+            "response code": 401
+        })
+
+    api_openai=requests.get("https://aemt.me/openai?text="+text).json()
+    if 'result' in api_openai:
+        return jsonify({
+            "code": 200,
+            "creator": "AmmarBN",
+            "result": api_openai['result']
+        })
+    else:
+        return jsonify({
+            "creator": "AmmarBN",
+            "response": "Failed",
+            "message": f"500 insternal server error"
         })
 
 class HomePage(Resource):
