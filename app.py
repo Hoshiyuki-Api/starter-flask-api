@@ -198,6 +198,46 @@ def ai_openai():
             "message": f"500 insternal server error"
         })
 
+@app.route('/api/c-ai', methods=['GET'])
+def c_ai():
+    char = request.args.get("char")
+    text = request.args.get("text")
+    apikey = request.args.get("apikey")
+    if not char:
+        return jsonify({
+            "Creator": "AmmarBN",
+            "message": "Masukkan parameter character",
+            "response code": 404
+        })
+    if not text:
+        return jsonify({
+            "Creator": "AmmarBN",
+            "message": "Masukkan parameter text",
+            "response code": 404
+        })
+    valid_api_keys = ["AmmarBN","Hoshiyuki"]
+    if apikey not in valid_api_keys:
+        return jsonify({
+            "Creator": "AmmarBN",
+            "message": "API key tidak valid",
+            "response code": 401
+        })
+
+    api_cai=requests.get("https://aemt.me/ai/c-ai?prompt="+char+"&text="+text).json()
+    if 'result' in api_cai:
+        return jsonify({
+            "code": 200,
+            "creator": "AmmarBN",
+            "character": char,
+            "result": api_cai['result']
+        })
+    else:
+        return jsonify({
+            "creator": "AmmarBN",
+            "response": "Failed",
+            "message": f"500 insternal server error"
+        })
+
 class HomePage(Resource):
     def get(self):
         return jsonify({"mssg":"Halo Admin, Rest Flask Berhasil dibuat ©Dusttale"})
