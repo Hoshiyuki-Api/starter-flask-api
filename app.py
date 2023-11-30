@@ -431,7 +431,7 @@ def show_kurumi():
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-@app.route('/anime')
+@app.route('/anime', methods=['GET'])
 def index_anime():
         return jsonify({
                "code": 200,
