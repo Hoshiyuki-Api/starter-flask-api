@@ -64,7 +64,7 @@ def show_random_image():
     except Exception as e:
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
-@app.route('/anime/kurumi', methods=["GET"])
+@app.route('/anime/loli', methods=["GET"])
 def show_kurumi():
     json_kurumi = ["https://i.imgur.com/cvqoK7l.jpg",
   "https://i.imgur.com/r1rm2ry.jpg",
