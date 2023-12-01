@@ -48,10 +48,11 @@ def download_igdl():
             "status": "error"
         }), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
+
 @app.route('/download/tiktok', methods=["GET"])
-#https://aemt.me/download/tikdl?url=https%3A%2F%2Fvt.tiktok.com%2FZSNxH4jw7%2F
 def download_tiktok():
     url = request.args.get('url')
+
     if not url:
         return jsonify({
             "code": 404,
@@ -60,26 +61,48 @@ def download_tiktok():
         })
 
     api_response = requests.get(f"https://aemt.me/download/tikdl?url={url}").json()
-    if 'result' in api_response:
-        result_data = api_response['result'][0]['url'][1]  # Ambil data dari indeks pertama dalam list result
 
-        return jsonify({
-            "code": 200,  # Menggunakan get() untuk menghindari KeyErro
+    if api_response.get('status') and api_response.get('code') == 200:
+        result_data = api_response['result']
+        video_info = result_data['info_video']
+        author_info = result_data['author_info']
+        url_info = result_data['url']
+
+        response_data = {
+            "code": 200,
             "creator": "AmmarBN",
-            "result": [
-                {
-                    "audio": result_data.get('audio', ''),
-                    "nowm": result_data.get('nowm', ''),
-                    "wm": result_data.get('wm', '')
+            "status": "success",
+            "data": {
+                "title": video_info['title'],
+                "region": video_info['region'],
+                "thumbnail": video_info['thumbnail'],
+                "duration": video_info['duration'],
+                "metrics": {
+                    "total_download": video_info['total_download'],
+                    "total_play": video_info['total_play'],
+                    "total_share": video_info['total_share'],
+                    "total_comment": video_info['total_comment'],
+                },
+                "author": {
+                    "nickname": author_info['nickname'],
+                    "id": author_info['id'],
+                    "profile": author_info['profile'],
+                },
+                "url": {
+                    "nowm": url_info['nowm'],
+                    "wm": url_info['wm'],
+                    "audio": url_info['audio'],
                 }
-            ],
-            "status": "success"
-        }), 200, {'Content-Type': 'application/json; charset=utf-8'}
+            }
+        }
+
+        return jsonify(response_data), 200, {'Content-Type': 'application/json; charset=utf-8'}
     else:
-        # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
         return jsonify({
-            "message": "Format respons API tidak valid",
-            "status": "error"
+            "error": {
+                "code": 500,
+                "message": "Format respons API tidak valid"
+            }
         }), 500, {'Content-Type': 'application/json; charset=utf-8'}
 
 @app.route('/nsfw/nsfwml', methods=["GET"])
@@ -91,7 +114,7 @@ def show_random_image():
         
         if image_response.status_code == 200:
             image_bytes = image_response.content
-            return send_file(BytesIO(image_bytes), mimetype='image/jpeg')
+            return send_file(BytesIO(image_bytes), mimetype='image/jppeg')
 
         return jsonify({"error": "Failed to retrieve and display the image."}), 500
 
