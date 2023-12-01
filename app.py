@@ -68,7 +68,7 @@ def download_tiktok():
         author_info = result_data['author_info']
         url_info = result_data['url']
 
-        response_data = {
+        return {
             "code": 200,
             "creator": "AmmarBN",
             "status": "success",
@@ -95,8 +95,6 @@ def download_tiktok():
                 }
             }
         }
-
-        return jsonify(response_data, indent=2)
     else:
         return jsonify({
             "error": {
