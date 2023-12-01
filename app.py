@@ -96,7 +96,7 @@ def download_tiktok():
             }
         }
 
-        return jsonify(response_data), 200, {'Content-Type': 'application/json; charset=utf-8'}, 2
+        return jsonify(response_data, indent=2)
     else:
         return jsonify({
             "error": {
