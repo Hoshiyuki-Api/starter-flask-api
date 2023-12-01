@@ -96,7 +96,7 @@ def download_tiktok():
             }
         }]
 
-	return json_data
+	return (json_data)
     else:
         return jsonify({
             "error": {
