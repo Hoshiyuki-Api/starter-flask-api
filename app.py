@@ -68,35 +68,20 @@ def download_tiktok():
         author_info = result_data['author_info']
         url_info = result_data['url']
 
-        json_data = [{
+        json_data = {
             "code": 200,
             "creator": "AmmarBN",
             "status": "success",
             "data": {
-                "title": video_info['title'],
-                "region": video_info['region'],
-                "thumbnail": video_info['thumbnail'],
-                "duration": video_info['duration'],
-                "metrics": {
-                    "total_download": video_info['total_download'],
-                    "total_play": video_info['total_play'],
-                    "total_share": video_info['total_share'],
-                    "total_comment": video_info['total_comment'],
-                },
-                "author": {
-                    "nickname": author_info['nickname'],
-                    "id": author_info['id'],
-                    "profile": author_info['profile'],
-                },
                 "url": {
                     "nowm": url_info['nowm'],
                     "wm": url_info['wm'],
-                    "audio": url_info['audio'],
+                    "audio": url_info['audio']
                 }
             }
-        }]
+        }
 
-	return (json_data)
+	return jsonify(json_data)
     else:
         return jsonify({
             "error": {
