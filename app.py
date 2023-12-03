@@ -7,7 +7,12 @@ from io import BytesIO
 
 app=Flask(__name__)
 api=Api(app)
-app.config["SECRET_KEY"] = "inirahasianegara"
+CORS(app, resources={r"/api/*": {"origins": "http://hoshiyuki-api.rf.gd/"}})
+
+@app.route('/api/data')
+def get_data():
+    # Logika untuk mendapatkan data
+    return {'message': 'Hello, this is your API!'}
 
 @app.route('/')
 def index():
