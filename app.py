@@ -3,6 +3,7 @@ from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators,random
 from functools import wraps
 from fake_useragent import UserAgent
+from flask_cors import CORS
 from io import BytesIO
 
 app=Flask(__name__)
