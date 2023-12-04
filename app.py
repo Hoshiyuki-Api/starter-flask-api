@@ -1,6 +1,7 @@
 from flask import Flask,request,make_response,jsonify,redirect,url_for,render_template,send_file
 from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators,random
+from bs4 import BeautifulSoup
 from functools import wraps
 from fake_useragent import UserAgent
 from flask_cors import CORS
@@ -20,6 +21,46 @@ def index():
     # Redirect to home/index.html
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
+
+def get_proxies():
+    url = 'https://www.sslproxies.org/'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        proxy_list = []
+
+        for row in soup.find_all('tr')[1:]:
+            columns = row.find_all('td')
+
+            if len(columns) >= 2:
+                ip = columns[0].get_text()
+                port = columns[1].get_text()
+                proxy = f'http://{ip}:{port}'
+                proxy_list.append(proxy)
+
+        return proxy_list
+    else:
+        print(f"Failed to fetch proxies. Status Code: {response.status_code}")
+        return []
+
+def get_random_proxies(proxy_list, num_proxies):
+    return random.sample(proxy_list, min(num_proxies, len(proxy_list)))
+
+@app.route('/proxy', methods=['GET'])
+def get_proxies_endpoint():
+    num_proxies = request.args.get('Jum', default=None, type=int)
+
+    if num_proxies is None:
+        return jsonify({"creator": "AmmarBN","error": "Parameter 'Jum' is required."})
+
+    proxies = get_proxies()
+
+    if proxies:
+        random_proxies = get_random_proxies(proxies, num_proxies)
+        return jsonify({"proxies": random_proxies})
+    else:
+        return jsonify({"error": "No proxies available."})
 
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
