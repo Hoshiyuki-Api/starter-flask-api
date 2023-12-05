@@ -49,10 +49,10 @@ def get_random_proxies(proxy_list, num_proxies):
 
 @app.route('/proxy', methods=['GET'])
 def get_proxies_endpoint():
-    num_proxies = request.args.get('Jum', default=None, type=int)
+    num_proxies = request.args.get('jum', default=None, type=int)
 
     if num_proxies is None:
-        return jsonify({"creator": "AmmarBN","error": "Parameter 'Jum' is required."})
+        return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
 
     proxies = get_proxies()
 
@@ -648,14 +648,19 @@ def index_bak():
 	return render_template('index_bak.html')
 
 @app.route('/user-agent', methods=['GET'])
-def generate_random_user_agent():
-    # Create a UserAgent object
-    ua = generate_user_agent()
+def generate_random_user_agents():
+    num_ua = request.args.get('jum', default=None, type=int)
+
+    if num_ua is None:
+        return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
+
+    # Generate a list of random user agents
+    user_agents = [generate_user_agent() for _ in range(num_ua)]
 
     return jsonify({
-             "code": 200,
-             "creator": "AmmarBN",
-             "user_agent": ua
+        "code": 200,
+        "creator": "AmmarBN",
+        "user_agents": user_agents
     })
 
 class SpamCall(Resource):
