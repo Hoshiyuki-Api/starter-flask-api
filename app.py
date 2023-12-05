@@ -3,7 +3,7 @@ from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators,random
 from bs4 import BeautifulSoup
 from functools import wraps
-from fake_useragent import UserAgent
+from user_agent import generate_user_agent
 from flask_cors import CORS
 from io import BytesIO
 
@@ -650,15 +650,12 @@ def index_bak():
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agent():
     # Create a UserAgent object
-    ua = UserAgent()
-
-    # Get a random user agent string
-    random_user_agent = ua.random
+    ua = generate_user_agent()
 
     return jsonify({
              "code": 200,
              "creator": "AmmarBN",
-             "user_agent": random_user_agent
+             "user_agent": ua
     })
 
 class SpamCall(Resource):
