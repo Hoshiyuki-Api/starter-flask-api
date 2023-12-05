@@ -647,6 +647,20 @@ def index_anime():
 def index_bak():
 	return render_template('index_bak.html')
 
+@app.route('/user-agent', methods=['GET'])
+def generate_random_user_agent():
+    # Create a UserAgent object
+    ua = UserAgent()
+
+    # Get a random user agent string
+    random_user_agent = ua.random
+
+    return jsonify({
+             "code": 200,
+             "creator": "AmmarBN",
+             "user_agent": random_user_agent
+    })
+
 class SpamCall(Resource):
 	def post(self):
 		nomor=request.form.get("nomor")
@@ -825,20 +839,11 @@ class Kontol(Resource):
     def get(self):
         return jsonify({"mssg":"Muka Lu Kaya Kontol:V"})
 
-class RandomUa(Resource):
-    def get(self):
-        useragent=UserAgent()
-        ua=useragent.random
-        return ({
-            "user-agent": ua,
-            "response code": 200,
-            "creator": "Ammar-Excuted"
-        })
 
 api.add_resource(HomePage, "/apikey", methods=["GET"])
-api.add_resource(RandomUa, "/api/user-agent", methods=["GET"])
 api.add_resource(Kontol, "/testing", methods=["GET"])
 api.add_resource(SpamCall, "/api/call", methods=["POST"])
 api.add_resource(PinterestDl, "/api/pinterest", methods=["POST"])
 if __name__ == "__main__":
     app.run(debug=True)
+ 
