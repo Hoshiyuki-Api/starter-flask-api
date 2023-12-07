@@ -1,0 +1,4 @@
+{
+    "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
+    "Hoshiyuki": {"type": "unlimited"}
+}
