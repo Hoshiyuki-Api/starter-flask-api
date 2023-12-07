@@ -22,10 +22,20 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
-api_keys = {
-    "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
-    "Hoshiyuki": {"type": "unlimited"}
-}
+api_keys_file = "gpnting.json"  # Nama berkas penyimpanan API keys
+
+def load_api_keys():
+    try:
+        with open(api_keys_file, "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return {}
+
+def save_api_keys(api_keys_data):
+    with open(api_keys_file, "w") as file:
+        json.dump(api_keys_data, file, indent=2)
+
+api_keys = load_api_keys()
 ADMIN_APIKEY = "botol"
 
 def is_admin_apikey(apikey):
@@ -110,7 +120,8 @@ def create_apikey(apikey, apikey_type):
         return jsonify({"error": "Invalid request or insufficient permissions"}), 401
 
     new_apikey = str(uuid.uuid4()).replace("-", "")[:8]
-    api_keys[new_apikey] = {"type": apikey_type}
+    api_keys[new_apikey] = {"type": apikey_type, "created_at": str(datetime.utcnow())}
+    save_api_keys(api_keys)
     
     return jsonify({"message": f"New API key created: {new_apikey}"}), 200
 
@@ -118,9 +129,7 @@ def create_apikey(apikey, apikey_type):
 def create_apikey_route():
     apikey = request.args.get('apikey')
     apikey_type = request.args.get('type', 'limited').lower()
-    
     return create_apikey(apikey, apikey_type)
-
 
 @app.route('/set-type', methods=['POST'])
 def set_apikey_type():
