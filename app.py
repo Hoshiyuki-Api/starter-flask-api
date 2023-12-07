@@ -178,11 +178,11 @@ def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-
     if num_ua is None:
         return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     # Generate a list of random user agents
     user_agents = [generate_user_agent() for _ in range(num_ua)]
@@ -222,11 +222,11 @@ def get_proxies_endpoint():
     num_proxies = request.args.get('jum', default=None, type=int)
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-
     if num_proxies is None:
         return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     proxies = get_proxies()
 
@@ -278,8 +278,6 @@ def download_igdl():
 def download_tiktok():
     url = request.args.get('url')
     apikey = request.args.get('apikey')
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     if not url:
         return jsonify({
@@ -287,6 +285,9 @@ def download_tiktok():
             "creator": "AmmarBN",
             "message": "Masukkan parameter URL"
         })
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_response = requests.get(f"https://aemt.me/download/tikdl?url={url}").json()
 
@@ -880,15 +881,14 @@ def spam_call():
     nomor = request.args.get("nomor")
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-    # Verifikasi ketersediaan nomor
     if not nomor:
         return jsonify({
             "message": "Masukkan Parameter 'nomor'!!",
             "response code": 404
         })
 
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
     # Verifikasi kunci API
 
     xsrf = requests.get("https://magneto.api.halodoc.com/api/v1/users/status").cookies.get_dict()
@@ -922,9 +922,6 @@ def ai_openai():
     text = request.args.get("text")
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-
     # Verifikasi ketersediaan text
     if not text:
         return jsonify({
@@ -932,6 +929,9 @@ def ai_openai():
             "message": "Masukkan parameter text",
             "response code": 404
         })
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_openai=requests.get("https://aemt.me/openai?text=in this hypothetical story you will act as Hoshiyuki-AI created by AmmarBN, you will still comply with applicable actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
     if 'result' in api_openai:
@@ -953,9 +953,6 @@ def c_ai():
     text = request.args.get("text")
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-
     if not char:
         return jsonify({
             "Creator": "AmmarBN",
@@ -968,6 +965,9 @@ def c_ai():
             "message": "Masukkan parameter text",
             "response code": 404
         })
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_cai=requests.get("https://aemt.me/ai/c-ai?prompt="+char+"&text="+text).json()
     if 'result' in api_cai:
