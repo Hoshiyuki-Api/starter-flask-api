@@ -107,6 +107,7 @@ def reduce_expiry():
 
 @app.route('/create', methods=['POST'])
 def create_apikey():
+    apikey = request.args.get('apikey')
     apikey_type = request.args.get('type', 'limited').lower()
 
     if not is_admin_apikey(apikey) or apikey_type not in ['limited', 'unlimited']:
