@@ -58,14 +58,19 @@ def check_expiry():
 
     if api_keys[apikey]["type"] == "limited":
         expiry_date = api_keys[apikey]["expiry_date"]
-        remaining_time = expiry_date - datetime.utcnow()
-        remaining_days = remaining_time.days
-        remaining_hours, remainder = divmod(remaining_time.seconds, 3600)
-        remaining_minutes, _ = divmod(remainder, 60)
+        current_time = datetime.utcnow()
 
-        return jsonify({
-            "message": f"API key will expire in {remaining_days} days, {remaining_hours} hours, and {remaining_minutes} minutes"
-        }), 200
+        if current_time < expiry_date:
+            remaining_time = expiry_date - current_time
+            remaining_days = remaining_time.days
+            remaining_hours, remainder = divmod(remaining_time.seconds, 3600)
+            remaining_minutes, _ = divmod(remainder, 60)
+
+            return jsonify({
+                "message": f"API key will expire in {remaining_days} days, {remaining_hours} hours, and {remaining_minutes} minutes"
+            }), 200
+        else:
+            return jsonify({"message": "API key has been expired"}), 200
     else:
         return jsonify({"message": "Unlimited API key"}), 200
 
