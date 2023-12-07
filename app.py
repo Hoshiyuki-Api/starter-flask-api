@@ -23,10 +23,8 @@ def index():
 	#return render_template('index.html')
 
 api_keys = {
-    "AmmarBN": {"key": ''.join(random.choices(string.ascii_letters + string.digits, k=32)),
-                "expiry": datetime.now() + timedelta(days=3)},
-    "Hoshiyuki": {"key": ''.join(random.choices(string.ascii_letters + string.digits, k=32)),
-                  "expiry": None}
+    "AmmarBN": {"expiry": datetime.now() + timedelta(days=3), "type": "limited"},
+    "Hoshiyuki": {"expiry": None, "type": "unlimited"}
 }
 
 admin_key = "admin_key"
