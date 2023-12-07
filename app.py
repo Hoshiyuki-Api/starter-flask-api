@@ -62,6 +62,43 @@ def get_proxies_endpoint():
     else:
         return jsonify({"error": "No proxies available."})
 
+@app.route('/download/ytdl', methods=['GET'])
+def youtube_downloader():
+    try:
+        youtube_url = request.args.get('url')
+
+        # Check if the 'url' parameter is provided
+        if not youtube_url:
+            return jsonify({"status": False, "error": "Parameter 'url' is required"})
+
+        api_url = f'https://aemt.me/download/ytdl?url={youtube_url}'
+        
+        # Making request to the provided API
+        response = requests.get(api_url)
+        data = response.json()
+
+        if data.get("status") and data.get("result"):
+            result_info = data["result"]
+
+            # Extracting relevant information
+            quality = result_info.get("size")
+            video_link = result_info.get("link")
+            mp3_link = result_info.get("mp3")
+
+            result = {
+                "creator": "AmmarBN",
+                "quality": quality,
+                "video_link": video_link,
+                "mp3_link": mp3_link
+            }
+
+            return jsonify({"status": True, "result": result})
+
+        return jsonify({"status": False, "error": "Invalid response format"})
+
+    except Exception as e:
+        return jsonify({"status": False, "error": str(e)})
+
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
     url = request.args.get('url')
@@ -848,4 +885,3 @@ api.add_resource(SpamCall, "/api/call", methods=["POST"])
 api.add_resource(PinterestDl, "/api/pinterest", methods=["POST"])
 if __name__ == "__main__":
     app.run(debug=True)
- 
