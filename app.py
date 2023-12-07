@@ -26,6 +26,8 @@ api_keys = {
     "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
     "Hoshiyuki": {"type": "unlimited"}
 }
+ADMIN_APIKEY = "botol"
+
 def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
@@ -58,6 +60,60 @@ def check_expiry():
         }), 200
     else:
         return jsonify({"message": "Unlimited API key"}), 200
+
+@app.route('/extend', methods=['POST'])
+def extend_expiry():
+    apikey = request.args.get('apikey')
+    days_add = int(request.args.get('day_add', 0))
+
+    if not apikey or not days_add or not is_admin_apikey(apikey):
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    if apikey in api_keys and api_keys[apikey]["type"] == "limited":
+        api_keys[apikey]["expiry_date"] += timedelta(days=days_add)
+        return jsonify({"message": f"API key '{apikey}' extended by {days_add} days"}), 200
+    else:
+        return jsonify({"error": "Invalid API key or not a limited key"}), 400
+
+@app.route('/reduce', methods=['POST'])
+def reduce_expiry():
+    apikey = request.args.get('apikey')
+    days_reduce = int(request.args.get('days_reduce', 0))
+
+    if not apikey or not days_reduce or not is_admin_apikey(apikey):
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    if apikey in api_keys and api_keys[apikey]["type"] == "limited":
+        api_keys[apikey]["expiry_date"] -= timedelta(days=days_reduce)
+        return jsonify({"message": f"API key '{apikey}' reduced by {days_reduce} days"}), 200
+    else:
+        return jsonify({"error": "Invalid API key or not a limited key"}), 400
+
+@app.route('/create', methods=['POST'])
+def create_apikey():
+    apikey_type = request.args.get('type', 'limited').lower()
+
+    if not is_admin_apikey(apikey) or apikey_type not in ['limited', 'unlimited']:
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    new_apikey = generate_apikey(apikey_type)
+    return jsonify({"message": f"New API key created: {new_apikey}"}), 200
+
+@app.route('/set-type', methods=['POST'])
+def set_apikey_type():
+    apikey = request.args.get('apikey')
+    new_type = request.args.get('type', 'limited').lower()
+
+    if not apikey or not is_admin_apikey(apikey) or new_type not in ['limited', 'unlimited']:
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    if apikey in api_keys:
+        api_keys[apikey]["type"] = new_type
+        return jsonify({"message": f"API key '{apikey}' type set to {new_type}"}), 200
+    else:
+        return jsonify({"error": "Invalid API key"}), 400
+
+#-----------+ Pembatas Apikey & Tools +-----------------#
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
@@ -883,4 +939,3 @@ api.add_resource(SpamCall, "/api/call", methods=["POST"])
 api.add_resource(PinterestDl, "/api/pinterest", methods=["POST"])
 if __name__ == "__main__":
     app.run(debug=True)
-	    
