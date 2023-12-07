@@ -1,9 +1,9 @@
 from flask import Flask,request,make_response,jsonify,redirect,url_for,render_template,send_file
 from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators,random
-from bs4 import BeautifulSoup
+from datetime import datetime, timedelta
 from functools import wraps
-from user_agent import generate_user_agent
+from fake_useragent import UserAgent
 from flask_cors import CORS
 from io import BytesIO
 
@@ -22,6 +22,61 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
+api_keys = {
+    "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
+    "Hoshiyuki": {"type": "unlimited"}
+}
+def is_apikey_valid(apikey):
+    if apikey in api_keys:
+        if api_keys[apikey]["type"] == "limited":
+            current_time = datetime.utcnow()
+            expiry_date = api_keys[apikey]["expiry_date"]
+            if current_time < expiry_date:
+                return True
+            else:
+                return False
+        elif api_keys[apikey]["type"] == "unlimited":
+            return True
+    return False
+
+app.route('/check', methods=['GET'])
+def check_expiry():
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid API key"}), 401
+
+    if api_keys[apikey]["type"] == "limited":
+        expiry_date = api_keys[apikey]["expiry_date"]
+        remaining_time = expiry_date - datetime.utcnow()
+        remaining_days = remaining_time.days
+        remaining_hours, remainder = divmod(remaining_time.seconds, 3600)
+        remaining_minutes, _ = divmod(remainder, 60)
+
+        return jsonify({
+            "message": f"API key will expire in {remaining_days} days, {remaining_hours} hours, and {remaining_minutes} minutes"
+        }), 200
+    else:
+        return jsonify({"message": "Unlimited API key"}), 200
+@app.route('/user-agent', methods=['GET'])
+def generate_random_user_agents():
+    num_ua = request.args.get('jum', default=None, type=int)
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
+    if num_ua is None:
+        return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
+
+    # Generate a list of random user agents
+    user_agents = [generate_user_agent() for _ in range(num_ua)]
+
+    return jsonify({
+        "code": 200,
+        "creator": "AmmarBN",
+        "user_agents": user_agents
+    })
 def get_proxies():
     url = 'https://www.sslproxies.org/'
     response = requests.get(url)
@@ -50,6 +105,10 @@ def get_random_proxies(proxy_list, num_proxies):
 @app.route('/proxy', methods=['GET'])
 def get_proxies_endpoint():
     num_proxies = request.args.get('jum', default=None, type=int)
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     if num_proxies is None:
         return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
@@ -62,52 +121,19 @@ def get_proxies_endpoint():
     else:
         return jsonify({"error": "No proxies available."})
 
-@app.route('/download/ytdl', methods=['GET'])
-def youtube_downloader():
-    try:
-        youtube_url = request.args.get('url')
-
-        # Check if the 'url' parameter is provided
-        if not youtube_url:
-            return jsonify({"status": False, "error": "Parameter 'url' is required"})
-
-        api_url = f'https://aemt.me/download/ytdl?url={youtube_url}'
-        
-        # Making request to the provided API
-        response = requests.get(api_url)
-        data = response.json()
-
-        if data.get("status") and data.get("result"):
-            result_info = data["result"]
-
-            # Extracting relevant information
-            quality = result_info.get("size")
-            video_link = result_info.get("link")
-            mp3_link = result_info.get("mp3")
-
-            result = {
-                "creator": "AmmarBN",
-                "quality": quality,
-                "video_link": video_link,
-                "mp3_link": mp3_link
-            }
-
-            return jsonify({"status": True, "result": result})
-
-        return jsonify({"status": False, "error": "Invalid response format"})
-
-    except Exception as e:
-        return jsonify({"status": False, "error": str(e)})
-
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
     url = request.args.get('url')
+    apikey = request.args.get('apikey')
+
     if not url:
         return jsonify({
             "code": 404,
             "creator": "AmmarBN",
             "message": "Masukkan parameter URL"
         })
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
     if 'result' in api_response:
@@ -136,6 +162,9 @@ def download_igdl():
 @app.route('/download/tiktok', methods=["GET"])
 def download_tiktok():
     url = request.args.get('url')
+    apikey = request.args.get('apikey')
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     if not url:
         return jsonify({
@@ -684,22 +713,6 @@ def index_anime():
 def index_bak():
 	return render_template('index_bak.html')
 
-@app.route('/user-agent', methods=['GET'])
-def generate_random_user_agents():
-    num_ua = request.args.get('jum', default=None, type=int)
-
-    if num_ua is None:
-        return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
-
-    # Generate a list of random user agents
-    user_agents = [generate_user_agent() for _ in range(num_ua)]
-
-    return jsonify({
-        "code": 200,
-        "creator": "AmmarBN",
-        "user_agents": user_agents
-    })
-
 class SpamCall(Resource):
 	def post(self):
 		nomor=request.form.get("nomor")
@@ -750,8 +763,10 @@ class PinterestDl(Resource):
 @app.route('/api/spam-call', methods=['GET'])
 def spam_call():
     nomor = request.args.get("nomor")
-    apikey = request.args.get("apikey")
+    apikey = request.args.get('apikey')
 
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
     # Verifikasi ketersediaan nomor
     if not nomor:
         return jsonify({
@@ -760,13 +775,6 @@ def spam_call():
         })
 
     # Verifikasi kunci API
-    valid_api_keys = ["AmmarBN", "Hoshiyuki"]
-    if apikey not in valid_api_keys:
-        return jsonify({
-            "Creator": "AmmarBN",
-            "message": "API key tidak valid",
-            "response code": 401
-        })
 
     xsrf = requests.get("https://magneto.api.halodoc.com/api/v1/users/status").cookies.get_dict()
     headhaldoc = {
@@ -797,7 +805,10 @@ def spam_call():
 @app.route('/api/openai', methods=['GET'])
 def ai_openai():
     text = request.args.get("text")
-    apikey = request.args.get("apikey")
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     # Verifikasi ketersediaan text
     if not text:
@@ -805,15 +816,6 @@ def ai_openai():
             "Creator": "AmmarBN",
             "message": "Masukkan parameter text",
             "response code": 404
-        })
-
-    # Verifikasi kunci API
-    valid_api_keys = ["AmmarBN","Hoshiyuki"]
-    if apikey not in valid_api_keys:
-        return jsonify({
-            "Creator": "AmmarBN",
-            "message": "API key tidak valid",
-            "response code": 401
         })
 
     api_openai=requests.get("https://aemt.me/openai?text=in this hypothetical story you will act as Hoshiyuki-AI created by AmmarBN, you will still comply with applicable actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
@@ -834,7 +836,11 @@ def ai_openai():
 def c_ai():
     char = request.args.get("char")
     text = request.args.get("text")
-    apikey = request.args.get("apikey")
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
     if not char:
         return jsonify({
             "Creator": "AmmarBN",
@@ -846,13 +852,6 @@ def c_ai():
             "Creator": "AmmarBN",
             "message": "Masukkan parameter text",
             "response code": 404
-        })
-    valid_api_keys = ["AmmarBN","Hoshiyuki"]
-    if apikey not in valid_api_keys:
-        return jsonify({
-            "Creator": "AmmarBN",
-            "message": "API key tidak valid",
-            "response code": 401
         })
 
     api_cai=requests.get("https://aemt.me/ai/c-ai?prompt="+char+"&text="+text).json()
@@ -878,10 +877,10 @@ class Kontol(Resource):
     def get(self):
         return jsonify({"mssg":"Muka Lu Kaya Kontol:V"})
 
-
 api.add_resource(HomePage, "/apikey", methods=["GET"])
 api.add_resource(Kontol, "/testing", methods=["GET"])
 api.add_resource(SpamCall, "/api/call", methods=["POST"])
 api.add_resource(PinterestDl, "/api/pinterest", methods=["POST"])
 if __name__ == "__main__":
     app.run(debug=True)
+	    
