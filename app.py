@@ -44,11 +44,6 @@ def is_apikey_valid(apikey):
             return True
     return False
 
-def generate_apikey(apikey_type):
-    new_apikey = str(uuid.uuid4()).replace("-", "")[:8]
-    api_keys[new_apikey] = {"type": apikey_type}
-    return new_apikey
-
 @app.route('/check', methods=['GET'])
 def check_expiry():
     apikey = request.args.get('apikey')
@@ -110,16 +105,22 @@ def reduce_expiry():
     else:
         return jsonify({"error": "Invalid API key to reduce"}), 400
 
-@app.route('/create', methods=['POST'])
-def create_apikey():
-    apikey = request.args.get('apikey')
-    apikey_type = request.args.get('type', 'limited').lower()
-
+def create_apikey(apikey, apikey_type):
     if not is_admin_apikey(apikey) or apikey_type not in ['limited', 'unlimited']:
         return jsonify({"error": "Invalid request or insufficient permissions"}), 401
 
-    new_apikey = generate_apikey(apikey_type)
+    new_apikey = str(uuid.uuid4()).replace("-", "")[:8]
+    api_keys[new_apikey] = {"type": apikey_type}
+    
     return jsonify({"message": f"New API key created: {new_apikey}"}), 200
+
+@app.route('/create', methods=['POST'])
+def create_apikey_route():
+    apikey = request.args.get('apikey')
+    apikey_type = request.args.get('type', 'limited').lower()
+    
+    return create_apikey(apikey, apikey_type)
+
 
 @app.route('/set-type', methods=['POST'])
 def set_apikey_type():
