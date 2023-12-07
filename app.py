@@ -39,7 +39,7 @@ def is_apikey_valid(apikey):
             return True
     return False
 
-app.route('/check', methods=['GET'])
+@app.route('/check', methods=['GET'])
 def check_expiry():
     apikey = request.args.get('apikey')
 
