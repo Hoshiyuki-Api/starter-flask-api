@@ -72,16 +72,20 @@ def check_expiry():
 @app.route('/extend', methods=['POST'])
 def extend_expiry():
     apikey = request.args.get('apikey')
-    days_add = int(request.args.get('day_add', 0))
+    days_to_add = int(request.args.get('day_add', 0))
+    apikey_to_extend = request.args.get('apikey_to_extend')
 
-    if not apikey or not days_add or not is_admin_apikey(apikey):
+    if not apikey or not days_to_add or not apikey_to_extend or not is_admin_apikey(apikey):
         return jsonify({"error": "Invalid request or insufficient permissions"}), 401
 
-    if apikey in api_keys and api_keys[apikey]["type"] == "limited":
-        api_keys[apikey]["expiry_date"] += timedelta(days=days_add)
-        return jsonify({"message": f"API key '{apikey}' extended by {days_add} days"}), 200
+    if apikey_to_extend in api_keys:
+        if api_keys[apikey_to_extend]["type"] == "limited":
+            api_keys[apikey_to_extend]["expiry_date"] += timedelta(days=days_to_add)
+            return jsonify({"message": f"API key '{apikey_to_extend}' extended by {days_to_add} days"}), 200
+        else:
+            return jsonify({"error": "Unlimited API key cannot be extended"}), 400
     else:
-        return jsonify({"error": "Invalid API key or not a limited key"}), 400
+        return jsonify({"error": "Invalid API key to extend"}), 400
 
 @app.route('/reduce', methods=['POST'])
 def reduce_expiry():
