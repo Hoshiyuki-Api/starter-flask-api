@@ -1,7 +1,6 @@
 from flask import Flask,request,make_response,jsonify,redirect,url_for,render_template,send_file
 from flask_restful import Resource,Api,reqparse
-import jwt,datetime,requests,json,validators,random
-import uuid
+import jwt,datetime,requests,json,validators,random,string
 from datetime import datetime, timedelta
 from functools import wraps
 from fake_useragent import UserAgent
@@ -24,8 +23,10 @@ def index():
 	#return render_template('index.html')
 
 api_keys = {
-    "AmmarBN": {"key": str(uuid.uuid4()), "expiry": datetime.now() + timedelta(days=3)},
-    "Hoshiyuki": {"key": str(uuid.uuid4()), "expiry": None}
+    "AmmarBN": {"key": ''.join(random.choices(string.ascii_letters + string.digits, k=32)),
+                "expiry": datetime.now() + timedelta(days=3)},
+    "Hoshiyuki": {"key": ''.join(random.choices(string.ascii_letters + string.digits, k=32)),
+                  "expiry": None}
 }
 
 admin_key = "admin_key"
