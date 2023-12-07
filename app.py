@@ -28,6 +28,9 @@ api_keys = {
 }
 ADMIN_APIKEY = "botol"
 
+def is_admin_apikey(apikey):
+    return apikey == ADMIN_APIKEY
+
 def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
