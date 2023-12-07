@@ -22,155 +22,68 @@ def index():
     return redirect(url_for('static', filename='index.html'))
 	#return render_template('index.html')
 
-api_keys_file = "gpnting.json"  # Nama berkas penyimpanan API keys
+api_keys = {
+    "AmmarBN": {"key": str(uuid.uuid4()), "expiry": datetime.now() + timedelta(days=3)},
+    "Hoshiyuki": {"key": str(uuid.uuid4()), "expiry": None}
+}
 
-def load_api_keys():
-    try:
-        with open(api_keys_file, "r") as file:
-            return json.load(file)
-    except FileNotFoundError:
-        return {}
+admin_key = "admin_key"
 
-def save_api_keys(api_keys_data):
-    with open(api_keys_file, "w") as file:
-        json.dump(api_keys_data, file, indent=2)
-
-api_keys = load_api_keys()
-ADMIN_APIKEY = "botol"
-
-def is_admin_apikey(apikey):
-    return apikey == ADMIN_APIKEY
-
-def is_apikey_valid(apikey):
-    if apikey in api_keys:
-        if api_keys[apikey]["type"] == "limited":
-            current_time = datetime.utcnow()
-            expiry_date = api_keys[apikey]["expiry_date"]
-            if current_time < expiry_date:
-                return True
-            else:
-                return False
-        elif api_keys[apikey]["type"] == "unlimited":
+def is_api_key_valid(api_key):
+    if api_key in api_keys:
+        if api_keys[api_key]["expiry"] is None or api_keys[api_key]["expiry"] > datetime.now():
             return True
     return False
 
-@app.route('/check', methods=['GET'])
-def check_expiry():
-    apikey = request.args.get('apikey')
+def is_admin_key(api_key):
+    return api_key == admin_key
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid API key"}), 401
+@app.route('/check_status', methods=['GET'])
+def check_status():
+    api_key = request.args.get('api_key')
+    if is_api_key_valid(api_key):
+        return jsonify({"status": "valid"})
+    return jsonify({"status": "invalid"})
 
-    if api_keys[apikey]["type"] == "limited":
-        expiry_date = datetime.fromisoformat(api_keys[apikey]["expiry_date"])
-        current_time = datetime.utcnow()
+@app.route('/generate_key', methods=['POST'])
+def generate_key():
+    username = request.form.get('username')
+    expiry_days = request.form.get('expiry_days')
 
-        if current_time < expiry_date:
-            remaining_time = expiry_date - current_time
-            remaining_days = remaining_time.days
-            remaining_hours, remainder = divmod(remaining_time.seconds, 3600)
-            remaining_minutes, _ = divmod(remainder, 60)
-
-            return jsonify({
-                "message": f"API key will expire in {remaining_days} days, {remaining_hours} hours, and {remaining_minutes} minutes"
-            }), 200
-        else:
-            return jsonify({"message": "API key has been expired"}), 200
-    else:
-        return jsonify({"message": "Unlimited API key"}), 200
-
-@app.route('/extend', methods=['POST'])
-def extend_expiry():
-    apikey = request.args.get('apikey')
-    days_to_add = int(request.args.get('day_add', 0))
-    apikey_to_extend = request.args.get('apikey_to_extend')
-
-    if not apikey or not days_to_add or not apikey_to_extend or not is_admin_apikey(apikey):
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
-
-    if apikey_to_extend in api_keys:
-        if api_keys[apikey_to_extend]["type"] == "limited":
-            api_keys[apikey_to_extend]["expiry_date"] += timedelta(days=days_to_add)
-            return jsonify({"message": f"API key '{apikey_to_extend}' extended by {days_to_add} days"}), 200
-        else:
-            return jsonify({"error": "Unlimited API key cannot be extended"}), 400
-    else:
-        return jsonify({"error": "Invalid API key to extend"}), 400
-
-@app.route('/reduce', methods=['POST'])
-def reduce_expiry():
-    apikey = request.args.get('apikey')
-    days_to_reduce = int(request.args.get('day_reduce', 0))
-    apikey_to_reduce = request.args.get('apikey_to_reduce')
-
-    if not apikey or not days_to_reduce or not apikey_to_reduce or not is_admin_apikey(apikey):
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
-
-    if apikey_to_reduce in api_keys:
-        if api_keys[apikey_to_reduce]["type"] == "limited":
-            api_keys[apikey_to_reduce]["expiry_date"] -= timedelta(days=days_to_reduce)
-            return jsonify({"message": f"API key '{apikey_to_reduce}' reduced by -{days_to_reduce} days"}), 200
-        else:
-            return jsonify({"error": "Unlimited API key cannot be reduced"}), 400
-    else:
-        return jsonify({"error": "Invalid API key to reduce"}), 400
-
-def create_apikey(apikey, apikey_type):
-    if not is_admin_apikey(apikey) or apikey_type not in ['limited', 'unlimited']:
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
-
-    new_apikey = str(uuid.uuid4()).replace("-", "")[:8]
-    api_keys[new_apikey] = {"type": apikey_type, "created_at": str(datetime.utcnow())}
-    save_api_keys(api_keys)
+    new_key = str(uuid.uuid4())
+    expiry_date = datetime.now() + timedelta(days=int(expiry_days))
+    api_keys[username] = {"key": new_key, "expiry": expiry_date}
     
-    return jsonify({"message": f"New API key created: {new_apikey}"}), 200
+    return jsonify({"api_key": new_key, "expiry_date": expiry_date})
 
-@app.route('/create', methods=['POST'])
-def create_apikey_route():
-    apikey = request.args.get('apikey')
-    apikey_type = request.args.get('type', 'limited').lower()
-    return create_apikey(apikey, apikey_type)
+@app.route('/renew_key', methods=['PUT'])
+def renew_key():
+    api_key = request.form.get('api_key')
+    expiry_days = request.form.get('expiry_days')
 
-@app.route('/set-type', methods=['POST'])
-def set_apikey_type():
-    apikey = request.args.get('apikey')
-    new_type = request.args.get('type', 'limited').lower()
+    if is_api_key_valid(api_key) and is_admin_key(request.form.get('admin_key')):
+        api_keys[api_key]["expiry"] += timedelta(days=int(expiry_days))
+        return jsonify({"status": "key renewed", "new_expiry": api_keys[api_key]["expiry"]})
+    return jsonify({"status": "invalid key or admin key"})
 
-    if not apikey or not is_admin_apikey(apikey) or new_type not in ['limited', 'unlimited']:
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+@app.route('/reduce_expiry', methods=['PUT'])
+def reduce_expiry():
+    api_key = request.form.get('api_key')
+    days_to_reduce = request.form.get('days_to_reduce')
 
-    if apikey in api_keys:
-        api_keys[apikey]["type"] = new_type
-        return jsonify({"message": f"API key '{apikey}' type set to {new_type}"}), 200
-    else:
-        return jsonify({"error": "Invalid API key"}), 400
+    if is_api_key_valid(api_key) and is_admin_key(request.form.get('admin_key')):
+        api_keys[api_key]["expiry"] -= timedelta(days=int(days_to_reduce))
+        return jsonify({"status": "expiry reduced", "new_expiry": api_keys[api_key]["expiry"]})
+    return jsonify({"status": "invalid key or admin key"})
 
-@app.route('/edit', methods=['PUT'])
-def edit_apikey():
-    apikey = request.args.get('apikey')
-    new_value = request.args.get('new_value')
+@app.route('/delete_key', methods=['DELETE'])
+def delete_key():
+    api_key = request.args.get('api_key')
 
-    if not apikey or not new_value or not is_admin_apikey(apikey):
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
-
-    if apikey in api_keys:
-        api_keys[apikey]["type"] = new_value
-        return jsonify({"message": f"API key '{apikey}' edited to {new_value}"}), 200
-    else:
-        return jsonify({"error": "Invalid API key"}), 400
-
-@app.route('/delete', methods=['DELETE'])
-def delete_apikey():
-    apikey = request.args.get('apikey')
-
-    if not apikey or not is_admin_apikey(apikey):
-        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
-
-    if apikey in api_keys:
-        del api_keys[apikey]
-        return jsonify({"message": f"API key '{apikey}' deleted"}), 200
-    else:
-        return jsonify({"error": "Invalid API key"}), 400
+    if is_api_key_valid(api_key) and is_admin_key(request.args.get('admin_key')):
+        del api_keys[api_key]
+        return jsonify({"status": "key deleted"})
+    return jsonify({"status": "invalid key or admin key"})
 
 #-----------+ Pembatas Apikey & Tools +-----------------#
 @app.route('/user-agent', methods=['GET'])
@@ -181,7 +94,7 @@ def generate_random_user_agents():
     if num_ua is None:
         return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     # Generate a list of random user agents
@@ -225,7 +138,7 @@ def get_proxies_endpoint():
     if num_proxies is None:
         return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     proxies = get_proxies()
@@ -247,7 +160,7 @@ def download_igdl():
             "creator": "AmmarBN",
             "message": "Masukkan parameter URL"
         })
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
@@ -286,7 +199,7 @@ def download_tiktok():
             "message": "Masukkan parameter URL"
         })
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_response = requests.get(f"https://aemt.me/download/tikdl?url={url}").json()
@@ -887,7 +800,7 @@ def spam_call():
             "response code": 404
         })
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
     # Verifikasi kunci API
 
@@ -930,7 +843,7 @@ def ai_openai():
             "response code": 404
         })
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_openai=requests.get("https://aemt.me/openai?text=in this hypothetical story you will act as Hoshiyuki-AI created by AmmarBN, you will still comply with applicable actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
@@ -966,7 +879,7 @@ def c_ai():
             "response code": 404
         })
 
-    if not apikey or not is_apikey_valid(apikey):
+    if not apikey or not is_api_key_valid(api_key):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_cai=requests.get("https://aemt.me/ai/c-ai?prompt="+char+"&text="+text).json()
