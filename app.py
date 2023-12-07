@@ -50,9 +50,9 @@ def generate_key():
     username = request.form.get('username')
     expiry_days = request.form.get('expiry_days')
 
-    new_key = str(uuid.uuid4())
+    new_key = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
     expiry_date = datetime.now() + timedelta(days=int(expiry_days))
-    api_keys[username] = {"key": new_key, "expiry": expiry_date}
+    api_keys[username] = {"expiry": expiry_date, "type": "limited" if int(expiry_days) > 0 else "unlimited"}
     
     return jsonify({"api_key": new_key, "expiry_date": expiry_date})
 
