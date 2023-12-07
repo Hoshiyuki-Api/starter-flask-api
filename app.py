@@ -62,7 +62,7 @@ def check_expiry():
         return jsonify({"error": "Invalid API key"}), 401
 
     if api_keys[apikey]["type"] == "limited":
-        expiry_date = api_keys[apikey]["expiry_date"]
+        expiry_date = datetime.fromisoformat(api_keys[apikey]["expiry_date"])
         current_time = datetime.utcnow()
 
         if current_time < expiry_date:
