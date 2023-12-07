@@ -44,6 +44,11 @@ def is_apikey_valid(apikey):
             return True
     return False
 
+def generate_apikey(apikey_type):
+    new_apikey = str(uuid.uuid4()).replace("-", "")[:8]
+    api_keys[new_apikey] = {"type": apikey_type}
+    return new_apikey
+
 @app.route('/check', methods=['GET'])
 def check_expiry():
     apikey = request.args.get('apikey')
@@ -113,6 +118,33 @@ def set_apikey_type():
     if apikey in api_keys:
         api_keys[apikey]["type"] = new_type
         return jsonify({"message": f"API key '{apikey}' type set to {new_type}"}), 200
+    else:
+        return jsonify({"error": "Invalid API key"}), 400
+
+@app.route('/edit', methods=['PUT'])
+def edit_apikey():
+    apikey = request.args.get('apikey')
+    new_value = request.args.get('new_value')
+
+    if not apikey or not new_value or not is_admin_apikey(apikey):
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    if apikey in api_keys:
+        api_keys[apikey]["type"] = new_value
+        return jsonify({"message": f"API key '{apikey}' edited to {new_value}"}), 200
+    else:
+        return jsonify({"error": "Invalid API key"}), 400
+
+@app.route('/delete', methods=['DELETE'])
+def delete_apikey():
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_admin_apikey(apikey):
+        return jsonify({"error": "Invalid request or insufficient permissions"}), 401
+
+    if apikey in api_keys:
+        del api_keys[apikey]
+        return jsonify({"message": f"API key '{apikey}' deleted"}), 200
     else:
         return jsonify({"error": "Invalid API key"}), 400
 
