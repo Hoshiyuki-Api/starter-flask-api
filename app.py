@@ -122,7 +122,7 @@ def check_expiry():
         return jsonify({"message": "Unlimited API key"}), 200
 
 @app.route('/add_expiry', methods=['POST'])
-@admin_required
+#@admin_required
 def add_expiry():
     apikey = request.form.get('apikey')
     days_to_add = int(request.form.get('days'))
