@@ -21,10 +21,12 @@ github_repo_url = "https://raw.githubusercontent.com/AmmarBN/starter-flask-api/m
 
 def load_api_keys():
     response = requests.get(github_repo_url)
-    return response.json() if response.status_code == 200 else {}
+    data = response.json() if response.status_code == 200 else {}
+    return data.get("api_keys", {})
 
 def save_api_keys(api_keys):
-    response = requests.put(github_repo_url, json=api_keys)
+    data = {"api_keys": api_keys}
+    response = requests.put(github_repo_url, json=data)
     return response.status_code == 200
 
 api_keys = load_api_keys()
@@ -33,7 +35,7 @@ def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
             current_time = datetime.utcnow()
-            expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
+            expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d %H:%M:%S.%f")
             if current_time < expiry_date:
                 return True
             else:
