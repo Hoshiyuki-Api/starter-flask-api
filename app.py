@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 from flask_cors import CORS
 from io import BytesIO
+from bs4 import BeautifulSoup
 import jwt
 import requests
 import json
