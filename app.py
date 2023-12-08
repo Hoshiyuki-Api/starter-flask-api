@@ -39,7 +39,7 @@ def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
             current_time = datetime.utcnow()
-            expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d %H:%M:%S.%f")
+            expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
             if current_time < expiry_date:
                 return True
             else:
