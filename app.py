@@ -5,6 +5,7 @@ from functools import wraps
 from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
+import functools
 import jwt
 import requests
 import json
@@ -16,16 +17,23 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app, resources={r"/api/*": {"origins": "http://hoshiyuki-api.rf.gd/"}})
 
-api_keys = {
-    "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
-    "Hoshiyuki": {"type": "unlimited"}
-}
+github_repo_url = "https://raw.githubusercontent.com/AmmarBN/starter-flask-api/main/gpnting.json"
+
+def load_api_keys():
+    response = requests.get(github_repo_url)
+    return response.json() if response.status_code == 200 else {}
+
+def save_api_keys(api_keys):
+    response = requests.put(github_repo_url, json=api_keys)
+    return response.status_code == 200
+
+api_keys = load_api_keys()
 
 def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
             current_time = datetime.utcnow()
-            expiry_date = api_keys[apikey]["expiry_date"]
+            expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
             if current_time < expiry_date:
                 return True
             else:
@@ -34,13 +42,27 @@ def is_apikey_valid(apikey):
             return True
     return False
 
-@app.route('/api/data')
-def get_data():
-    return {'message': 'Hello, this is your API!'}
+# List pengguna yang dianggap sebagai admin
+admin_users = ["admin_key"]
 
-@app.route('/')
-def index():
-    return redirect(url_for('static', filename='index.html'))
+# Decorator untuk memeriksa apakah pengguna adalah admin
+def admin_required(f):
+    @functools.wraps(f)
+    def wrapper(*args, **kwargs):
+        provided_key = request.args.get('key')
+        if provided_key in admin_users:
+            return f(*args, **kwargs)
+        else:
+            return jsonify({"error": "Unauthorized access"}), 403
+    return wrapper
+
+def check_apikey_type(apikey):
+    if apikey in admin_users:
+        return "admin"
+    elif apikey in api_keys:
+        return api_keys[apikey]["type"]
+    else:
+        return None
 
 @app.route('/check', methods=['GET'])
 def check_expiry():
@@ -49,18 +71,86 @@ def check_expiry():
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid API key"}), 401
 
-    if api_keys[apikey]["type"] == "limited":
-        expiry_date = api_keys[apikey]["expiry_date"]
-        remaining_time = expiry_date - datetime.utcnow()
-        remaining_days = remaining_time.days
-        remaining_hours, remainder = divmod(remaining_time.seconds, 3600)
-        remaining_minutes, _ = divmod(remainder, 60)
+    apikey_type = check_apikey_type(apikey)
+    
+    if apikey_type == "admin":
+        return jsonify({"type": "admin", "message": "Admin API key"})
+    else:
+        expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
+        expiry_date_only = expiry_date.date()
 
         return jsonify({
-            "message": f"API key will expire in {remaining_days} days, {remaining_hours} hours, and {remaining_minutes} minutes"
+            "type": apikey_type,
+            "message": f"API key will expire on {expiry_date_only}"
+        }), 200
+
+@app.route('/adjust_expiry', methods=['POST'])
+@admin_required
+def adjust_expiry():
+    apikey = request.form.get('apikey')
+    days_to_adjust = int(request.form.get('days'))
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid API key"}), 401
+
+    if api_keys[apikey]["type"] == "limited":
+        expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
+        new_expiry_date = expiry_date + timedelta(days=days_to_adjust)
+        api_keys[apikey]["expiry_date"] = new_expiry_date.strftime("%Y-%m-%d")
+        save_api_keys(api_keys)
+
+        return jsonify({
+            "message": f"API key expiry date adjusted. New expiry date: {new_expiry_date.date()}"
         }), 200
     else:
-        return jsonify({"message": "Unlimited API key"}), 200
+        return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
+
+@app.route('/reduce_expiry', methods=['POST'])
+@admin_required
+def reduce_expiry():
+    apikey = request.form.get('apikey')
+    days_to_reduce = int(request.form.get('days'))
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid API key"}), 401
+
+    if api_keys[apikey]["type"] == "limited":
+        expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
+        new_expiry_date = expiry_date - timedelta(days=days_to_reduce)
+
+        if new_expiry_date >= datetime.utcnow():
+            api_keys[apikey]["expiry_date"] = new_expiry_date.strftime("%Y-%m-%d")
+            save_api_keys(api_keys)
+            return jsonify({
+                "message": f"API key expiry date reduced. New expiry date: {new_expiry_date.date()}"
+            }), 200
+        else:
+            return jsonify({"error": "Cannot reduce expiry date beyond the current date"}), 400
+    else:
+        return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
+
+@app.route('/add_expiry', methods=['POST'])
+@admin_required
+def add_expiry():
+    apikey = request.form.get('apikey')
+    days_to_add = int(request.form.get('days'))
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid API key"}), 401
+
+    if api_keys[apikey]["type"] == "limited":
+        expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
+        new_expiry_date = expiry_date + timedelta(days=days_to_add)
+        api_keys[apikey]["expiry_date"] = new_expiry_date.strftime("%Y-%m-%d")
+
+        if save_api_keys(api_keys):
+            return jsonify({
+                "message": f"API key expiry date extended. New expiry date: {new_expiry_date.date()}"
+            }), 200
+        else:
+            return jsonify({"error": "Failed to update API keys on GitHub"}), 500
+    else:
+        return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 @app.route('/user-agent', methods=['GET'])
