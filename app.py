@@ -142,10 +142,10 @@ def get_proxies_endpoint():
     apikey = request.args.get('apikey')
 
     if num_proxies is None:
-        return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
+        return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
 
-    if not apikey or not is_api_key_valid(api_key):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+    if not apikey or not is_api_key_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, please download a new apikey"}), 401
 
     proxies = get_proxies()
 
