@@ -77,6 +77,11 @@ def check_expiry():
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid API key"}), 401
 
+    apikey_type = check_apikey_type(apikey)
+
+    if apikey_type == "admin":
+        return jsonify({"message": "Admin API key"}), 200
+
     if "expiry_date" in api_keys.get(apikey, {}):
         expiry_date_str = api_keys[apikey]["expiry_date"]
         expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d")
