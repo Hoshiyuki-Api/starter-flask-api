@@ -158,22 +158,17 @@ def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
     apikey = request.args.get('apikey')
 
+    print(f"Menerima kunci API: {apikey}")
+
     if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, please download new apikey"}), 401
+        return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
 
     if num_ua is None:
-        return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
+        return jsonify({"pembuat": "AmmarBN", "error": "Parameter 'jum' diperlukan."})
 
-    # Your logic to generate random user agents goes here
-    # You can use libraries like Faker to generate user agent strings
+    # Logika Anda untuk menghasilkan string user agent secara acak di sini
 
-    # Example using Faker:
-    from faker import Faker
-
-    fake = Faker()
-    user_agents = [fake.user_agent() for _ in range(num_ua)]
-
-    return jsonify({"user_agents": user_agents, "creator": "AmmarBN"}), 200
+    return jsonify({"user_agents": user_agents, "pembuat": "AmmarBN"}), 200
 
 def get_proxies():
     url = 'https://www.sslproxies.org/'
