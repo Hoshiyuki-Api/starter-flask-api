@@ -93,23 +93,25 @@ def check_expiry():
     else:
         return jsonify({"message": "Unlimited API key"}), 200
 
-@app.route('/adjust_expiry', methods=['POST'])
+@app.route('/add_expiry', methods=['POST'])
 @admin_required
-def adjust_expiry():
+def add_expiry():
     apikey = request.form.get('apikey')
-    days_to_adjust = int(request.form.get('days'))
+    days_to_add = int(request.form.get('days'))
 
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid API key"}), 401
 
     if api_keys[apikey]["type"] == "limited":
         expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
-        new_expiry_date = expiry_date + timedelta(days=days_to_adjust)
+        new_expiry_date = expiry_date + timedelta(days=days_to_add)
         api_keys[apikey]["expiry_date"] = new_expiry_date.strftime("%Y-%m-%d")
+
+        # Save changes to gpnting.json
         save_api_keys(api_keys)
 
         return jsonify({
-            "message": f"API key expiry date adjusted. New expiry date: {new_expiry_date.date()}"
+            "message": f"API key expiry date extended. New expiry date: {new_expiry_date.date()}"
         }), 200
     else:
         return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
