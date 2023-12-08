@@ -172,7 +172,7 @@ def generate_random_user_agents():
         return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
 
     # Logika Anda untuk menghasilkan string user agent secara acak di sini
-
+    user_agents = [generate_user_agent() for _ in range(num_ua)]
     return jsonify({"user_agents": user_agents, "pembuat": "AmmarBN"}), 200
 
 def get_proxies():
