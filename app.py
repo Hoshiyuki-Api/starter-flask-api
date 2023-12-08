@@ -30,8 +30,35 @@ def load_api_keys():
 
 def save_api_keys(api_keys):
     data = {"api_keys": api_keys}
+    
+    # Simpan perubahan ke gpnting.json
     with open(gpnting_json_path, "w") as file:
         json.dump(data, file)
+
+    # Dorong perubahan ke GitHub
+    github_token = "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"
+    repo_name = "AmmarBN/starter-flask-api"  # Perbarui dengan nama repositori Anda
+    branch_name = "main"  # Perbarui dengan nama cabang Anda
+
+    g = Github(github_token)
+    repo = g.get_repo(repo_name)
+    branch = repo.get_branch(branch_name)
+    
+    file_path = "gpnting.json"
+    commit_message = "Perbarui gpnting.json"
+
+    # Baca konten file
+    with open(gpnting_json_path, "r") as file:
+        file_content = file.read()
+
+    # Perbarui file di repositori
+    repo.update_file(
+        path=file_path,
+        message=commit_message,
+        content=file_content,
+        sha=branch.commit.sha,
+        branch=branch_name
+)
 
 api_keys = load_api_keys()
 
