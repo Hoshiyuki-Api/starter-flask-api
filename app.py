@@ -113,10 +113,11 @@ def generate_random_user_agents():
 
 def get_proxies():
     url = 'https://www.sslproxies.org/'
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, 'html.parser')
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        
+        soup = BeautifulSoup(response.text, 'lxml')
         proxy_list = []
 
         for row in soup.find_all('tr')[1:]:
@@ -129,8 +130,8 @@ def get_proxies():
                 proxy_list.append(proxy)
 
         return proxy_list
-    else:
-        print(f"Failed to fetch proxies. Status Code: {response.status_code}")
+    except requests.RequestException as e:
+        print(f"Failed to fetch proxies. Error: {e}")
         return []
 
 def get_random_proxies(proxy_list, num_proxies):
