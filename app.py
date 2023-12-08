@@ -11,6 +11,7 @@ import requests
 import json
 import validators
 import random
+import user_agent
 from fake_useragent import UserAgent
 
 app = Flask(__name__)
@@ -158,6 +159,10 @@ def add_expiry():
         return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
+def generate_user_agent():
+    ua = user_agent.generate_user_agent()
+    return ua
+
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
