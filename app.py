@@ -38,7 +38,7 @@ def save_api_keys(api_keys):
 
     # Dorong perubahan ke GitHub
     github_token = "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"
-    repo_name = "AmmarBN/starter-flask-api"  # Perbarui dengan nama repositori Anda
+    repo_name = "AmmarrBN/starter-flask-api"  # Perbarui dengan nama repositori Anda
     branch_name = "main"  # Perbarui dengan nama cabang Anda
 
     g = Github(github_token)
