@@ -146,7 +146,7 @@ def add_expiry():
 	    
 
 @app.route('/reduce_expiry', methods=['POST'])
-@admin_required
+#@admin_required
 def reduce_expiry():
     apikey = request.form.get('apikey')
     days_to_reduce = int(request.form.get('days'))
@@ -169,28 +169,6 @@ def reduce_expiry():
     else:
         return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
 
-@app.route('/add_expiry', methods=['POST'])
-@admin_required
-def add_expiry():
-    apikey = request.form.get('apikey')
-    days_to_add = int(request.form.get('days'))
-
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid API key"}), 401
-
-    if api_keys[apikey]["type"] == "limited":
-        expiry_date = datetime.strptime(api_keys[apikey]["expiry_date"], "%Y-%m-%d")
-        new_expiry_date = expiry_date + timedelta(days=days_to_add)
-        api_keys[apikey]["expiry_date"] = new_expiry_date.strftime("%Y-%m-%d")
-
-        if save_api_keys(api_keys):
-            return jsonify({
-                "message": f"API key expiry date extended. New expiry date: {new_expiry_date.date()}"
-            }), 200
-        else:
-            return jsonify({"error": "Failed to update API keys on GitHub"}), 500
-    else:
-        return jsonify({"error": "Unlimited API key cannot be adjusted"}), 400
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 def generate_user_agent():
