@@ -62,6 +62,7 @@ def check_expiry():
     else:
         return jsonify({"message": "Unlimited API key"}), 200
 
+#-----------------# Pembatas Sistem Apikey #--------------------#
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
