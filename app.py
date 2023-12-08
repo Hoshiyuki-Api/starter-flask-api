@@ -2,6 +2,7 @@ from flask import Flask,request,make_response,jsonify,redirect,url_for,render_te
 from flask_restful import Resource,Api,reqparse
 import jwt,datetime,requests,json,validators,random,string
 from datetime import datetime, timedelta
+from faker import Faker  # Install the 'Faker' library for generating fake user agents
 from functools import wraps
 from fake_useragent import UserAgent
 from flask_cors import CORS
@@ -86,6 +87,10 @@ def delete_key():
     return jsonify({"status": "invalid key or admin key"})
 
 #-----------+ Pembatas Apikey & Tools +-----------------#
+def generate_user_agent():
+    fake = Faker()
+    return fake.user_agent()
+
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
@@ -94,8 +99,8 @@ def generate_random_user_agents():
     if num_ua is None:
         return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
 
-    if not apikey or not is_api_key_valid(api_key):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+    if not apikey or not is_api_key_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, please download a new apikey"}), 401
 
     # Generate a list of random user agents
     user_agents = [generate_user_agent() for _ in range(num_ua)]
@@ -105,6 +110,7 @@ def generate_random_user_agents():
         "creator": "AmmarBN",
         "user_agents": user_agents
     })
+
 def get_proxies():
     url = 'https://www.sslproxies.org/'
     response = requests.get(url)
