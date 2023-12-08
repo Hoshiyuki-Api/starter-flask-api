@@ -17,17 +17,20 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app, resources={r"/api/*": {"origins": "http://hoshiyuki-api.rf.gd/"}})
 
-github_repo_url = "https://raw.githubusercontent.com/AmmarBN/starter-flask-api/main/gpnting.json"
+gpnting_json_path = "gpnting.json"
 
 def load_api_keys():
-    response = requests.get(github_repo_url)
-    data = response.json() if response.status_code == 200 else {}
-    return data.get("api_keys", {})
+    try:
+        with open(gpnting_json_path, "r") as file:
+            data = json.load(file)
+            return data.get("api_keys", {})
+    except FileNotFoundError:
+        return {}
 
 def save_api_keys(api_keys):
     data = {"api_keys": api_keys}
-    response = requests.put(github_repo_url, json=data)
-    return response.status_code == 200
+    with open(gpnting_json_path, "w") as file:
+        json.dump(data, file)
 
 api_keys = load_api_keys()
 
