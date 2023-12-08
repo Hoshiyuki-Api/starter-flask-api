@@ -1,31 +1,25 @@
-from flask import Flask,request,make_response,jsonify,redirect,url_for,render_template,send_file
-from flask_restful import Resource,Api,reqparse
-import jwt,datetime,requests,json,validators,random
+from flask import Flask, request, make_response, jsonify, redirect, url_for, render_template, send_file
+from flask_restful import Resource, Api, reqparse
 from datetime import datetime, timedelta
 from functools import wraps
-from fake_useragent import UserAgent
 from flask_cors import CORS
 from io import BytesIO
+import jwt
+import requests
+import json
+import validators
+import random
+from fake_useragent import UserAgent
 
-app=Flask(__name__)
-api=Api(app)
+app = Flask(__name__)
+api = Api(app)
 CORS(app, resources={r"/api/*": {"origins": "http://hoshiyuki-api.rf.gd/"}})
-
-@app.route('/api/data')
-def get_data():
-    # Logika untuk mendapatkan data
-    return {'message': 'Hello, this is your API!'}
-
-@app.route('/')
-def index():
-    # Redirect to home/index.html
-    return redirect(url_for('static', filename='index.html'))
-	#return render_template('index.html')
 
 api_keys = {
     "AmmarBN": {"type": "limited", "expiry_date": datetime.utcnow() + timedelta(days=5)},
     "Hoshiyuki": {"type": "unlimited"}
 }
+
 def is_apikey_valid(apikey):
     if apikey in api_keys:
         if api_keys[apikey]["type"] == "limited":
@@ -38,6 +32,14 @@ def is_apikey_valid(apikey):
         elif api_keys[apikey]["type"] == "unlimited":
             return True
     return False
+
+@app.route('/api/data')
+def get_data():
+    return {'message': 'Hello, this is your API!'}
+
+@app.route('/')
+def index():
+    return redirect(url_for('static', filename='index.html'))
 
 @app.route('/check', methods=['GET'])
 def check_expiry():
@@ -58,25 +60,18 @@ def check_expiry():
         }), 200
     else:
         return jsonify({"message": "Unlimited API key"}), 200
+
 @app.route('/user-agent', methods=['GET'])
 def generate_random_user_agents():
     num_ua = request.args.get('jum', default=None, type=int)
     apikey = request.args.get('apikey')
 
     if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+        return jsonify({"error": "Invalid or expired API key, please download new apikey"}), 401
 
     if num_ua is None:
         return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
 
-    # Generate a list of random user agents
-    user_agents = [generate_user_agent() for _ in range(num_ua)]
-
-    return jsonify({
-        "code": 200,
-        "creator": "AmmarBN",
-        "user_agents": user_agents
-    })
 def get_proxies():
     url = 'https://www.sslproxies.org/'
     response = requests.get(url)
