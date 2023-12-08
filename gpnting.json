@@ -2,7 +2,7 @@
   "api_keys": {
     "AmmarBN": {
       "type": "limited",
-      "expiry_date": "2023-12-15 12:00:00.000000"
+      "expiry_date": "2023-12-15"
     },
     "Hoshiyuki": {
       "type": "unlimited"
