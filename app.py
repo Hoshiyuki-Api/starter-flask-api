@@ -79,7 +79,7 @@ def check_expiry():
 
     if "expiry_date" in api_keys.get(apikey, {}):
         expiry_date_str = api_keys[apikey]["expiry_date"]
-        expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d %H:%M:%S.%f")
+        expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d")
         expiry_date_formatted = expiry_date.strftime("%Y-%m-%d")
 
         return jsonify({
