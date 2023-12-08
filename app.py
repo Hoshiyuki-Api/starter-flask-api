@@ -160,11 +160,11 @@ def generate_random_user_agents():
 
     print(f"Menerima kunci API: {apikey}")
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
-
     if num_ua is None:
         return jsonify({"pembuat": "AmmarBN", "error": "Parameter 'jum' diperlukan."})
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
 
     # Logika Anda untuk menghasilkan string user agent secara acak di sini
 
