@@ -164,6 +164,17 @@ def generate_random_user_agents():
     if num_ua is None:
         return jsonify({"creator": "AmmarBN", "error": "Parameter 'jum' is required."})
 
+    # Your logic to generate random user agents goes here
+    # You can use libraries like Faker to generate user agent strings
+
+    # Example using Faker:
+    from faker import Faker
+
+    fake = Faker()
+    user_agents = [fake.user_agent() for _ in range(num_ua)]
+
+    return jsonify({"user_agents": user_agents, "creator": "AmmarBN"}), 200
+
 def get_proxies():
     url = 'https://www.sslproxies.org/'
     response = requests.get(url)
