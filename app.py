@@ -190,7 +190,7 @@ def generate_mess_gmail():
                        "send_to": email
                   }
               })
-        elif "anda telah mencapai batas permintaan otp, silahkan tunggu sebentar","en":"you had reached limit otp request, please wait" in response:
+          if "anda telah mencapai batas permintaan otp, silahkan tunggu sebentar","en":"you had reached limit otp request, please wait" in response:
 	      return jsonify({
                   "creator": "AmmarBN",
                   "status": "failed",
