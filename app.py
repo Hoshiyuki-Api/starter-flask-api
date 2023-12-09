@@ -156,6 +156,54 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
+@app.route('/api/spam-gmail', methods=['GET'])
+def generate_mess_gmail():
+    email = request.args.get("email")
+    apikey = request.args.get('apikey')
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+    # Verifikasi ketersediaan nomor
+    if not nomor:
+        return jsonify({
+            "message": "Masukkan Parameter 'nomor'!!",
+            "response code": 404
+        })
+
+    # Verifikasi kunci API
+    api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
+    api_params = {"jum": 1, "apikey": "Hoshiyuki"}
+    api_response = requests.get(api_url, params=api_params)
+    if api_response.status_code == 200:
+         user_agents = api_response.json().get("user_agents", [])
+         user_agent = user_agents[0] if user_agents else "Default User Agent"
+         headers = {        'Host':'807garage.com',        'Connection':'keep-alive',        'Accept':'application/json',        'Content-Type':'application/json',        'sec-ch-ua-mobile':'?1',        'User-Agent':user_agent,        'Authorization':'U2FsdGVkX18vqd+U4IlnnKd7nQ3gLfuL5PZZEvpiRGsqwwmo+AJ+hmepyIQX8uaB8YnmMqePJ5N+35ZvJPnqQVjsMehG2QaRIs2PTBMOoNiH8K0y6qHRNzo5PWgtv7Bzm44FbNUOMqStwqF0zXKO7DUgMltKXsCnanz30xVjAfV0MSRYvfKQye30dHzAvXUnETrrZ6ILHnMPktsqmoFyRrxzaQt59eJdsqpXZDrsfK6HPAd4YuhdOxbwtXq6WpW8Ujq3lfqkrWNSUaflGVJIMDCFzQADEXlBoXWOFSUZN/asowkwdvyjnHmzHspcM72qgUtGRy1YPwapbWtPNtEf9bgNdoTUIk0+SoGHG/j6w7WhWYhp6xTc5O6PVl4Rw1/tgYlAulP+VXl7HOCfI9mgb3spypeAK/HqD1epOSwMUcnqfUwXvsyODIlfLOSzvpJbkX422kBOoScBiUZ1Tm4SdmGY4gMvYNbZ19324ClMCZLb+53i8OcS8K0PJ8vOemxN9DsfgcxbO3gNyH9UIwA3UpgP29sw1SPsddaWslzuU5P5IHYyG2uViogw20D7gfHOPktOMy//mbuogfwnKqbfaO8ExmBkadI/U2bXDGwGPz+azKooirvFOPu2pG3OXIE5qocWVovBFCNry5gKYjykZYXVZ6Hxw69Rn4jYb863RKxuj4lhHDHncrgFcNnubAgE49Gl1B3g+tH2bzIEnAt4E4VLdgGiMtDU+rKMK9rhHp2dzTqjJLYrSe5MKbnlnSuaBD6gFRZLZ5glY5X3EsmHiG2E3ZqC8uy4J8sclT35ZNHakPSnaNjwMkJVJ6AfP1s1',        'sec-ch-ua-platform':'"Android"',        'Origin':'https://807garage.com',        'Sec-Fetch-Site':'same-origin',        'Sec-Fetch-Mode':'cors',        'Sec-Fetch-Dest':'empty',        'Referer':'https://807garage.com/login',        'Accept-Encoding':'gzip, deflate, br',        'Accept-Language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
+         dat807=json.dumps({"phone_email":email})
+         response = requests.post("https://807garage.com/api/member/login_reg", headers=headers,data=dat807).text
+         if response == "200":
+              return jsonify({
+                  "creator": "AmmarBN",
+                  "status": "success",
+                  "message": {
+                       "get_otp": True,
+                       "send_to": email
+                  }
+              })
+         else:
+              return jsonify({
+                  "creator": "AmmarBN",
+                  "status": "failed",
+                  "message": {
+                       "get_otp": False,
+                       "send_to": email
+                  }
+              })
+    else:
+         return ({
+             "code": 404,
+             "message": "Gagal Mengambil Data API"
+         })
+
 def generate_user_agent():
     ua = user_agent.generate_user_agent()
     return ua
