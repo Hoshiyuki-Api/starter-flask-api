@@ -161,14 +161,15 @@ def generate_mess_gmail():
     email = request.args.get("email")
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
     # Verifikasi ketersediaan nomor
-    if not nomor:
+    if not email:
         return jsonify({
-            "message": "Masukkan Parameter 'nomor'!!",
+            "message": "Masukkan Parameter 'email'!!",
             "response code": 404
         })
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     # Verifikasi kunci API
     api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
