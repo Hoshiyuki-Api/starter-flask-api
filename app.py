@@ -202,7 +202,8 @@ def get_spm_sny():
         headsampi={"Host": "auth.sampingan.co", "domain-name": "auth-svc", "app-auth": "Skip","content-type": "application/json; charset=UTF-8", "user-agent": user_agent,"application/vnd.full+json": None, "accept": "application/json","content-type": "application/vnd.full+json", "content-type": "application/json","app-version": "2.1.2", "app-platform": "Android"}
         sampi = requests.post("https://auth.sampingan.co/v1/otp", headers=headsampi, data=json.dumps({"channel": "WA", "country_code": "+62", "phone_number": nomor}).text
 #
-        headtokoko = {'Host': 'api-v2.bukuwarung.com', 'content-length': '198',
+        headtokoko = {'Host': 'api-v2.bukuwarung.com', 
+              'content-length': '198',
               'sec-ch-ua-mobile': '?0', 'user-agent': user_agent,
               'content-type': 'application/json', 'accept': 'application/json, text/plain, */*',
               'x-app-version-code': '5050', 'x-app-version-name': 'android',
