@@ -300,7 +300,7 @@ def get_spm_sny():
             "accept-encoding": "gzip, deflate, br"
         }
         data_club = {"account": nomor}
-        response = requests.post(url, headers=headersmap, json=data).text
+        response = requests.post(url, headers=headersmap, json=data_club).text
 #
         headersmau = {
             "Host": "japi.maucash.id",
