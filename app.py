@@ -212,9 +212,8 @@ def get_spm_sny():
             "pinConfirm": random_number,
             "minicart_id": None
 	}
-	register_url = "https://wapi.ruparupa.com/klk/register"
         register_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '217',    'sec-ch-ua-mobile': '?0',    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/auth/register?action=register&component=profile-form-1',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
-        register_response = requests.post(register_url, headers=register_headers, data=json.dumps(datrupa))
+        register_response = requests.post("https://wapi.ruparupa.com/klk/register", headers=register_headers, data=json.dumps(datrupa))
         authorization_token = register_response.json()['data']['access_token']
         otp_url = "https://wapi.ruparupa.com/klk/manage-otp-request"
         otp_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '60',    'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    'sec-ch-ua-mobile': '?0',    'authorization': authorization_token,    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
