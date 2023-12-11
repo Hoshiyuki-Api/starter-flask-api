@@ -201,8 +201,18 @@ def get_spm_sny():
         headsampi={"Host": "auth.sampingan.co", "domain-name": "auth-svc", "app-auth": "Skip","content-type": "application/json; charset=UTF-8", "user-agent": user_agent,"application/vnd.full+json": None, "accept": "application/json","content-type": "application/vnd.full+json", "content-type": "application/json","app-version": "2.1.2", "app-platform": "Android"}
         sampi = requests.post("https://auth.sampingan.co/v1/otp", headers=headsampi, data=json.dumps({"channel": "WA", "country_code": "+62", "phone_number": nomor})).text
 #
-        datrupa = {    "name": random_text+" subrekammarBN",    "email": "akuntumbal8836@gmail.com",    "phone": "0"+nomor,    "password": "@mm4r"+random_text,    "confirmPassword": "@mm4r"+random_text,    "employeeCode": "",    "pin": random_number,    "pinConfirm": random_number,    "minicart_id": None}
-        register_url = "https://wapi.ruparupa.com/klk/register"
+        datrupa = {
+            "name": random_text + " subrekammarBN",
+            "email": "akuntumbal8836@gmail.com",
+            "phone": "0" + nomor,
+            "password": "@mm4r" + random_text,
+            "confirmPassword": "@mm4r" + random_text,
+            "employeeCode": "",
+            "pin": random_number,
+            "pinConfirm": random_number,
+            "minicart_id": None
+	}
+	register_url = "https://wapi.ruparupa.com/klk/register"
         register_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '217',    'sec-ch-ua-mobile': '?0',    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/auth/register?action=register&component=profile-form-1',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
         register_response = requests.post(register_url, headers=register_headers, data=json.dumps(datrupa))
         authorization_token = register_response.json()['data']['access_token']
