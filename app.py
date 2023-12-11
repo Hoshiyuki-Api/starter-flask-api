@@ -199,7 +199,7 @@ def get_spm_sny():
         response = requests.post("https://807garage.com/api/member/login_reg", headers=headers,data=dat807).text
 #
         headsampi={"Host": "auth.sampingan.co", "domain-name": "auth-svc", "app-auth": "Skip","content-type": "application/json; charset=UTF-8", "user-agent": user_agent,"application/vnd.full+json": None, "accept": "application/json","content-type": "application/vnd.full+json", "content-type": "application/json","app-version": "2.1.2", "app-platform": "Android"}
-        sampi = requests.post("https://auth.sampingan.co/v1/otp", headers=headsampi, data=json.dumps({"channel": "WA", "country_code": "+62", "phone_number": nomor}).text
+        sampi = requests.post("https://auth.sampingan.co/v1/otp", headers=headsampi, data=json.dumps({"channel": "WA", "country_code": "+62", "phone_number": nomor})).text
 #
         datrupa = {    "name": random_text+" subrekammarBN",    "email": "akuntumbal8836@gmail.com",    "phone": "0"+nomor,    "password": "@mm4r"+random_text,    "confirmPassword": "@mm4r"+random_text,    "employeeCode": "",    "pin": random_number,    "pinConfirm": random_number,    "minicart_id": None}
         register_url = "https://wapi.ruparupa.com/klk/register"
@@ -209,7 +209,7 @@ def get_spm_sny():
         otp_url = "https://wapi.ruparupa.com/klk/manage-otp-request"
         otp_headers = {    'Host': 'wapi.ruparupa.com',    'content-length': '60',    'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    'sec-ch-ua-mobile': '?0',    'authorization': authorization_token,    'user-agent': user_agent,    'content-type': 'application/json',    'x-company-name': 'ruparupa',    'accept': 'application/json',    'x-frontend-type': 'desktop',    'informa-b2b': 'false',    'user-platform': 'desktop',    'sec-ch-ua-platform': '"Linux"',    'origin': 'https://www.ruparupa.com',    'sec-fetch-site': 'same-site',    'sec-fetch-mode': 'cors',    'sec-fetch-dest': 'empty',    'referer': 'https://www.ruparupa.com/',    'accept-encoding': 'gzip, deflate, br',    'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'}
         otp_payload = {"otpRequestType": "verify-phone", "action": "onMountOrResend"}
-        otp_response = requests.post(otp_url, headers=otp_headers, data=json.dumps(otp_payload))
+        otp_response = requests.post(otp_url, headers=otp_headers, data=json.dumps(otp_payload)).text
 #
         pintar=requests.post("https://api.pintarnya.com/api/pk/auth/register/mobile",headers={'Host':'api.pintarnya.com','content-length':'27','sec-ch-ua':'"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"','sec-ch-ua-mobile':'?1','authorization':'Bearer undefined','user-agent':user_agent,'content-type':'application/json','accept':'application/json, text/plain, */*','platform':'web-kerja','sec-ch-ua-platform':'"Android"','origin':'https://pintarnya.com','sec-fetch-site':'same-site','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://pintarnya.com/','accept-encoding':'gzip, deflate, br','accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'},data=json.dumps({"mobile":"+62"+nomor})).text
 #
