@@ -206,7 +206,7 @@ def generate_quote():
         response = requests.post('https://bot.lyo.su/quote/generate', json=obj, headers={'Content-Type': 'application/json'})
         response_data = response.json()
         
-        image_data = BytesIO(bytes(response_data['result']['image'], 'utf-8'))  # Assuming the image is base64 encoded
+        image_data = BytesIO(bytes(response_data['data']['result']['image'], 'utf-8'))  # Assuming the image is base64 encoded
 
         return send_file(image_data, mimetype='image/webp', download_name='Quotly.webp', as_attachment=True), 200
 
