@@ -93,9 +93,6 @@ def check_expiry():
     if apikey_type == "admin":
         return jsonify({"message": "Admin API key"}), 200
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid API key"}), 401
-
     apikey_info = api_keys.get(apikey, {})
 
     if "expiry_date" in apikey_info:
@@ -111,6 +108,9 @@ def check_expiry():
         }), 200
     else:
         return jsonify({"type": "Unlimited","apikey": apikey}), 200
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid API key"}), 401
 
 @app.route('/add_expiry', methods=['POST'])
 #@admin_required
