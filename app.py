@@ -168,9 +168,13 @@ def reduce_expiry():
 @app.route('/qc', methods=['GET'])
 def generate_quote():
     try:
+        apikey = request.args.get('apikey')
         name = request.args.get('name', '')
         text = request.args.get('text', '')
 
+        if not apikey or not is_apikey_valid(apikey):
+            return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+	    
         if not text:
             return jsonify({"error": "Text is missing"}), 400
 
