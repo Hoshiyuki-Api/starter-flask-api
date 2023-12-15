@@ -103,7 +103,7 @@ def check_expiry():
         expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d")
 
         if expiry_date < datetime.now():
-            return jsonify({"message": f"API key {apikey} has expired"}), 401
+            return jsonify({"message": f"API key '{apikey}' has expired"}), 401
 
         expiry_date_formatted = expiry_date.strftime("%Y-%m-%d")
         return jsonify({
