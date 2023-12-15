@@ -642,7 +642,7 @@ def show_random_image():
         
         if image_response.status_code == 200:
             image_bytes = image_response.content
-            return send_file(BytesIO(image_bytes), mimetype='image/jppeg')
+            return send_file(BytesIO(image_bytes), mimetype='image/jpeg')
 
         return jsonify({"error": "Failed to retrieve and display the image."}), 500
 
