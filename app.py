@@ -106,7 +106,7 @@ def check_expiry():
         return jsonify({
             "message": f"API key will expire on {expiry_date_formatted}"
         }), 200
-    else:
+    elif "unlimited" in apikey_info:
         return jsonify({"type": "Unlimited","apikey": apikey}), 200
 
     if not apikey or not is_apikey_valid(apikey):
