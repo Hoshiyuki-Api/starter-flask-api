@@ -164,6 +164,56 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 
+@app.route('/qc', methods=['GET'])
+def generate_quote():
+    try:
+        name = request.args.get('name', '')
+        text = request.args.get('text', '')
+
+        if not text:
+            return jsonify({"error": "Text is missing"}), 400
+
+        if not name:
+            return jsonify({"error": "Name is missing"}), 400
+
+        if len(text) > 10000:
+            return jsonify({"error": "Maximum 10000 characters allowed"}), 400
+
+        pp = 'https://i.ibb.co/3Fh9V6p/avatar-contact.png'  # Replace with your logic to get profile picture URL
+
+        obj = {
+            "type": "quote",
+            "format": "png",
+            "backgroundColor": "#000000",
+            "width": 512,
+            "height": 768,
+            "scale": 2,
+            "messages": [{
+                "entities": [],
+                "avatar": True,
+                "from": {
+                    "id": 1,
+                    "name": name,  # Replace with your logic to get the sender's name
+                    "photo": {
+                        "url": pp
+                    }
+                },
+                "text": text,
+                "replyMessage": {}
+            }]
+        }
+
+        response = requests.post('https://bot.lyo.su/quote/generate', json=obj, headers={'Content-Type': 'application/json'})
+        response_data = response.json()
+        
+        image_data = BytesIO(response_data['result']['image'].decode('base64'))  # Assuming the image is base64 encoded
+
+        return send_file(image_data, mimetype='image/png', download_name='Quotly.png', as_attachment=True), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 def generate_random_string(length):
     letters = string.ascii_letters
     return ''.join(random.choice(letters) for _ in range(length))
