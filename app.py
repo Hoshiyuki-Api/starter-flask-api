@@ -208,7 +208,7 @@ def generate_quote():
         
         image_data = BytesIO(bytes(response_data['result']['image'], 'utf-8'))  # Assuming the image is base64 encoded
 
-        return send_file(image_data, mimetype='image/png', download_name='Quotly.png', as_attachment=True), 200
+        return send_file(image_data, mimetype='image/webp', download_name='Quotly.webp', as_attachment=True), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
