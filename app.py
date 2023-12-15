@@ -57,7 +57,7 @@ def is_apikey_valid(apikey):
             if current_time < expiry_date:
                 return True
             else:
-                return True
+                return False
         elif api_keys[apikey]["type"] == "unlimited":
             return True
     return False
