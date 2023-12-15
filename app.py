@@ -57,7 +57,7 @@ def is_apikey_valid(apikey):
             if current_time < expiry_date:
                 return True
             else:
-                return False
+                return True
         elif api_keys[apikey]["type"] == "unlimited":
             return True
     return False
@@ -98,23 +98,22 @@ def check_expiry():
 
     if not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid API key"}), 401
-    else:
 
-        apikey_info = api_keys.get(apikey, {})
+    apikey_info = api_keys.get(apikey, {})
 
-        if "expiry_date" in apikey_info:
-            expiry_date_str = apikey_info["expiry_date"]
-            expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d")
+    if "expiry_date" in apikey_info:
+        expiry_date_str = apikey_info["expiry_date"]
+        expiry_date = datetime.strptime(expiry_date_str, "%Y-%m-%d")
 
-            if expiry_date < datetime.now():
-                return jsonify({"message": f"API key '{apikey}' has expired"}), 401
+        if expiry_date < datetime.now():
+            return jsonify({"message": f"API key '{apikey}' has expired"}), 401
 
-            expiry_date_formatted = expiry_date.strftime("%Y-%m-%d")
+        expiry_date_formatted = expiry_date.strftime("%Y-%m-%d")
             return jsonify({
                 "message": f"API key '{apikey}' will expire on {expiry_date_formatted}"
             }), 200
-        else:
-            return jsonify({"type": "Unlimited", "apikey": apikey}), 200
+    else:
+        return jsonify({"type": "Unlimited", "apikey": apikey}), 200
 
 @app.route('/add_expiry', methods=['POST'])
 #@admin_required
