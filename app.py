@@ -6,6 +6,7 @@ from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
 from github import Github
+import base64
 import functools
 import jwt
 import requests
@@ -205,10 +206,10 @@ def generate_quote():
 
         response = requests.post('https://bot.lyo.su/quote/generate', json=obj, headers={'Content-Type': 'application/json'})
         response_data = response.json()
-        
-        image_data = BytesIO(bytes(response_data['data']['result']['image'], 'utf-8'))  # Assuming the image is base64 encoded
 
-        return send_file(image_data, mimetype='image/webp', download_name='Quotly.webp', as_attachment=True), 200
+        image_data = base64.b64decode(response_data['result']['image'])
+
+        return send_file(BytesIO(image_data), mimetype='image/webp', download_name='Quotly.webp', as_attachment=True), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
