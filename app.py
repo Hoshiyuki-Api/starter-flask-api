@@ -165,8 +165,8 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 
-@app.route('/maker/jadianime', methods=['GET'])
-def get_image():
+@app.route('/jadianime', methods=['GET'])
+def toanime():
     url=request.args.get('url')
     api=requests.get("https://aemt.me/toanime?url="+url)
     api_respon=api.json()
