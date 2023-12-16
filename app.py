@@ -167,34 +167,10 @@ def reduce_expiry():
 
 @app.route('/maker/jadianime', methods=['GET'])
 def get_image():
-    if request.method != 'GET':
-        return jsonify({"error": "Only GET requests are allowed"}), 405
-
-    try:
-        image_url = request.args.get('url')
-
-        if not image_url:
-            return jsonify({"error": "URL is required"}), 400
-
-        api_url = f'https://aemt.me/toanime?url={image_url}'
-        response = requests.get(api_url)
-        data = response.json()
-
-        img_crop_single_url = data.get('url', {}).get('img_crop_single')
-
-        if not img_crop_single_url:
-            return jsonify({"error": "Failed to retrieve image URL"}), 500
-
-        return jsonify({
-                "url": 
-                    {
-                        "img_crop_single": img_crop_single_url
-                    }
-	})
-
-    except Exception as e:
-        error_message = {"error": str(e)}
-        return jsonify(error_message), 500
+    url=request.args.get('url')
+    api=requests.get("https://aemt.me/toanime?url="+url)
+    api_respon=api.json()
+    return (api_json)
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
