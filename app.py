@@ -168,39 +168,21 @@ def reduce_expiry():
 @app.route('/maker/jadianime', methods=['GET'])
 def make_jadi_anime():
     try:
-        # Check for request method
-        if request.method != 'GET':
-            return jsonify({'error': 'Only GET requests are allowed'}), 405  # Method Not Allowed
-
         image_url = request.args.get('url')
-        # Handle missing 'url' parameter
         if not image_url:
             return jsonify({'error': 'Image URL is required'}), 400
 
         api_url = f'https://aemt.me/toanime?url={image_url}'
-        
-        # Handle timeout for external API request
-        response = requests.get(api_url, timeout=10)
-        response.raise_for_status()  # Raise HTTPError for bad responses
-
+        response = requests.get(api_url)
         result = response.json()
 
         if 'img_crop_single' in result.get('url', {}):
             img_url = result['url']['img_crop_single']
-            
-            # Download the image
-            img_response = requests.get(img_url, timeout=10)
-            img_response.raise_for_status()  # Raise HTTPError for bad responses
-            image_bytes = img_response.content
-
-            return send_file(BytesIO(image_bytes), mimetype='image/jpeg')
+            return jsonify({'creator': 'AmmarBN','image': img_url}), 200
         else:
             return jsonify({'error': 'Error in API response'}), 500
 
-    except requests.Timeout:
-        return jsonify({'error': 'Request to external API timed out'}), 504  # Gateway Timeout
-
-    except requests.RequestException as e:
+    except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 @app.route('/qc', methods=['GET'])
