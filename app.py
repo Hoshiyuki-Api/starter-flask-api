@@ -165,25 +165,25 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 
-@app.route('/maker/jadianime', methods=['GET'])
-def make_jadi_anime():
+@app.route('/get_image', methods=['GET'])
+def get_image():
     try:
         image_url = request.args.get('url')
         if not image_url:
-            return jsonify({'error': 'Image URL is required'}), 400
+            return jsonify({"error": "URL is required"}), 400
 
         api_url = f'https://aemt.me/toanime?url={image_url}'
         response = requests.get(api_url)
-        result = response.json()
+        data = response.json()
 
-        if 'img_crop_single' in result.get('url', {}):
-            img_url = result['url']['img_crop_single']
-            return jsonify({'creator': 'AmmarBN','image': img_url}), 200
-        else:
-            return jsonify({'error': 'Error in API response'}), 500
+        img_crop_single_url = data['url']['img_crop_single']
+
+        result = {"url": {"img_crop_single": img_crop_single_url}}
+        return jsonify(result)
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        error_message = {"error": str(e)}
+        return jsonify(error_message)
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
@@ -233,7 +233,7 @@ def generate_quote():
 
         image_data = base64.b64decode(response_data['result']['image'])
 
-        return send_file(BytesIO(image_data), mimetype='image/webp', download_name='Quotly.webp', as_attachment=True), 200
+        return send_file(BytesIO(image_data), mimetype='image/webp'), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
