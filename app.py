@@ -165,7 +165,7 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 
-@app.route('/get_image', methods=['GET'])
+@app.route('/maker/jadianime', methods=['GET'])
 def get_image():
     try:
         image_url = request.args.get('url')
