@@ -165,6 +165,31 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 
+@app.route('/maker/jadianime', methods=['GET'])
+def make_jadi_anime():
+    try:
+        image_url = request.args.get('url')
+        if not image_url:
+            return jsonify({'error': 'Image URL is required'}), 400
+
+        api_url = f'https://aemt.me/toanime?url={image_url}'
+        response = requests.get(api_url)
+        result = response.json()
+
+        if 'img_crop_single' in result.get('url', {}):
+            img_url = result['url']['img_crop_single']
+            
+            # Download the image
+            img_response = requests.get(img_url)
+            image_bytes = img_response.content
+
+            return send_file(BytesIO(image_bytes), mimetype='image/jpeg')
+        else:
+            return jsonify({'error': 'Error in API response'}), 500
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/qc', methods=['GET'])
 def generate_quote():
     try:
