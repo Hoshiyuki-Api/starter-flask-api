@@ -478,7 +478,6 @@ def generate_mess_sny():
             "accept-encoding": "gzip, deflate, br",
             "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
 	}
-        }
         token_data = {
             "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
             "type": "web"
