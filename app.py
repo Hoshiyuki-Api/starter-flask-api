@@ -443,7 +443,7 @@ def get_spm_sny():
     "type": "web"}
 
         token_responseo = requests.post(token_urlo, json=token_datao, headers=token_headerso)
-        tokeno = token_response.json()["data"]["accessToken"]
+        tokeno = token_responseo.json()["data"]["accessToken"]
 
         register_urlo = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
         register_headerso = {
