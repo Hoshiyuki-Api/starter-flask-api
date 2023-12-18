@@ -419,10 +419,7 @@ def get_spm_sny():
             "situation":"REGISTER"
         }
         respondesty=requests.post("https://pulibic-gateway.desty.app/platform/user/catpcha/send", headers=headersdesty, json=payloaddesty).text
-#
-        headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
-        payloaddooit = {"code": "+62", "phone": nomor}
-        responsedooit = requests.post("https://www.dooitwell.id/site/generateotp", headers=headdooit, json=payloaddooit).text
+
         return jsonify({
             "creator": "AmmarBN",
             "status": True,
