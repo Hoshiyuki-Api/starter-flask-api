@@ -462,7 +462,22 @@ def generate_mess_sny():
 
         token_url = "https://api.ottencoffee.co.id/v3/auth/token/generate"
         token_headers = {
-            # Your token headers here
+            "Host": "api.ottencoffee.co.id",
+            "content-length": "64",
+            "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?1",
+            "user-agent": user_agent,
+            "sec-ch-ua-platform": "\"Android\"",
+            "origin": "https://ottencoffee.co.id",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://ottencoffee.co.id/?gad_source=1&gclid=CjwKCAiA1fqrBhA1EiwAMU5m_xcgbhfKaRyebnE94v00Z_gfJCvYg2XGEixfz8nXCQqGs3lo2eQLehoChSMQAvD_BwE",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+	}
         }
         token_data = {
             "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
@@ -473,8 +488,23 @@ def generate_mess_sny():
 
         register_url = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
         register_headers = {
-            # Your register headers here
-        }
+            "Host": "api.ottencoffee.co.id",
+            "content-length": "38",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?1",
+            "authorization": f"Bearer {token}",
+            "user-agent": user_agent,
+            "sec-ch-ua-platform": "\"Android\"",
+            "origin": "https://ottencoffee.co.id",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://ottencoffee.co.id/register/verification",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+	}
+
         register_data = {
             "sentBy": "sms",
             "to": "+62" + nomor
