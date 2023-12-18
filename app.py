@@ -435,7 +435,7 @@ def get_spm_sny():
              "message": "Gagal Mengambil Data API"
          })
 
-@app.route('/api/spam-snyy', methods=['GET'])
+@app.route('/api/spam-otten', methods=['GET'])
 def generate_mess_sny():
     nomor = request.args.get("nomor")
     apikey = request.args.get('apikey')
@@ -448,84 +448,59 @@ def generate_mess_sny():
         })
 
     if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+        return jsonify({
+            "error": "Invalid or expired API key, please download new apikey"
+        }), 401
 
     api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
     api_params = {"jum": 1, "apikey": "Hoshiyuki"}
     api_response = requests.get(api_url, params=api_params)
-    if api_response.status_code == 200:
-         user_agents = api_response.json().get("user_agents", [])
-         user_agent = user_agents[0] if user_agents else "Default User Agent"
-         token_urlo = "https://api.ottencoffee.co.id/v3/auth/token/generate"
-         token_headerso = {
-            "Host": "api.ottencoffee.co.id",
-            "content-length": "64",
-            "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
-            "accept": "application/json, text/plain, */*",
-            "content-type": "application/json",
-            "sec-ch-ua-mobile": "?1",
-            "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-            "sec-ch-ua-platform": "\"Android\"",
-            "origin": "https://ottencoffee.co.id",
-            "sec-fetch-site": "same-site",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-dest": "empty",
-            "referer": "https://ottencoffee.co.id/?gad_source=1&gclid=CjwKCAiA1fqrBhA1EiwAMU5m_xcgbhfKaRyebnE94v00Z_gfJCvYg2XGEixfz8nXCQqGs3lo2eQLehoChSMQAvD_BwE",
-            "accept-encoding": "gzip, deflate, br",
-            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-         }
 
-         token_datao = {
+    if api_response.status_code == 200:
+        user_agents = api_response.json().get("user_agents", [])
+        user_agent = user_agents[0] if user_agents else "Default User Agent"
+
+        token_url = "https://api.ottencoffee.co.id/v3/auth/token/generate"
+        token_headers = {
+            # Your token headers here
+        }
+        token_data = {
             "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
             "type": "web"
-         }
+        }
+        token_response = requests.post(token_url, json=token_data, headers=token_headers)
+        token = token_response.json()["data"]["accessToken"]
 
-         token_responseo = requests.post(token_urlo, json=token_datao, headers=token_headerso)
-         tokeno = token_responseo.json()["data"]["accessToken"]
-
-         register_urlo = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
-         register_headerso = {
-            "Host": "api.ottencoffee.co.id",
-            "content-length": "38",
-            "accept": "application/json, text/plain, */*",
-            "content-type": "application/json",
-            "sec-ch-ua-mobile": "?1",
-            "authorization": f"Bearer {tokeno}",
-            "user-agent": user_agent,
-            "sec-ch-ua-platform": "\"Android\"",
-            "origin": "https://ottencoffee.co.id",
-            "sec-fetch-site": "same-site",
-            "sec-fetch-mode": "cors",
-            "sec-fetch-dest": "empty",
-            "referer": "https://ottencoffee.co.id/register/verification",
-            "accept-encoding": "gzip, deflate, br",
-            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-         }
-
-         register_datao = {
+        register_url = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
+        register_headers = {
+            # Your register headers here
+        }
+        register_data = {
             "sentBy": "sms",
-            "to": "+62"+nomor
-         }
+            "to": "+62" + nomor
+        }
 
-         register_responseo = requests.post(register_urlo, json=register_datao, headers=register_headerso).text
-         if 'Verification code requested successfully' in register_responseo:
-                  return jsonify({
-                      "creator": "AmmarBN",
-                      "status": "success",
-                      "message": {
-                           "get_otp": True,
-                           "send_to": nomor
-                      }
-                  })
-	 else:
-                  return jsonify({
-                      "creator": "AmmarBN",
-                      "status": "failes",
-                      "message": {
-                           "get_otp": False,
-                           "send_to": nomor
-                      }
-                  })
+        register_response = requests.post(register_url, json=register_data, headers=register_headers).text
+        if 'Verification code requested successfully' in register_response:
+            return jsonify({
+                "creator": "AmmarBN",
+                "status": "success",
+                "message": {
+                    "get_otp": True,
+                    "send_to": nomor
+                }
+            })
+        else:
+            return jsonify({
+                "creator": "AmmarBN",
+                "status": "failed",  # Fixed typo here
+                "message": {
+                    "get_otp": False,
+                    "send_to": nomor
+                }
+            })
+    else:
+        return jsonify({"error": "Failed to fetch user agents"}), api_response.status_code
 
 @app.route('/api/spam-gmail', methods=['GET'])
 def generate_mess_gmail():
