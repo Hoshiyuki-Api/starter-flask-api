@@ -420,8 +420,44 @@ def get_spm_sny():
         }
         respondesty=requests.post("https://pulibic-gateway.desty.app/platform/user/catpcha/send", headers=headersdesty, json=payloaddesty).text
 #
-        token_urlo = "https://api.ottencoffee.co.id/v3/auth/token/generate"
-        token_headerso = {
+        headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
+        payloaddooit = {"code": "+62", "phone": nomor}
+        responsedooit = requests.post("https://www.dooitwell.id/site/generateotp", headers=headdooit, json=payloaddooit).text
+        return jsonify({
+            "creator": "AmmarBN",
+            "status": True,
+            "version": "Beta",
+            "message": f"Success Sending to phone {nomor} and {email}. please wait 2 minutes"
+        })
+    else:
+         return ({
+             "code": 404,
+             "message": "Gagal Mengambil Data API"
+         })
+
+@app.route('/api/spam-snyy', methods=['GET'])
+def generate_mess_sny():
+    nomor = request.args.get("nomor")
+    apikey = request.args.get('apikey')
+
+    # Verifikasi ketersediaan nomor
+    if not nomor:
+        return jsonify({
+            "message": "Masukkan Parameter 'nomor'!!",
+            "response code": 404
+        })
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
+    api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
+    api_params = {"jum": 1, "apikey": "Hoshiyuki"}
+    api_response = requests.get(api_url, params=api_params)
+    if api_response.status_code == 200:
+         user_agents = api_response.json().get("user_agents", [])
+         user_agent = user_agents[0] if user_agents else "Default User Agent"
+         token_urlo = "https://api.ottencoffee.co.id/v3/auth/token/generate"
+         token_headerso = {
             "Host": "api.ottencoffee.co.id",
             "content-length": "64",
             "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
@@ -437,18 +473,18 @@ def get_spm_sny():
             "referer": "https://ottencoffee.co.id/?gad_source=1&gclid=CjwKCAiA1fqrBhA1EiwAMU5m_xcgbhfKaRyebnE94v00Z_gfJCvYg2XGEixfz8nXCQqGs3lo2eQLehoChSMQAvD_BwE",
             "accept-encoding": "gzip, deflate, br",
             "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-        }
+         }
 
-        token_datao = {
+         token_datao = {
             "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
             "type": "web"
-        }
+         }
 
-        token_responseo = requests.post(token_urlo, json=token_datao, headers=token_headerso)
-        tokeno = token_responseo.json()["data"]["accessToken"]
+         token_responseo = requests.post(token_urlo, json=token_datao, headers=token_headerso)
+         tokeno = token_responseo.json()["data"]["accessToken"]
 
-        register_urlo = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
-        register_headerso = {
+         register_urlo = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
+         register_headerso = {
             "Host": "api.ottencoffee.co.id",
             "content-length": "38",
             "accept": "application/json, text/plain, */*",
@@ -464,29 +500,32 @@ def get_spm_sny():
             "referer": "https://ottencoffee.co.id/register/verification",
             "accept-encoding": "gzip, deflate, br",
             "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
-        }
+         }
 
-        register_datao = {
+         register_datao = {
             "sentBy": "sms",
             "to": "+62"+nomor
-        }
+         }
 
-        register_responseo = requests.post(register_urlo, json=register_datao, headers=register_headerso).text
-#
-        headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
-        payloaddooit = {"code": "+62", "phone": nomor}
-        responsedooit = requests.post("https://www.dooitwell.id/site/generateotp", headers=headdooit, json=payloaddooit).text
-        return jsonify({
-            "creator": "AmmarBN",
-            "status": True,
-            "version": "Beta",
-            "message": f"Success Sending to phone {nomor} and {email}. please wait 2 minutes"
-        })
-    else:
-         return ({
-             "code": 404,
-             "message": "Gagal Mengambil Data API"
-         })
+         register_responseo = requests.post(register_urlo, json=register_datao, headers=register_headerso).text
+         if 'Verification code requested successfully' in register_responseo:
+                  return jsonify({
+                      "creator": "AmmarBN",
+                      "status": "success",
+                      "message": {
+                           "get_otp": True,
+                           "send_to": nomor
+                      }
+                  })
+	 else:
+                  return jsonify({
+                      "creator": "AmmarBN",
+                      "status": "failes",
+                      "message": {
+                           "get_otp": False,
+                           "send_to": nomor
+                      }
+                  })
 
 @app.route('/api/spam-gmail', methods=['GET'])
 def generate_mess_gmail():
