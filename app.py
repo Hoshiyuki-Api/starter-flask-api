@@ -493,7 +493,7 @@ def generate_mess_sny():
             "accept": "application/json, text/plain, */*",
             "content-type": "application/json",
             "sec-ch-ua-mobile": "?1",
-            "authorization": f"Bearer {token}",
+            "authorization": "Bearer "+token,
             "user-agent": user_agent,
             "sec-ch-ua-platform": "\"Android\"",
             "origin": "https://ottencoffee.co.id",
