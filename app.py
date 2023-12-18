@@ -510,27 +510,27 @@ def generate_mess_sny():
         }
 
         register_response = requests.post(register_url, json=register_data, headers=register_headers).text
-        return (register_response)
-        #if 'Verification code requested successfully' in register_response:
-            #return jsonify({
-               # "creator": "AmmarBN",
-             #   "status": "success",
-              #  "message": {
-             #       "get_otp": True,
-             #       "send_to": nomor
-            #    }
-         #   })
-      #  else:
-          #  return jsonify({
-              #  "creator": "AmmarBN",
-             #   "status": "failed",  # Fixed typo here
-           #     "message": {
-                #    "get_otp": False,
-                 #   "send_to": nomor
-             #   }
-         #   })
-  #  else:
-       # return jsonify({"error": "Failed to fetch user agents"}), api_response.status_code
+        #return (register_response)
+        if 'Verification code requested successfully' in register_response:
+            return jsonify({
+                "creator": "AmmarBN",
+                "status": "success",
+                "message": {
+                    "get_otp": True,
+                    "send_to": nomor
+                }
+            })
+        else:
+            return jsonify({
+                "creator": "AmmarBN",
+                "status": "failed",  # Fixed typo here
+                "message": {
+                    "get_otp": False,
+                    "send_to": nomor
+                }
+            })
+    else:
+        return jsonify({"error": "Failed to fetch user agents"}), api_response.status_code
 
 @app.route('/api/spam-gmail', methods=['GET'])
 def generate_mess_gmail():
