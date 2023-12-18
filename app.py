@@ -422,53 +422,56 @@ def get_spm_sny():
 #
         token_urlo = "https://api.ottencoffee.co.id/v3/auth/token/generate"
         token_headerso = {
-    "Host": "api.ottencoffee.co.id",
-    "content-length": "64",
-    "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
-    "accept": "application/json, text/plain, */*",
-    "content-type": "application/json",
-    "sec-ch-ua-mobile": "?1",
-    "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
-    "sec-ch-ua-platform": "\"Android\"",
-    "origin": "https://ottencoffee.co.id",
-    "sec-fetch-site": "same-site",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-dest": "empty",
-    "referer": "https://ottencoffee.co.id/?gad_source=1&gclid=CjwKCAiA1fqrBhA1EiwAMU5m_xcgbhfKaRyebnE94v00Z_gfJCvYg2XGEixfz8nXCQqGs3lo2eQLehoChSMQAvD_BwE",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"}
+            "Host": "api.ottencoffee.co.id",
+            "content-length": "64",
+            "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?1",
+            "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+            "sec-ch-ua-platform": "\"Android\"",
+            "origin": "https://ottencoffee.co.id",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://ottencoffee.co.id/?gad_source=1&gclid=CjwKCAiA1fqrBhA1EiwAMU5m_xcgbhfKaRyebnE94v00Z_gfJCvYg2XGEixfz8nXCQqGs3lo2eQLehoChSMQAvD_BwE",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+        }
 
         token_datao = {
-    "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
-    "type": "web"}
+            "clientId": "74f4aa1b-dd27-4fcc-8996-2ad6075d0286",
+            "type": "web"
+        }
 
         token_responseo = requests.post(token_urlo, json=token_datao, headers=token_headerso)
         tokeno = token_responseo.json()["data"]["accessToken"]
 
         register_urlo = "https://api.ottencoffee.co.id/v3/auth/register/code/request"
         register_headerso = {
-    "Host": "api.ottencoffee.co.id",
-    "content-length": "38",
-    "sec-ch-ua": "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"",
-    "accept": "application/json, text/plain, */*",
-    "content-type": "application/json",
-    "sec-ch-ua-mobile": "?1",
-    "authorization": f"Bearer {tokeno}",
-    "user-agent": user_agent,
-    "sec-ch-ua-platform": "\"Android\"",
-    "origin": "https://ottencoffee.co.id",
-    "sec-fetch-site": "same-site",
-    "sec-fetch-mode": "cors",
-    "sec-fetch-dest": "empty",
-    "referer": "https://ottencoffee.co.id/register/verification",
-    "accept-encoding": "gzip, deflate, br",
-    "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"}
+            "Host": "api.ottencoffee.co.id",
+            "content-length": "38",
+            "accept": "application/json, text/plain, */*",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?1",
+            "authorization": f"Bearer {tokeno}",
+            "user-agent": user_agent,
+            "sec-ch-ua-platform": "\"Android\"",
+            "origin": "https://ottencoffee.co.id",
+            "sec-fetch-site": "same-site",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "referer": "https://ottencoffee.co.id/register/verification",
+            "accept-encoding": "gzip, deflate, br",
+            "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7"
+        }
 
         register_datao = {
-    "sentBy": "sms",
-    "to": "+62"+nomor}
+            "sentBy": "sms",
+            "to": "+62"+nomor
+        }
 
-        register_responseo = requests.post(register_urlo, json=register_datao, headers=register_headerso)
+        register_responseo = requests.post(register_urlo, json=register_datao, headers=register_headerso).text
 #
         headdooit = {    "Host": "www.dooitwell.id",    "Content-Length": "36",    "Sec-Ch-UA": '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',    "Accept": "application/json, text/plain, */*",    "Content-Type": "application/json;charset=UTF-8",    "Sec-Ch-UA-Mobile": "?1",    "User-Agent":user_agent,    "Sec-Ch-UA-Platform": '"Android"',    "Origin": "https://www.dooitwell.id",    "Sec-Fetch-Site": "same-origin",    "Sec-Fetch-Mode": "cors",    "Sec-Fetch-Dest": "empty",    "Referer": "https://www.dooitwell.id/register",    "Accept-Encoding": "gzip, deflate, br",    "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",}
         payloaddooit = {"code": "+62", "phone": nomor}
