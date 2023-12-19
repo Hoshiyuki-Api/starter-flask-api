@@ -98,7 +98,7 @@ def check_expiry():
         return jsonify({"message": "Admin API key"}), 200
 
     if not is_apikey_valid(apikey):
-        return jsonify({"message": f"'{apikey}' Invalid API key"}), 200
+        return jsonify({"message": f"'{apikey}' Invalid or expired API key"}), 200
 
     apikey_info = api_keys.get(apikey, {})
 
