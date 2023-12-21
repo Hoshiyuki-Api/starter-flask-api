@@ -672,7 +672,7 @@ def ytdl_coy():
         return jsonify({
             "Creator": "AmmarBN",
             "Status": True,
-            "Data": {key: result.get(key, '') for key in ['title', 'link', 'mp3']}
+            "Data": [{key: result.get(key, '') for key in ['title', 'link', 'mp3']}]
         })
     else:
         return jsonify({"error": "Error in API response"}), 500
