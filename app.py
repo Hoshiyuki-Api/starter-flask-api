@@ -652,6 +652,30 @@ def get_proxies_endpoint():
     else:
         return jsonify({"error": "No proxies available."})
 
+@app.route('/download/ytdl', methods=['GET'])
+    url = request.args.get('url')
+    apikey = request.args.get('apikey')
+
+    if not url:
+        return jsonify({
+            "code": 404,
+            "creator": "AmmarBN",
+            "message": "Masukkan parameter URL"
+        })
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
+    api_response = requests.get(f"https://aemt.me/download/ytdl?url={url}").json()
+    if 'result' in api_response:
+        result = api_response['result']
+        return jsonify({
+            "Creator": "AmmarBN",
+            "Status": True,
+            "Data": {key: result.get(key, '') for key in ['title', 'link', 'mp3']}
+        })
+    else:
+        return jsonify({"error": "Error in API response"}), 500
+
 @app.route('/download/igdl', methods=['GET'])
 def download_igdl():
     url = request.args.get('url')
