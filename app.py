@@ -653,6 +653,7 @@ def get_proxies_endpoint():
         return jsonify({"error": "No proxies available."})
 
 @app.route('/download/ytdl', methods=['GET'])
+def ytdl_coy():
     url = request.args.get('url')
     apikey = request.args.get('apikey')
 
