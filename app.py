@@ -175,18 +175,18 @@ def get_image():
 @app.route('/qc', methods=['GET'])
 def generate_quote():
     try:
-        apikey = request.args.get('apikey')
         name = request.args.get('name', '')
         text = request.args.get('text', '')
-
-        if not apikey or not is_apikey_valid(apikey):
-            return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+        apikey = request.args.get('apikey')
 	    
         if not text:
             return jsonify({"error": "Text is missing"}), 400
 
         if not name:
             return jsonify({"error": "Name is missing"}), 400
+
+        if not apikey or not is_apikey_valid(apikey):
+            return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
         if len(text) > 10000:
             return jsonify({"error": "Maximum 10000 characters allowed"}), 400
@@ -638,11 +638,11 @@ def get_proxies_endpoint():
     num_proxies = request.args.get('jum', default=None, type=int)
     apikey = request.args.get('apikey')
 
-    if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-
     if num_proxies is None:
         return jsonify({"creator": "AmmarBN","error": "Parameter 'jum' is required."})
+
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     proxies = get_proxies()
 
