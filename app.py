@@ -170,7 +170,7 @@ def get_image():
     url=request.args.get('url')
     api=requests.get(f"https://aemt.me/toanime?url={url}")
     api_respon=api.json()
-    return (api_json)
+    return (api_respon)
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
