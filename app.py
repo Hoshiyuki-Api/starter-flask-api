@@ -175,9 +175,16 @@ def bing_image_api():
             img_response = requests.get(result_url)
             
             # Memuat gambar ke BytesIO agar bisa digunakan oleh send_file
-            img_bytes = BytesIO(img_response.content + b".jpeg")
+            img_bytes = BytesIO(img_response.content)
             
-            return send_file(img_bytes, mimetype='image/jpeg')
+            # Menambahkan format .jpeg pada nama file untuk keperluan unduhan
+            filename = f"{text}.jpeg"
+
+            # Membuat respons
+            response = make_response(send_file(img_bytes, mimetype='image/jpeg', as_attachment=True, download_name=filename))
+            response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+            
+            return response
         else:
             return "Failed to fetch image URL"
     else:
