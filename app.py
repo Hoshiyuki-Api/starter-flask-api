@@ -175,7 +175,7 @@ def bing_image_api():
             img_response = requests.get(result_url)
             
             # Memuat gambar ke BytesIO agar bisa digunakan oleh send_file
-            img_bytes = BytesIO(img_response.content)
+            img_bytes = BytesIO(img_response.content + b".jpeg")
             
             return send_file(img_bytes, mimetype='image/jpeg')
         else:
