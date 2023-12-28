@@ -164,6 +164,30 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
+@app.route('/text2img', methods=['GET'])
+def get_bing_image():
+    text = request.args.get('text')
+    api_url = f'https://aemt.me/bingimg?text={text}'
+    
+    try:
+        response = requests.get(api_url)
+        data = response.json()
+        
+        if data['status']:
+            image_url = data['result']
+            image_response = requests.get(image_url)
+            
+            # Simpan image sementara
+            with open('temp_image.jpg', 'wb') as temp_image:
+                temp_image.write(image_response.content)
+            
+            # Kirim image sebagai respon
+            return send_file('temp_image.jpg', mimetype='image/jpeg')
+        else:
+            return jsonify({'status': False, 'message': 'Failed to fetch image'})
+
+    except Exception as e:
+        return jsonify({'status': False, 'message': str(e)})
 
 @app.route('/maker/jadianime', methods=['GET'])
 def get_image():
