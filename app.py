@@ -172,23 +172,32 @@ def bing_image_api():
         response = requests.get(url)
         if response.status_code == 200:
             result_url = response.json()['result']
-            img_response = requests.get(result_url)
             
-            # Memuat gambar ke BytesIO agar bisa digunakan oleh send_file
-            img_bytes = BytesIO(img_response.content)
+            # Menggabungkan informasi respon dalam bentuk JSON
+            api_response = {
+                'Creator': 'AmmarBN',
+                'Status': True,  # Ubah menjadi False jika diperlukan
+                'Result': result_url
+            }
             
-            # Menambahkan format .jpeg pada nama file untuk keperluan unduhan
-            filename = f"{text}.jpeg"
-
-            # Membuat respons
-            response = make_response(send_file(img_bytes, mimetype='image/jpeg', as_attachment=True, download_name=filename))
-            response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-            
-            return response
+            # Menambahkan indent untuk kejelasan
+            return jsonify(api_response), 200, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
         else:
-            return "Failed to fetch image URL"
+            # Jika gagal mendapatkan URL gambar
+            api_response = {
+                'Creator': 'AmmarBN',
+                'Status': False,
+                'Result': 'Failed to fetch image URL'
+            }
+            return jsonify(api_response), 404, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
     else:
-        return "Missing 'text' parameter"
+        # Jika parameter 'text' hilang
+        api_response = {
+            'Creator': 'AmmarBN',
+            'Status': False,
+            'Result': 'Missing \'text\' parameter'
+        }
+        return jsonify(api_response), 400, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
 
 @app.route('/maker/jadianime', methods=['GET'])
 def get_image():
