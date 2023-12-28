@@ -165,33 +165,23 @@ def reduce_expiry():
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
 @app.route('/bingimg', methods=['GET'])
-def get_bing_image():
+def bing_image_api():
     text = request.args.get('text')
-
-    if not text:
-        return jsonify({'status': False, 'message': 'Parameter "text" is required'})
-
-    api_url = f'https://aemt.me/bingimg?text={text}'
-    
-    try:
-        response = requests.get(api_url)
-        data = response.json()
-        
-        if data['status']:
-            image_url = data['result']
-            image_response = requests.get(image_url)
+    if text:
+        url = f'https://aemt.me/bingimg?text={text}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            result_url = response.json()['result']
+            img_response = requests.get(result_url)
             
-            # Simpan image sementara
-            with open('temp_image.jpg', 'wb') as temp_image:
-                temp_image.write(image_response.content)
+            # Memuat gambar ke BytesIO agar bisa digunakan oleh send_file
+            img_bytes = BytesIO(img_response.content)
             
-            # Kirim image sebagai respon
-            return send_file('temp_image.jpg', mimetype='image/jpeg')
+            return send_file(img_bytes, mimetype='image/jpeg')
         else:
-            return jsonify({'status': False, 'message': 'Failed to fetch image'})
-
-    except Exception as e:
-        return jsonify({'status': False, 'message': str(e)})
+            return "Failed to fetch image URL"
+    else:
+        return "Missing 'text' parameter"
 
 @app.route('/maker/jadianime', methods=['GET'])
 def get_image():
