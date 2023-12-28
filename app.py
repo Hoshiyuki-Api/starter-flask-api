@@ -174,30 +174,28 @@ def bing_image_api():
             result_url = response.json()['result']
             
             # Menggabungkan informasi respon dalam bentuk JSON
-            api_response = {
+            return ({
                 'Creator': 'AmmarBN',
                 'Status': True,  # Ubah menjadi False jika diperlukan
                 'Result': result_url
-            }
-            
-            # Menambahkan indent untuk kejelasan
-            return jsonify(api_response), 200, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
+            })
+            #return jsonify(api_response)
         else:
             # Jika gagal mendapatkan URL gambar
-            api_response = {
+            return ({
                 'Creator': 'AmmarBN',
                 'Status': False,
                 'Result': 'Failed to fetch image URL'
-            }
-            return jsonify(api_response), 404, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
+            })
+            #return jsonify(api_response)
     else:
         # Jika parameter 'text' hilang
-        api_response = {
+        return ({
             'Creator': 'AmmarBN',
             'Status': False,
             'Result': 'Missing \'text\' parameter'
-        }
-        return jsonify(api_response), 400, {'Content-Type': 'application/json; charset=utf-8', 'Indent': 2}
+        })
+        #return jsonify(api_response)
 
 @app.route('/maker/jadianime', methods=['GET'])
 def get_image():
