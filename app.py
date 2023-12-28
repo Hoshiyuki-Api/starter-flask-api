@@ -164,9 +164,13 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
-@app.route('/text2img', methods=['GET'])
+@app.route('/bingimg', methods=['GET'])
 def get_bing_image():
     text = request.args.get('text')
+
+    if not text:
+        return jsonify({'status': False, 'message': 'Parameter "text" is required'})
+
     api_url = f'https://aemt.me/bingimg?text={text}'
     
     try:
