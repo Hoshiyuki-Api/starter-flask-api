@@ -197,10 +197,14 @@ def bing_image_api():
         })
         #return jsonify(api_response)
 
-@app.route('/jadianime', methods=['GET'])
+@app.route('/convert-to-anime', methods=['GET'])
 def convert_to_anime():
     try:
         url = request.args.get('url')
+        
+        if not url:
+            return jsonify({"error": "Missing 'url' parameter"}), 400
+
         api_url = f'https://aemt.me/toanime?url={url}'
         
         response = requests.get(api_url)
@@ -211,7 +215,7 @@ def convert_to_anime():
         return jsonify({"anime_url": anime_url})
 
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
