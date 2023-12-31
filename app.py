@@ -197,12 +197,21 @@ def bing_image_api():
         })
         #return jsonify(api_response)
 
-@app.route('/maker/jadianime', methods=['GET'])
-def get_image():
-    url=request.args.get('url')
-    api=requests.get(f"https://aemt.me/toanime?url={url}")
-    api_respon=api.json()
-    return (api_respon)
+@app.route('/jadianime', methods=['GET'])
+def convert_to_anime():
+    try:
+        url = request.args.get('url')
+        api_url = f'https://aemt.me/toanime?url={url}'
+        
+        response = requests.get(api_url)
+        data = response.json()
+
+        anime_url = data['url']['img_crop_single']
+
+        return jsonify({"anime_url": anime_url})
+
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
