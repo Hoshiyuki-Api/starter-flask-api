@@ -168,6 +168,10 @@ def reduce_expiry():
 def pricing():
     return redirect(url_for('shop_index'))
 
+app.route('/shop/index.html')
+def shop_index():
+    return send_from_directory('shop', 'index.html')
+
 @app.route('/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
