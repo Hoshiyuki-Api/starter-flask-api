@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harga API Key</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Daftar Harga API Key</h2>
+
+        <ul id="priceList" class="price-list">
+            <li data-price="5000">
+                <div class="package">
+                    <span class="title">Paket Bulanan</span>
+                    <span class="price">5k</span>
+                </div>
+                <span class="description">Akses penuh selama satu bulan.</span>
+            </li>
+            <li data-price="10000">
+                <div class="package">
+                    <span class="title">Paket 2 Bulan</span>
+                    <span class="price">10k</span>
+                </div>
+                <span class="description">Diskon untuk pembelian dua bulan.</span>
+            </li>
+            <li data-price="15000">
+                <div class="package">
+                    <span class="title">Paket 5 Bulan</span>
+                    <span class="price">15k</span>
+                </div>
+                <span class="description">Paket hemat selama lima bulan.</span>
+            </li>
+        </ul>
+
+        <div class="total-container">
+            <p id="totalPrice" class="total-price">Total: <span id="totalAmount">0</span>k</p>
+            <div class="payment-method-container">
+                <select id="paymentMethod" class="payment-method" onchange="updatePaymentImage()">
+                    <option value="DANA">DANA</option>
+                    <option value="GOPAY">GOPAY</option>
+                    <option value="QRIS">QRIS</option>
+                </select>
+                <img id="paymentImage" src="" alt="Payment Logo" class="payment-image">
+            </div>
+            <button id="purchaseButton" class="purchase-button" onclick="makePayment()">Beli Sekarang</button>
+            <button id="cancelButton" class="purchase-button" onclick="cancelPurchase()">Tidak Jadi</button>
+        </div>
+
+        <div id="paymentOptions" class="payment-options">
+            <!-- Gambar digunakan di dalam dropdown -->
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+</html>
