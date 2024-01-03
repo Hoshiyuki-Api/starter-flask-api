@@ -164,11 +164,11 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
-@app.route('/pricing')
+@app.route('/price')
 def pricing():
     return redirect(url_for('shop_index'))
 
-@app.route('/shop/index.html')
+@app.route('/pricing')
 def shop_index():
     return send_from_directory('shop', 'index.html')
 
