@@ -164,6 +164,10 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
+@app.route('/pricing')
+def pricing():
+    return redirect(url_for('shop_index'))
+
 @app.route('/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
