@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harga API Key</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', _external=True, _from='shop') }}">
 </head>
 <body>
     <div class="container">
@@ -52,7 +52,7 @@
             <!-- Gambar digunakan di dalam dropdown -->
         </div>
 
-        <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+        <script src="{{ url_for('static', filename='shop/script.js', _external=True) }}" defer></script>
     </div>
 </body>
 </html>
