@@ -172,6 +172,28 @@ def pricing():
 def shop_index():
     return send_from_directory('shop', 'index.html')
 
+@app.route('/nsfw/nsfw-loli')
+def nsfw_loli():
+    json_url = "https://raw.githubusercontent.com/AmmarrBN/dbbot/main/nsfw/nsfw-loli.json"
+    response = requests.get(json_url)
+
+    if response.status_code == 200:
+        data = json.loads(response.text)
+        image_urls = data["images"]
+
+        random_image = random.choice(image_urls)
+
+        # Fetch the image data
+        image_data = requests.get(random_image).content
+
+        # Create BytesIO object
+        image_stream = BytesIO(image_data)
+
+        # Send image file
+        return send_file(image_stream, mimetype='image/jpeg')
+    else:
+        return "Failed to fetch data from the JSON URL"
+
 @app.route('/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
