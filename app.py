@@ -164,6 +164,10 @@ def reduce_expiry():
 
 
 #-----------------# Pembatas Sistem Apikey #--------------------#
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
 @app.route('/price')
 def pricing():
     return redirect(url_for('shop_index'))
