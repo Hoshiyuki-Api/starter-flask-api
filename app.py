@@ -179,7 +179,9 @@ def nsfw_loli():
 
     if response.status_code == 200:
         data = json.loads(response.text)
-        image_urls = data["images"]
+        
+        # List of image URLs directly from the JSON
+        image_urls = data
 
         random_image = random.choice(image_urls)
 
