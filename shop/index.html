@@ -5,166 +5,184 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harga API Key</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+}
 
-        .container {
-            text-align: center;
-            margin: 50px auto;
-            max-width: 600px;
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            position: relative;
-        }
+.container {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    position: relative;
+}
 
-        h2 {
-            color: #333;
-        }
+h2 {
+    color: #333;
+}
 
-        .price-list {
-            list-style-type: none;
-            padding: 0;
-        }
+.price-list {
+    list-style-type: none;
+    padding: 0;
+}
 
-        .price-list li {
-            background-color: #f8f8f8;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+.price-list li {
+    background-color: #f8f8f8;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
 
-        .price-list li:hover {
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-        }
+.price-list li:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+}
 
-        .package {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.package {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        .title {
-            font-size: 20px;
-            color: #333;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+.title {
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
 
-        .price {
-            font-size: 24px;
-            color: #4CAF50;
-            font-weight: bold;
-        }
+.price {
+    font-size: 24px;
+    color: #4CAF50;
+    font-weight: bold;
+}
 
-        .description {
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-        }
+.description {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
 
-        .total-container {
-            margin-top: 30px;
-        }
+.total-container {
+    margin-top: 30px;
+}
 
-        .total-price {
-            font-size: 18px;
-            color: #555;
-        }
+.total-price {
+    font-size: 18px;
+    color: #555;
+}
 
-        #totalAmount {
-            font-weight: bold;
-            font-size: 24px;
-            color: #333;
-        }
+#totalAmount {
+    font-weight: bold;
+    font-size: 24px;
+    color: #333;
+}
 
-        .payment-method-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
+.payment-method-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+}
 
-        .payment-method {
-            flex-grow: 1;
-        }
+.payment-method {
+    flex-grow: 1;
+}
 
-        .payment-image {
-            width: 40px;
-            height: 40px;
-            margin-left: 10px;
-            border-radius: 5px;
-        }
+.payment-image {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    border-radius: 5px;
+}
 
-        .purchase-button {
-            padding: 12px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+.payment-method-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 5px;
+}
 
-        .purchase-button:hover {
-            background-color: #45a049;
-        }
+.payment-label {
+    font-size: 16px;
+    color: #555;
+    font-family: Copperplate, Papyrus, fantasy;
+}
 
-        .payment-options {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-        }
+.payment-label {
+    font-size: 16px;
+    color: #555;
+}
 
-        .payment-option {
-            margin-top: 10px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: background-color 0.3s;
-        }
+.purchase-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
 
-        .payment-option img {
-            width: 40px;
-            height: 40px;
-            margin-bottom: 5px;
-        }
+.purchase-button:hover {
+    background-color: #45a049;
+}
 
-        .payment-option:hover {
-            background-color: #45a049;
-        }
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+}
+
+.payment-option {
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.payment-option img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.payment-option:hover {
+    background-color: #45a049;
+}
     </style>
+    <link rel="icon" type="image/png" href="https://telegra.ph/file/67ba3a71d90795c7be02b.png">
 </head>
 <body>
-
     <div class="container">
         <h2>Daftar Harga API Key</h2>
 
@@ -195,14 +213,15 @@
         <div class="total-container">
             <p id="totalPrice" class="total-price">Total: <span id="totalAmount">0</span>k</p>
             <div class="payment-method-container">
+                <p class="payment-label">Select Payment: </p>
                 <select id="paymentMethod" class="payment-method" onchange="updatePaymentImage()">
                     <option value="DANA">DANA</option>
                     <option value="GOPAY">GOPAY</option>
                     <option value="QRIS">QRIS</option>
                 </select>
-                <img id="paymentImage" src="" alt="Payment Logo" class="payment-image">
+                <img id="paymentImage" src="https://telegra.ph/file/ca920644477addba8937b.jpg" alt="Payment Logo" class="payment-image">
             </div>
-            <button id="purchaseButton" class="purchase-button" onclick="makePayment()">Beli Sekarang</button>
+            <button id="purchaseButton" class="purchase-button" onclick="validatePayment()">Beli Sekarang</button>
             <button id="cancelButton" class="purchase-button" onclick="cancelPurchase()">Tidak Jadi</button>
         </div>
 
@@ -211,83 +230,91 @@
         </div>
 
         <script>
-            let selectedPrice = 0;
+        let selectedPrice = 0;
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const priceList = document.getElementById("priceList");
-        const totalPriceElement = document.getElementById("totalAmount");
+document.addEventListener("DOMContentLoaded", function () {
+    const priceList = document.getElementById("priceList");
+    const totalPriceElement = document.getElementById("totalAmount");
 
-        priceList.addEventListener("click", function (event) {
-            const newSelectedPrice = parseInt(event.target.dataset.price);
+    priceList.addEventListener("click", function (event) {
+        const newSelectedPrice = parseInt(event.target.dataset.price);
 
-            if (!isNaN(newSelectedPrice)) {
-                selectedPrice = newSelectedPrice;
-                updateTotalPrice();
-            }
-        });
+        if (!isNaN(newSelectedPrice)) {
+            selectedPrice = newSelectedPrice;
+            updateTotalPrice();
+        }
     });
+});
 
-    function updateTotalPrice() {
-        const totalPriceElement = document.getElementById("totalAmount");
-        totalPriceElement.textContent = selectedPrice;
+function updateTotalPrice() {
+    const totalPriceElement = document.getElementById("totalAmount");
+    totalPriceElement.textContent = selectedPrice;
+}
+
+function validatePayment() {
+    const selectedMethod = document.getElementById("paymentMethod").value;
+    if (!selectedMethod) {
+        alert("Silakan pilih metode pembayaran.");
+    } else {
+        makePayment();
     }
+}
 
-    function showPaymentOptions() {
-        alert("Silahkan pilih metode pembayaran.");
-    }
+function showPaymentOptions() {
+    alert("Silakan pilih metode pembayaran.");
+}
 
-    function cancelPurchase() {
-        if (selectedPrice > 0) {
-            const confirmation = confirm("Anda yakin ingin membatalkan pembelian?");
-            if (confirmation) {
-                resetSelectedPrice();
-            }
-        } else {
-            alert("Tidak ada pembelian yang dapat dibatalkan.");
+function cancelPurchase() {
+    if (selectedPrice > 0) {
+        const confirmation = confirm("Anda yakin ingin membatalkan pembelian?");
+        if (confirmation) {
+            resetSelectedPrice();
         }
+    } else {
+        alert("Tidak ada pembelian yang dapat dibatalkan.");
     }
+}
 
-    function makePayment() {
-        const selectedMethod = document.getElementById("paymentMethod").value;
-        if (selectedPrice > 0 && selectedMethod) {
-            const confirmation = confirm(`Anda yakin ingin membeli dengan total ${selectedPrice}k menggunakan ${selectedMethod}?`);
-            if (confirmation) {
-                // Redirect to WhatsApp link with purchase details
-                const purchaseDetails = `Halo min, beli apikey metode: ${selectedMethod}, paket: ${selectedPrice}k`;
-                const waLink = `https://wa.me/6287708773367?text=${encodeURIComponent(purchaseDetails)}`;
-                window.location.href = waLink;
-                resetSelectedPrice();
-            }
-        } else {
-            alert("Pilih setidaknya satu paket dan metode pembayaran.");
+function makePayment() {
+    const selectedMethod = document.getElementById("paymentMethod").value;
+    if (selectedPrice > 0 && selectedMethod) {
+        const confirmation = confirm(`Anda yakin ingin membeli dengan total ${selectedPrice}k menggunakan ${selectedMethod}?`);
+        if (confirmation) {
+            // Redirect to WhatsApp link with purchase details
+            const purchaseDetails = `Halo min, beli apikey metode: ${selectedMethod}, paket: ${selectedPrice}k`;
+            const waLink = `https://wa.me/6287708773367?text=${encodeURIComponent(purchaseDetails)}`;
+            window.location.href = waLink;
+            resetSelectedPrice();
         }
+    } else {
+        alert("Pilih setidaknya satu paket dan metode pembayaran.");
     }
+}
 
-    function resetSelectedPrice() {
-        selectedPrice = 0;
-        updateTotalPrice();
+function resetSelectedPrice() {
+    selectedPrice = 0;
+    updateTotalPrice();
+}
+
+function updatePaymentImage() {
+    const selectedMethod = document.getElementById("paymentMethod").value;
+    const paymentImage = document.getElementById("paymentImage");
+
+    switch (selectedMethod) {
+        case "DANA":
+            paymentImage.src = "https://telegra.ph/file/0b28432e522334c4e1219.jpg";
+            break;
+        case "GOPAY":
+            paymentImage.src = "https://telegra.ph/file/42b4dd51e65974720dc0e.jpg";
+            break;
+        case "QRIS":
+            paymentImage.src = "https://telegra.ph/file/b4098fc07829fc506b3d4.jpg";
+            break;
+        default:
+            paymentImage.src = "";
     }
-
-    function updatePaymentImage() {
-        const selectedMethod = document.getElementById("paymentMethod").value;
-        const paymentImage = document.getElementById("paymentImage");
-
-        switch (selectedMethod) {
-            case "DANA":
-                paymentImage.src = "https://telegra.ph/file/0b28432e522334c4e1219.jpg";
-                break;
-            case "GOPAY":
-                paymentImage.src = "https://telegra.ph/file/42b4dd51e65974720dc0e.jpg";
-                break;
-            case "QRIS":
-                paymentImage.src = "https://telegra.ph/file/b4098fc07829fc506b3d4.jpg";
-                break;
-            default:
-                paymentImage.src = "";
-        }
-    }
+}
         </script>
     </div>
 </body>
-    </html>
-                    
+</html>
