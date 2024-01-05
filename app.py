@@ -239,7 +239,7 @@ def convert_to_anime():
         url = request.args.get('url')
         #api_url = f'https://aemt.me/toanime?url={url}'
         
-        response = requests.post(f"https://aemt.me/toanime?url={url}").json()
+        response = requests.get(f"https://aemt.me/toanime?url={url}").json()
         #data = response.json()
 
         #anime_url = response['url']['img_crop_single']
