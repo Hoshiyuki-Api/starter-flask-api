@@ -239,12 +239,12 @@ def convert_to_anime():
         url = request.args.get('url')
         #api_url = f'https://aemt.me/toanime?url={url}'
         
-        response = requests.get(f"https://aemt.me/toanime?url={url}").json()
+        response = requests.get(f"https://aemt.me/toanime?url={url}")text
         #data = response.json()
 
         #anime_url = response['url']['img_crop_single']
 
-        return jsonify({"anime_url": response['url']['img_crop_single']})
+        return (response)
 
     except Exception as e:
         return jsonify({"error": str(e)})
