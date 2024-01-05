@@ -249,9 +249,6 @@ def convert_to_anime():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
 @app.route('/qc', methods=['GET'])
 def generate_quote():
     try:
