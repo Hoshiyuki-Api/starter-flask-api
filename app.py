@@ -19,7 +19,7 @@ from fake_useragent import UserAgent
 
 app = Flask(__name__)
 api = Api(app)
-CORS(app, resources={r"/api/*": {"origins": "http://hoshiyuki-api.rf.gd/"}})
+CORS(app, resources={r"/api/*": {"origins": "https://hoshiyuki-api.my.id"}})
 
 gpnting_json_path = "gpnting.json"
 
@@ -239,12 +239,12 @@ def convert_to_anime():
         url = request.args.get('url')
         #api_url = f'https://aemt.me/toanime?url={url}'
         
-        response = requests.get(f"https://aemt.me/toanime?url={url}").text
+        response = requests.post(f"https://aemt.me/toanime?url={url}").json()
         #data = response.json()
 
         #anime_url = response['url']['img_crop_single']
 
-        return (response)
+        return response
 
     except Exception as e:
         return jsonify({"error": str(e)})
