@@ -208,10 +208,10 @@ def bing_image_api():
         response = requests.get(url)
         if response.status_code == 200:
             result_url = response.json()['result']
-            
             # Menggabungkan informasi respon dalam bentuk JSON
-            hasil = BytesIO(result_url)
-            return send_file(hasil, mimetype='image/jpeg')
+            if result_url:
+                hasil = BytesIO(result_url)
+                return send_file(hasil, mimetype='image/jpeg')
             #return ({
                 #'Creator': 'AmmarBN',
                 #'Status': True,  # Ubah menjadi False jika diperlukan
