@@ -203,37 +203,50 @@ def nsfw_loli():
 @app.route('/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
-    if text:
-        url = f'https://aemt.me/bingimg?text={text}'
-        response = requests.get(url)
-        if response.status_code == 200:
-            result_url = response.json()['result']
-            # Menggabungkan informasi respon dalam bentuk JSON
-            if result_url:
-                hasil = BytesIO(result_url)
-                return send_file(hasil, mimetype='image/jpeg')
-            #return ({
-                #'Creator': 'AmmarBN',
-                #'Status': True,  # Ubah menjadi False jika diperlukan
-                #'Result': result_url
-            #})
-            #return jsonify(api_response)
-        else:
-            # Jika gagal mendapatkan URL gambar
-            return ({
-                'Creator': 'AmmarBN',
-                'Status': False,
-                'Result': 'Failed to fetch image URL'
-            })
-            #return jsonify(api_response)
-    else:
+
+    if not text:
         # Jika parameter 'text' hilang
-        return ({
+        return jsonify({
             'Creator': 'AmmarBN',
             'Status': False,
             'Result': 'Missing \'text\' parameter'
         })
-        #return jsonify(api_response)
+
+    url = f'https://aemt.me/bingimg?text={text}'
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        result_url = response.json().get('result')
+
+        if result_url:
+            # Mendapatkan gambar dari URL
+            image_response = requests.get(result_url)
+
+            if image_response.status_code == 200:
+                # Membuat objek BytesIO dari gambar
+                hasil = BytesIO(image_response.content)
+                return send_file(hasil, mimetype='image/jpeg')
+            else:
+                # Jika gagal mendapatkan gambar dari URL
+                return jsonify({
+                    'Creator': 'AmmarBN',
+                    'Status': False,
+                    'Result': 'Failed to fetch image from external URL'
+                })
+        else:
+            # Jika tidak ada URL gambar dalam respon JSON
+            return jsonify({
+                'Creator': 'AmmarBN',
+                'Status': False,
+                'Result': 'Failed to fetch image URL'
+            })
+    else:
+        # Jika gagal mendapatkan respon dari server eksternal
+        return jsonify({
+            'Creator': 'AmmarBN',
+            'Status': False,
+            'Result': 'Failed to fetch image from external server'
+        })
 
 @app.route('/jadianime', methods=['GET'])
 def convert_to_anime():
