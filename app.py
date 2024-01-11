@@ -200,7 +200,7 @@ def nsfw_loli():
     else:
         return "Failed to fetch data from the JSON URL"
 
-@app.route('/bingimg', methods=['GET'])
+@app.route('/maker/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
     apikey = request.args.get('apikey')
