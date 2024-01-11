@@ -210,11 +210,13 @@ def bing_image_api():
             result_url = response.json()['result']
             
             # Menggabungkan informasi respon dalam bentuk JSON
-            return ({
-                'Creator': 'AmmarBN',
-                'Status': True,  # Ubah menjadi False jika diperlukan
-                'Result': result_url
-            })
+            hasil = BytesIO(result_url)
+            return send_file(hasil, mimetype='image/jpeg')
+            #return ({
+                #'Creator': 'AmmarBN',
+                #'Status': True,  # Ubah menjadi False jika diperlukan
+                #'Result': result_url
+            #})
             #return jsonify(api_response)
         else:
             # Jika gagal mendapatkan URL gambar
