@@ -203,6 +203,7 @@ def nsfw_loli():
 @app.route('/bingimg', methods=['GET'])
 def bing_image_api():
     text = request.args.get('text')
+    apikey = request.args.get('apikey')
 
     if not text:
         # Jika parameter 'text' hilang
@@ -211,6 +212,8 @@ def bing_image_api():
             'Status': False,
             'Result': 'Missing \'text\' parameter'
         })
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     url = f'https://aemt.me/bingimg?text={text}'
     response = requests.get(url)
