@@ -1365,6 +1365,10 @@ def index_anime():
 def index_bak():
 	return render_template('index_bak.html')
 
+@app.route('/maker')
+def index_bak():
+	return render_template('index_maker.html')
+
 class SpamCall(Resource):
 	def post(self):
 		nomor=request.form.get("nomor")
