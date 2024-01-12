@@ -17,7 +17,8 @@ import string
 import user_agent
 from fake_useragent import UserAgent
 
-app = Flask(__name__)
+app = Flask(__name__,
+	   static_folder='web/static')
 api = Api(app)
 CORS(app, resources={r"/api/*": {"origins": "https://hoshiyuki-api.my.id"}})
 
