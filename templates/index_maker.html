@@ -1,223 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maker Menu</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha384-GLhlTQ8iFZt5Sf8+nd0DTGodYjyy0X+TCA7/so/hF6NQjZ6P5tMWu2MOKB/w5Il1"
-        crossorigin="anonymous">
+    <link href="https://indrijunanda.github.io/RuangAdmin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
     <style>
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 20px;
-    background-color: #ffffff; /* Bright white background */
-    color: #333; /* Dark gray text color */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    overflow-y: auto;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #ffffff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
 
-h1 {
-    text-align: center;
-    color: #3498db; /* Bright blue heading color */
-    margin-bottom: 20px;
-    font-size: 36px;
-    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
-}
+        h1 {
+            text-align: center;
+            color: #3498db;
+            margin-bottom: 20px;
+            font-size: 36px;
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+        }
 
-table {
-    width: 80%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
-    background-color: #ffffff; /* Bright white background for the table */
-    border-radius: 12px;
-    overflow: hidden;
-    animation: fadeIn 1s ease-in-out;
-}
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-th, td {
-    padding: 15px;
-    text-align: left;
-    border-bottom: 1px solid #444;
-    transition: background-color 0.3s, color 0.3s;
-}
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-th {
-    background-color: #3498db; /* Bright blue header background color */
-    color: #fff; /* White text color for header */
-}
+        th {
+            background-color: #3498db;
+            color: #fff;
+        }
 
-tr:hover {
-    background-color: #ecf0f1; /* Light gray background on hover */
-}
+        tr:hover {
+            background-color: #ecf0f1;
+        }
 
-button {
-    background-color: #3498db; /* Bright blue button color */
-    color: #fff; /* White text color for button */
-    padding: 12px 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 16px;
-    margin-top: 10px;
-}
+        button {
+            background-color: #3498db;
+            color: #fff;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            margin-top: 10px;
+        }
 
-button:hover {
-    background-color: #2980b9; /* Slightly darker blue on hover */
-}
+        button:hover {
+            background-color: #2980b9;
+        }
 
-.menu-toggle {
-    display: none;
-}
+        .menu-toggle {
+            display: none;
+        }
 
-.menu-icon {
-    font-size: 24px;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #3498db; /* Bright blue color for the menu icon */
-}
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #3498db;
+        }
 
-.background-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white overlay */
-    z-index: 2;
-    animation: overlayFadeIn 0.5s ease-in-out;
-}
+        .background-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            animation: overlayFadeIn 0.5s ease-in-out;
+        }
 
-.menu-open .background-overlay {
-    display: block;
-}
+        .menu-open .background-overlay {
+            display: block;
+        }
 
-@keyframes overlayFadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+        @keyframes overlayFadeIn {
+            from {
+                opacity: 0;
+            }
 
-.dropdown {
-    display: none;
-    position: absolute;
-    top: 50px;
-    left: -80%; /* Initial position off-screen */
-    width: 80%;
-    height: calc(100vh - 50px); /* Full-height background */
-    background-color: #ecf0f1; /* Light gray background for the dropdown */
-    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    z-index: 3;
-    animation: slideIn 0.5s ease-in-out;
-}
+            to {
+                opacity: 1;
+            }
+        }
 
-.menu-open .dropdown {
-    display: block;
-    left: 0;
-}
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: -80%;
+            width: 80%;
+            height: calc(100vh - 50px);
+            background-color: #ecf0f1;
+            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            z-index: 3;
+            animation: slideIn 0.5s ease-in-out;
+        }
 
-.dropdown-header {
-    background-color: #3498db; /* Bright blue header background color for dropdown */
-    color: #fff; /* White text color for dropdown header */
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
-}
+        .menu-open .dropdown {
+            display: block;
+            left: 0;
+        }
 
-.dropdown.slide-out {
-    animation: slideOut 0.5s ease-in-out;
-}
+        .dropdown-header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
 
-.dropdown a {
-    padding: 12px 16px;
-    display: block;
-    color: #333; /* Dark gray text color for dropdown links */
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
+        .dropdown.slide-out {
+            animation: slideOut 0.5s ease-in-out;
+        }
 
-.dropdown a:hover {
-    background-color: #bdc3c7; /* Light gray background on dropdown link hover */
-}
+        .dropdown a {
+            padding: 12px 16px;
+            display: block;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
 
-@keyframes slideIn {
-    from {
-        transform: translateX(-100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
+        .dropdown a:hover {
+            background-color: #bdc3c7;
+        }
 
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-100%);
-    }
-}
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
 
-.menu-toggle:checked + .background-overlay,
-.menu-toggle:checked + .menu-icon {
-    display: none;
-}
+            to {
+                transform: translateX(0);
+            }
+        }
 
-.menu-toggle:checked + .menu-icon,
-.menu-toggle:checked + .menu-icon + .background-overlay,
-.menu-toggle:checked + .menu-icon + .background-overlay + .dropdown {
-    display: block;
-}
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+            }
 
-@media (max-width: 768px) {
-    table {
-        width: 100%;
-    }
+            to {
+                transform: translateX(-100%);
+            }
+        }
 
-    .menu-toggle:checked + table th,
-    .menu-toggle:checked + table td {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-}
+        .menu-toggle:checked+.background-overlay,
+        .menu-toggle:checked+.menu-icon {
+            display: none;
+        }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-  }
-  
+        .menu-toggle:checked+.menu-icon,
+        .menu-toggle:checked+.menu-icon+.background-overlay,
+        .menu-toggle:checked+.menu-icon+.background-overlay+.dropdown {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+            }
+
+            .menu-toggle:checked+table th,
+            .menu-toggle:checked+table td {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<input type="checkbox" class="menu-toggle" id="menuToggle">
+    <input type="checkbox" class="menu-toggle" id="menuToggle">
     <label for="menuToggle" class="menu-icon">&#9776;</label>
     <div class="background-overlay"></div>
 
     <div class="dropdown">
         <div class="dropdown-header">Hoshiyuki API</div>
         <a href="https://hoshiyuki-api.my.id">
-            <i class="fas fa-arrow-down fa-fw"></i> Downloader
+            <i class="fa fa-arrow-down fa-fw"></i> Downloader
         </a>
         <a href="https://hoshiyuki-api.my.id">
-            <i class="fas fa-camera-retro fa-fw"></i> Random Image
+            <i class="fa fa-camera-retro fa-fw"></i> Random Image
         </a>
         <a href="https://hoshiyuki-api.my.id">
-            <i class="fas fa-leaf fa-fw"></i> Primbon
+            <i class="fa fa-leaf fa-fw"></i> Primbon
         </a>
     </div>
 
