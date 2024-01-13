@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maker Menu</title>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background-color: #ffffff; /* Bright white background */
+    color: #333; /* Dark gray text color */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #3498db; /* Bright blue heading color */
+    margin-bottom: 20px;
+    font-size: 36px;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+table {
+    width: 80%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+    background-color: #ffffff; /* Bright white background for the table */
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+th {
+    background-color: #3498db; /* Bright blue header background color */
+    color: #fff; /* White text color for header */
+}
+
+tr:hover {
+    background-color: #ecf0f1; /* Light gray background on hover */
+}
+
+button {
+    background-color: #3498db; /* Bright blue button color */
+    color: #fff; /* White text color for button */
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #2980b9; /* Slightly darker blue on hover */
+}
+
+.menu-toggle {
+    display: none;
+}
+
+.menu-icon {
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #3498db; /* Bright blue color for the menu icon */
+}
+
+.background-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white overlay */
+    z-index: 2;
+    animation: overlayFadeIn 0.5s ease-in-out;
+}
+
+.menu-open .background-overlay {
+    display: block;
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 50px;
+    left: -80%; /* Initial position off-screen */
+    width: 80%;
+    height: calc(100vh - 50px); /* Full-height background */
+    background-color: #ecf0f1; /* Light gray background for the dropdown */
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    z-index: 3;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.menu-open .dropdown {
+    display: block;
+    left: 0;
+}
+
+.dropdown-header {
+    background-color: #3498db; /* Bright blue header background color for dropdown */
+    color: #fff; /* White text color for dropdown header */
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dropdown.slide-out {
+    animation: slideOut 0.5s ease-in-out;
+}
+
+.dropdown a {
+    padding: 12px 16px;
+    display: block;
+    color: #333; /* Dark gray text color for dropdown links */
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.dropdown a:hover {
+    background-color: #bdc3c7; /* Light gray background on dropdown link hover */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.menu-toggle:checked + .background-overlay,
+.menu-toggle:checked + .menu-icon {
+    display: none;
+}
+
+.menu-toggle:checked + .menu-icon,
+.menu-toggle:checked + .menu-icon + .background-overlay,
+.menu-toggle:checked + .menu-icon + .background-overlay + .dropdown {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+    }
+
+    .menu-toggle:checked + table th,
+    .menu-toggle:checked + table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+  }
+  
+    </style>
+</head>
+<body>
+
+<input type="checkbox" class="menu-toggle" id="menuToggle">
+<label for="menuToggle" class="menu-icon">&#9776;</label>
+<div class="background-overlay"></div>
+
+<div class="dropdown">
+    <div class="dropdown-header">Hoshiyuki API</div>
+    <a href="https://hoshiyuki-api.my.id">Downloader</a>
+    <a href="https://hoshiyuki-api.my.id">Random Image</a>
+    <a href="https://hoshiyuki-api.my.id">Primbon</a>
+</div>
+
+<h1>Maker Menu</h1>
+
+<table border="1">
+    <tr>
+        <th>No</th>
+        <th>Name</th>
+        <th>Desc</th>
+        <th>Info</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Text2Image</td>
+        <td>Convert Text to Image</td>
+        <td><a href="https://hoshiyuki-api.my.id/maker/bingimg?text=mobil balap&apikey=APIKEY" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Among Us</td>
+        <td>Among us</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Attp</td>
+        <td>Text to animated picture</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Attp 2</td>
+        <td>Text ti aninated picture</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Idul Fitri</td>
+        <td>Idul Fitri card generator</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>KTP maker</td>
+        <td>Ktp card generator</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Nulis Online</td>
+        <td>Nulis online di buku</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>Quotes Maker</td>
+        <td>Quotes Maker</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>Ttp</td>
+        <td>Text to picture</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>Wellcome Maker</td>
+        <td>Wellcome Maker</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+    <tr>
+        <td>11</td>
+        <td>Yigi Oh Card</td>
+        <td>Yugi Oh Card Maker</td>
+        <td><a href="https://hoshiyuki-api.my.id" target="_blank">
+            <button onmouseover="highlightButton(this)" onmouseout="resetButtonColor(this)">Get</button>
+        </a></td>
+    </tr>
+</table>
+
+<button onclick="redirectToHome()">Back To Home</button>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var menuToggle = document.getElementById('menuToggle');
+    var backgroundOverlay = document.querySelector('.background-overlay');
+    var dropdown = document.querySelector('.dropdown');
+
+    menuToggle.addEventListener('change', function () {
+        if (this.checked) {
+            document.body.classList.add('menu-open');
+            document.body.classList.remove('menu-open-full');
+            dropdown.classList.remove('slide-out');
+        } else {
+            document.body.classList.remove('menu-open');
+            dropdown.classList.add('slide-out');
+        }
+    });
+
+    backgroundOverlay.addEventListener('click', function () {
+        menuToggle.checked = false;
+        dropdown.classList.add('slide-out');
+    });
+
+    dropdown.addEventListener('animationend', function (event) {
+        if (event.animationName === 'slideOut' && !menuToggle.checked) {
+            document.body.classList.remove('menu-open');
+            document.body.classList.remove('menu-open-full');
+            dropdown.classList.remove('slide-out');
+        }
+    });
+
+    document.body.addEventListener('click', function (event) {
+        if (!dropdown.contains(event.target) && !menuToggle.contains(event.target)) {
+            menuToggle.checked = false;
+            dropdown.classList.add('slide-out');
+        }
+    });
+});
+
+function highlightButton(button) {
+    button.style.backgroundColor = "#27ae60";
+}
+
+function resetButtonColor(button) {
+    button.style.backgroundColor = "#3498db";
+}
+
+function redirectToHome() {
+    window.location.href = "https://hoshiyuki-api.my.id";
+}
+</script>
+</body>
+</html>
