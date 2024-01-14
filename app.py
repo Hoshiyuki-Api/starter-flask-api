@@ -256,13 +256,12 @@ def bing_image_api():
 def convert_to_anime():
     url = request.args.get('url')
     if not url:
-	return jsonify({
+        return jsonify({
             'Creator': 'AmmarBN',
             'Status': False,
             'Result': 'Missing \'url\' parameter'
         })
-    # api_url = f'https://aemt.me/toanime?url={url}'
-
+    
     response = requests.get(f"https://aemt.me/toanime?url={url}")
 
     if response.status_code == 200:
