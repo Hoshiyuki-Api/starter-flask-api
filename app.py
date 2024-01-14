@@ -256,26 +256,26 @@ def bing_image_api():
 def convert_to_anime():
     try:
         url = request.args.get('url')
-        #api_url = f'https://aemt.me/toanime?url={url}'
-        
-        response = requests.get(f"https://aemt.me/toanime?url={url}").json()
+        # api_url = f'https://aemt.me/toanime?url={url}'
+
+        response = requests.get(f"https://aemt.me/toanime?url={url}")
         data = response.json()
-        if data.status_code == 200:
-            gas = data.['url']['img_crop_single']
-	    return jsonify({
-                'creator': 'AmmarBN', 
-		'image': gas
-	    })
-	else:
-	    return jsonify ({
-		'creator': 'AmmarBN', 
-		'image': False
-	    }) 
 
-        #return response
-
+        if data['status_code'] == 200:
+            gas = data['url']['img_crop_single']
+            return jsonify({
+                'creator': 'AmmarBN',
+                'image': gas
+            })
+        else:
+            return jsonify({
+                'creator': 'AmmarBN',
+                'image': False
+            })
     except Exception as e:
-        return jsonify({"error": str(e)})
+        return jsonify({
+            'error': str(e)
+        })
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
