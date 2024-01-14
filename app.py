@@ -253,36 +253,30 @@ def bing_image_api():
         })
 
 @app.route('/jadianime', methods=['GET'])
-def convert_to_anime():
-    url = request.args.get('url')
-    if not url:
-        return jsonify({
-            'Creator': 'AmmarBN',
+def convert_anime():
+    api_url = "https://api.lolhuman.xyz/api/imagetoanime"
+    api_key = "haikalgans"
+    image_url = request.args.get('url')
+
+    if not image_url:
+        return jsonify ({
+	    'Creator': 'AmmarBN',
             'Status': False,
             'Result': 'Missing \'url\' parameter'
-        })
-    
-    response = requests.get(f"https://aemt.me/toanime?url={url}")
+	}) 
+
+    full_url = f"{api_url}?apikey={api_key}&img={image_url}"
+    response = requests.get(full_url)
 
     if response.status_code == 200:
-        data = response.json()
-
-        if 'url' in data and 'img_crop_single' in data['url']:
-            gas = data['url']['img_crop_single']
-            return jsonify({
-                'creator': 'AmmarBN',
-                'image': gas
-            })
-        else:
-            return jsonify({
-                'creator': 'AmmarBN',
-                'image': False,
-                'message': 'Image URL not available in the API response'
-            })
+        image_data = BytesIO(response.content)
+        return send_file(image_data, mimetype='image/png')
     else:
-        return jsonify({
-            'error': f'Failed to fetch data from the API. Status Code: {response.status_code}'
-        })
+        return jsonify ({
+	    'Creator': 'AmmarBN',
+            'Status': False,
+            'Result': 'Failed fetch image API'
+	}) 
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
