@@ -254,14 +254,21 @@ def bing_image_api():
 
 @app.route('/jadianime', methods=['GET'])
 def convert_to_anime():
-    try:
-        url = request.args.get('url')
-        # api_url = f'https://aemt.me/toanime?url={url}'
+    url = request.args.get('url')
+    if not url:
+	return jsonify({
+            'Creator': 'AmmarBN',
+            'Status': False,
+            'Result': 'Missing \'url\' parameter'
+        })
+    # api_url = f'https://aemt.me/toanime?url={url}'
 
-        response = requests.get(f"https://aemt.me/toanime?url={url}")
+    response = requests.get(f"https://aemt.me/toanime?url={url}")
+
+    if response.status_code == 200:
         data = response.json()
 
-        if data['status_code'] == 200:
+        if 'url' in data and 'img_crop_single' in data['url']:
             gas = data['url']['img_crop_single']
             return jsonify({
                 'creator': 'AmmarBN',
@@ -270,11 +277,12 @@ def convert_to_anime():
         else:
             return jsonify({
                 'creator': 'AmmarBN',
-                'image': False
+                'image': False,
+                'message': 'Image URL not available in the API response'
             })
-    except Exception as e:
+    else:
         return jsonify({
-            'error': str(e)
+            'error': f'Failed to fetch data from the API. Status Code: {response.status_code}'
         })
 
 @app.route('/qc', methods=['GET'])
