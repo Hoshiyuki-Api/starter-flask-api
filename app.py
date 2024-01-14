@@ -266,11 +266,8 @@ def convert_anime():
 	}) 
 
     full_url = f"{api_url}?apikey={api_key}&img={image_url}"
-    response = requests.get(full_url)
-
-    if response.status_code == 200:
-        image_data = BytesIO(response.content)
-        return Response(image_data.getvalue(), mimetype='image/bin')
+    response = requests.get(full_url).content
+    return response
     else:
         return jsonify ({
 	    'Creator': 'AmmarBN',
