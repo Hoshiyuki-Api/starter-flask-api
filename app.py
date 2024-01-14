@@ -259,11 +259,20 @@ def convert_to_anime():
         #api_url = f'https://aemt.me/toanime?url={url}'
         
         response = requests.get(f"https://aemt.me/toanime?url={url}").json()
-        #data = response.json()
+        data = response.json()
+        if data.status_code == 200:
+            gas = data.['url']['img_crop_single']
+	    return jsonify({
+                'creator': 'AmmarBN', 
+		'image': gas
+	    })
+	else:
+	    return jsonify ({
+		'creator': 'AmmarBN', 
+		'image': False
+	    }) 
 
-        #anime_url = response['url']['img_crop_single']
-
-        return response
+        #return response
 
     except Exception as e:
         return jsonify({"error": str(e)})
