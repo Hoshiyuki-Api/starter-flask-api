@@ -268,12 +268,6 @@ def convert_anime():
     full_url = f"{api_url}?apikey={api_key}&img={image_url}"
     response = requests.get(full_url).content
     return response
-    else:
-        return jsonify ({
-	    'Creator': 'AmmarBN',
-            'Status': False,
-            'Result': 'Failed fetch image API'
-	}) 
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
