@@ -270,7 +270,7 @@ def convert_anime():
 
     if response.status_code == 200:
         image_data = BytesIO(response.content)
-        return send_file(image_data, mimetype='image/png')
+        return Response(image_data.getvalue(), mimetype='image/bin')
     else:
         return jsonify ({
 	    'Creator': 'AmmarBN',
