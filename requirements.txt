@@ -1,5 +1,5 @@
 PyGithub
-PIL
+Pillow
 Faker==20.1.0
 user-agent==0.1.10
 validators==0.22.0
