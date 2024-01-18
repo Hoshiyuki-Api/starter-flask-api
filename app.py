@@ -6,6 +6,7 @@ from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
 from github import Github
+from PIL import Image
 import base64
 import functools
 import jwt
@@ -267,7 +268,9 @@ def toanime():
         image_bytes = BytesIO(response.content)
 
         files = {'image': ('toanime.jpg', image_bytes, 'image/jpeg')}
+        print("Before API Call")
         response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
+        print("After API Call")
 
         data = response.json()
         result = {
