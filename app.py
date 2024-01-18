@@ -261,17 +261,12 @@ def toanime():
         if not input_image_path:
             return 'Missing image parameter', 400
 
-        image = Image.open(input_image_path)
-        buffer = BytesIO()
-        image.save(buffer, format='JPEG')
-        buffer.seek(0)
-
-        files = {'image': ('toanime.jpg', buffer, 'image/jpeg')}
-        response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
+        with open(input_image_path, 'rb') as image_file:
+            files = {'image': ('toanime.jpg', image_file, 'image/jpeg')}
+            response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
 
         data = response.json()
         result = {
-            'creator': 'AmmarBN', 
             'image_data': data['result'],
             'image_size': data['size']
         }
