@@ -272,9 +272,7 @@ def toanime():
         buffer.seek(0)
 
         files = {'image': ('toanime.jpg', buffer, 'image/jpeg')}
-        print("Sebelum Panggilan API")
         response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
-        print("Setelah Panggilan API")
 
         data = response.json()
         result = {
