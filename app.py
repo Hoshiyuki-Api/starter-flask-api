@@ -257,13 +257,18 @@ def bing_image_api():
 def toanime():
     BASE_URL = 'https://tools.betabotz.org'
     try:
-        input_image_path = request.args.get('image')
-        if not input_image_path:
-            return 'Missing image parameter', 400
+        image_url = request.args.get('image')
+        if not image_url:
+            return 'Missing image URL parameter', 400
 
-        with open(input_image_path, 'rb') as image_file:
-            files = {'image': ('toanime.jpg', image_file, 'image/jpeg')}
-            response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
+        response = requests.get(image_url)
+        if response.status_code != 200:
+            return f'Failed to retrieve image from URL: {image_url}', response.status_code
+
+        image_bytes = BytesIO(response.content)
+
+        files = {'image': ('toanime.jpg', image_bytes, 'image/jpeg')}
+        response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
 
         data = response.json()
         result = {
