@@ -6,7 +6,6 @@ from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
 from github import Github
-from PIL import Image
 import base64
 import functools
 import jwt
