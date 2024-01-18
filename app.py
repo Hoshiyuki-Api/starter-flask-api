@@ -6,6 +6,7 @@ from flask_cors import CORS
 from io import BytesIO
 from bs4 import BeautifulSoup
 from github import Github
+from PIL import Image
 import base64
 import functools
 import jwt
@@ -252,22 +253,33 @@ def bing_image_api():
             'Result': 'Failed to fetch image from external server'
         })
 
-@app.route('/jadianime', methods=['GET'])
-def convert_anime():
-    api_url = "https://api.lolhuman.xyz/api/imagetoanime"
-    api_key = "haikalgans"
-    image_url = request.args.get('url')
+@app.route('/toanime', methods=['GET'])
+def toanime():
+    BASE_URL = 'https://tools.betabotz.org'
+    try:
+        input_image_path = request.args.get('image')
+        if not input_image_path:
+            return 'Missing image parameter', 400
 
-    if not image_url:
-        return jsonify ({
-	    'Creator': 'AmmarBN',
-            'Status': False,
-            'Result': 'Missing \'url\' parameter'
-	}) 
+        image = Image.open(input_image_path)
+        buffer = BytesIO()
+        image.save(buffer, format='JPEG')
+        buffer.seek(0)
 
-    full_url = f"{api_url}?apikey={api_key}&img={image_url}"
-    response = requests.get(full_url).content
-    return response
+        files = {'image': ('toanime.jpg', buffer, 'image/jpeg')}
+        response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
+
+        data = response.json()
+        result = {
+            'creator': 'AmmarBN', 
+            'image_data': data['result'],
+            'image_size': data['size']
+        }
+        return result
+
+    except Exception as error:
+        print('Identifikasi Gagal:', error)
+        return 'Identifikasi Gagal', 500
 
 @app.route('/qc', methods=['GET'])
 def generate_quote():
