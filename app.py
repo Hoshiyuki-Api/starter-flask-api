@@ -259,18 +259,22 @@ def toanime():
     try:
         image_url = request.args.get('image')
         if not image_url:
-            return 'Missing image URL parameter', 400
+            return 'Parameter URL gambar tidak ditemukan', 400
 
         response = requests.get(image_url)
         if response.status_code != 200:
-            return f'Failed to retrieve image from URL: {image_url}', response.status_code
+            return f'Gagal mengambil gambar dari URL: {image_url}', response.status_code
 
-        image_bytes = BytesIO(response.content)
+        image = Image.open(BytesIO(response.content))
 
-        files = {'image': ('toanime.jpg', image_bytes, 'image/jpeg')}
-        print("Before API Call")
+        buffer = BytesIO()
+        image.save(buffer, format='JPEG')
+        buffer.seek(0)
+
+        files = {'image': ('toanime.jpg', buffer, 'image/jpeg')}
+        print("Sebelum Panggilan API")
         response = requests.post(f'{BASE_URL}/ai/toanime', files=files, headers={'accept': 'application/json'})
-        print("After API Call")
+        print("Setelah Panggilan API")
 
         data = response.json()
         result = {
