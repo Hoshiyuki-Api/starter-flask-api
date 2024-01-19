@@ -1387,7 +1387,7 @@ def index_bak():
 def index_maker():
 	return render_template('index_maker.html')
 
-@app.route('/maker')
+@app.route('/portfolio')
 def index_portfolio():
 	return render_template('portfolio.html')
 
