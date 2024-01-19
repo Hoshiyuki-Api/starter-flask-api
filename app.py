@@ -1387,6 +1387,10 @@ def index_bak():
 def index_maker():
 	return render_template('index_maker.html')
 
+@app.route('/maker')
+def index_portfolio():
+	return render_template('portfolio.html')
+
 class SpamCall(Resource):
 	def post(self):
 		nomor=request.form.get("nomor")
