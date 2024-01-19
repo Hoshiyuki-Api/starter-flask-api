@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Ammar Burhanuddin Nafis</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #3f51b5;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+
+        img {
+            width: 100px;
+            border-radius: 50%;
+        }
+
+        h1 {
+            color: white;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 2em auto;
+            padding: 1em;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2,
+        h3 {
+            color: #3f51b5;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+        }
+
+        a {
+            color: #2196f3;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #1976d2;
+        }
+
+        .project {
+            margin-bottom: 1em;
+            background-color: #e3f2fd;
+            padding: 1em;
+            border-radius: 8px;
+        }
+
+        button {
+            display: block;
+            margin-top: 1em;
+            padding: 0.5em 1em;
+            background-color: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1976d2;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-info p {
+            margin: 0;
+        }
+
+        .contact-info i {
+            margin-right: 0.5em;
+        }
+
+        .skills {
+            display: flex;
+            justify-content: center;
+            margin-top: 1em;
+        }
+
+        .skills i {
+            font-size: 2em;
+            margin: 0 0.5em;
+        }
+
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.5;
+        }
+
+        .snowflake {
+            position: absolute;
+            display: block;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            opacity: 0.8;
+            animation: falling linear infinite;
+            transform-origin: 50% 50%;
+            border-radius: 50%;
+        }
+
+        .carbon-code {
+            background-color: black;
+            color: white;
+            padding: 1em;
+            border-radius: 8px;
+            margin-top: 1em;
+            overflow-x: auto;
+        }
+
+        @keyframes falling {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+            }
+
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="https://telegra.ph/file/dae98a2c0fc23c24c944c.jpg" alt="Ammar's Photo">
+        <h1>My Portfolio</h1>
+    </header>
+
+    <section>
+        <div>
+            <h2 style="color: #3f51b5;">Profil</h2>
+            <p>Nama: Ammar Burhanuddin Nafis<br>Kelas: 10 SMA</p>
+            <button onclick="toggleVisibility('profilDetails')">Lihat Detail</button>
+            <p id="profilDetails" style="display:none; color: #555;">Halo, saya Ammar. Seorang Backend Developer yang sedang belajar pemrograman. Saya bercita-cita menjadi Web Developer/Game Developer dan terus belajar hingga menguasainya. Saya berimpian menjadi web developer/game developer. Program yang saya kuasai:</p>
+            <div class="skills">
+                <i class="fab fa-html5" title="HTML" style="color: #e44d26;"></i>
+                <i class="fab fa-css3-alt" title="CSS" style="color: #264de4;"></i>
+                <i class="fab fa-js" title="JavaScript" style="color: #f0db4f;"></i>
+                <i class="fab fa-python" title="Python" style="color: #306998;"></i>
+            </div>
+        </div>
+
+        <div>
+            <h2 style="color: #3f51b5;">Proyek</h2>
+            <div class="project">
+                <h3>Telegram Bot</h3>
+                <p>Ini adalah Source Code Telegram Bot, Yaitu Code untuk membuat robot Telegram, BOT ini menggunakan language JavaScript klik 'Detail Proyek' untuk menampilkan code.</p>
+                <button onclick="toggleVisibility('carbonContainer1')">Detail Proyek</button>
+                <button onclick="copyCode('carbonContainer1')">Copy Code</button>
+                <div id="carbonContainer1" style="display: none;">
+                    <h3>index.js</h3>
+                    <div class="carbon-code">
+                        <!-- Add your JavaScript code here -->
+                        <pre>
+Hello World, Saya Ammar Ini first My Portfolio :D
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project">
+                <h3>Proyek 2</h3>
+                <p>Deskripsi proyek 2.</p>
+                <button onclick="toggleVisibility('carbonContainer2')">Detail Proyek</button>
+                <button onclick="copyCode('carbonContainer2')">Copy Code</button>
+                <div id="carbonContainer2" style="display: none;">
+                    <h3>Project Name</h3>
+                    <div class="carbon-code">
+                        <!-- Add your JavaScript code here -->
+                        <pre>
+Hello World
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 style="color: #3f51b5;">Kontak</h2>
+        <div class="contact-info">
+            <p><i class="fas fa-envelope"></i>Email: <a href="mailto:ammarexecuted@gmail.com" style="color: #2196f3;">ammarexecuted@gmail.com</a></p>
+            <p><i class="fab fa-instagram"></i>Instagram: <a href="https://instagram.com/ammarbn27" target="_blank" style="color: #2196f3;">Instagram.com/ammarbn27</a></p>
+            <p><i class="fab fa-github"></i>GitHub: <a href="https://github.com/AmmarrBN" target="_blank" style="color: #2196f3;">github.com/AmmarrBN</a></p>
+        </div>
+    </section>
+
+    <div class="snowflakes" aria-hidden="true">
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❅</div>
+        <!-- Add more snowflakes as needed -->
+    </div>
+
+    <script>
+    function toggleVisibility(elementId) {
+        var element = document.getElementById(elementId);
+        element.style.display = (element.style.display === "none") ? "block" : "none";
+    }
+
+    function copyCode(elementId) {
+        var codeContainer = document.getElementById(elementId).getElementsByClassName('carbon-code')[0];
+        var code = codeContainer.textContent || codeContainer.innerText;
+
+        // Buat elemen textarea untuk menyalin teks
+        var textArea = document.createElement("textarea");
+        textArea.value = code;
+        document.body.appendChild(textArea);
+
+        // Pilih dan salin teks dari textarea
+        textArea.select();
+        document.execCommand('copy');
+
+        // Hapus elemen textarea yang tidak diperlukan
+        document.body.removeChild(textArea);
+
+        alert('Code copied to clipboard!');
+    }
+
+    const snowflakesContainer = document.querySelector('.snowflakes');
+
+    for (let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.innerHTML = '❅';
+        snowflake.style.left = `${Math.random() * 100}vw`;
+        snowflake.style.animationDuration = `${Math.random() * 2 + 1}s`;
+        snowflakesContainer.appendChild(snowflake);
+    }
+    </script>
+
+</body>
+
+</html>
