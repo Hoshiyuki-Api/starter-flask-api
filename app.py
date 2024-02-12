@@ -178,6 +178,27 @@ def pricing():
 def shop_index():
     return send_from_directory('shop', 'index.html')
 
+@app.route('/bingimg', methods=['GET'])
+def search_bing_image():
+    text = request.args.get('text')
+    api_key = request.args.get('apikey')
+
+    if not text or not api_key:
+        return jsonify({'error': 'Missing parameters'}), 400
+
+    api_url = f'https://api.betabotz.eu.org/api/search/bing-img?text={text}&apikey=beta-kizh1'
+    
+    try:
+        response = requests.get(api_url)
+        data = response.json()
+        
+        if data.get('status') and data.get('result'):
+            return jsonify({'result': data['result']})
+        else:
+            return jsonify({'error': 'Invalid response format'}), 500
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/nsfw/nsfw-loli')
 def nsfw_loli():
     json_url = "https://raw.githubusercontent.com/AmmarrBN/dbbot/main/nsfw/nsfw-loli.json"
