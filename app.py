@@ -183,8 +183,11 @@ def search_bing_image():
     text = request.args.get('text')
     api_key = request.args.get('apikey')
 
-    if not text or not api_key:
+    if not text:
         return jsonify({'error': 'Missing parameters'}), 400
+
+    if not api_key or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
     api_url = f'https://api.betabotz.eu.org/api/search/bing-img?text={text}&apikey=beta-kizh1'
     
