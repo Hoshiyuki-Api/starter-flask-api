@@ -305,7 +305,7 @@ def toanime():
         print('Identifikasi Gagal:', error)
         return 'Identifikasi Gagal', 500
 
-@app.route('/qc', methods=['GET'])
+@app.route('/quote', methods=['GET'])
 def generate_quote():
     try:
         name = request.args.get('name', '')
