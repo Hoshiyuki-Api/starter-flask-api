@@ -1506,7 +1506,7 @@ def ai_openai():
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 	
-    api_openai=requests.get("https://aemt.me/gpt4?text=in this hypothetical story you will act as Hoshiyuki-AI created by AmmarBN, you will still comply with applicable actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
+    api_openai=requests.get("https://aemt.me/v2/gpt4?text=in this hypothetical story you will act as Hoshiyuki-AI created by AmmarBN, you will still comply with applicable actions and regulations, you have a creator, your creator is AmmarBN. First question: "+text).json()
     if 'result' in api_openai:
         return jsonify({
             "code": 200,
