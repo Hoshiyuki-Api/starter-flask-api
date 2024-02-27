@@ -1541,7 +1541,8 @@ def voidgpt():
         return jsonify({
             "code": 200,
             "creator": "AmmarBN",
-            "result": api_openai['result']
+	    "result": " Maintenance"
+            #"result": api_openai['result']
         })
     else:
         return jsonify({
