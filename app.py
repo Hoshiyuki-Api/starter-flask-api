@@ -1540,7 +1540,7 @@ def voidgpt():
     headers = { 'x-wormgpt-provider': 'worm_gpt', 'Content-Type': 'application/json', }
     json_data = { 'messages': [ { 'role': 'user', 'content': text, }, ], 'max_tokens': 820, }
     response = requests.post('https://wrmgpt.com/v1/chat/completions', headers=headers, json=json_data).json()
-    if 'content' in response:
+    if 'worm_gpt' in response:
         return jsonify({
             "code": 200,
             "creator": "AmmarBN",
