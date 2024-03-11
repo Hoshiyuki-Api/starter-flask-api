@@ -6,6 +6,10 @@
     },
     "Hoshiyuki": {
       "type": "unlimited"
+    }, 
+    "cihuyy": {
+      "type": "limited", 
+      "expiry_date": "2025-01-05"
     }
   }
 }
