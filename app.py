@@ -178,6 +178,35 @@ def pricing():
 def shop_index():
     return send_from_directory('shop', 'index.html')
 
+@app.route('/jadwalsholat', methods=['GET'])
+def get_prayer_times():
+    api_url = 'https://api.myquran.com/v2/sholat/kota/cari/kota'
+    keyword = request.args.get('kota', default='', type=str)
+
+    try:
+        response = requests.get(api_url)
+        data = response.json()
+
+        # Sesuaikan dengan struktur data API
+        locations = [{'id': item['id'], 'lokasi': item['lokasi']} for item in data['data']]
+
+        if keyword:
+            filtered_locations = [loc for loc in locations if keyword.lower() in loc['lokasi'].lower()]
+            if filtered_locations:
+                city_id = filtered_locations[0]['id']
+                prayer_times_url = f'https://api.myquran.com/v2/sholat/jadwal/{city_id}'
+                prayer_times_response = requests.get(prayer_times_url)
+                prayer_times_data = prayer_times_response.json()
+                return jsonify(prayer_times_data)
+            else:
+                return jsonify({'status': False, 'error': f'Tidak dapat menemukan informasi untuk kota {keyword}'})
+
+        else:
+            return jsonify({'status': False, 'error': 'Mohon sertakan parameter kota'})
+
+    except Exception as e:
+        return jsonify({'status': False, 'error': str(e)})
+
 @app.route('/bingimg', methods=['GET'])
 def search_bing_image():
     text = request.args.get('text')
