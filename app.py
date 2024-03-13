@@ -200,7 +200,7 @@ def get_prayer_times():
 
             # API request for city, id, and today's date
             api_url = f'https://api.myquran.com/v2/sholat/jadwal/{city_id}/{today_date.year}/{today_date.month}/{today_date.day}'
-            response = requests.get(api_url)
+            data = requests.get(api_url)
                  if 'data' in data and 'jadwal' in data['data']:
                       jadwal = data['data']['jadwal']
                       return jsonify({"Creator": "AmmarBN", "Jadwal": jadwal })
