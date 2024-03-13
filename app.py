@@ -192,7 +192,7 @@ def get_prayer_times():
         elif keyword and not city_id:
             # API request for keyword only
             api_url = f'https://api.myquran.com/v2/sholat/kota/cari/{keyword}'
-            get_api= requests.get(api_url).json()
+            get_api = requests.get(api_url).json()
             return jsonify(get_api)
         elif keyword and city_id:
             # Get today's date
@@ -200,12 +200,13 @@ def get_prayer_times():
 
             # API request for city, id, and today's date
             api_url = f'https://api.myquran.com/v2/sholat/jadwal/{city_id}/{today_date.year}/{today_date.month}/{today_date.day}'
-            data = requests.get(api_url)
-                 if 'data' in data and 'jadwal' in data['data']:
-                      jadwal = data['data']['jadwal']
-                      return jsonify({"Creator": "AmmarBN", "Jadwal": jadwal })
-		 else:
-                      return jsonify({"Creator": " AmmarBN", "response": "Invalid Response structure"})
+            data = requests.get(api_url).json()
+
+            if 'data' in data and 'jadwal' in data['data']:
+                jadwal = data['data']['jadwal']
+                return jsonify({"Creator": "AmmarBN", "Jadwal": jadwal })
+            else:
+                return jsonify({"Creator": "AmmarBN", "response": "Invalid Response structure"})
         else:
             return jsonify({'status': False, 'error': 'Invalid parameters'})
     
