@@ -180,8 +180,8 @@ def shop_index():
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
-    api_url = 'https://api.myquran.com/v2/sholat/kota/cari/kota'
     keyword = request.args.get('kota', default='', type=str)
+    api_url = f'https://api.myquran.com/v2/sholat/kota/cari/{keyword}'
 
     try:
         response = requests.get(api_url)
