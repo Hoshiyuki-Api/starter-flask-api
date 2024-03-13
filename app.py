@@ -180,20 +180,22 @@ def shop_index():
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
-    keyword = request.args.get('keyword', default='', type=str)
+    keyword = request.args.get('kota', default='', type=str)
     city_id = request.args.get('id', default='', type=str)
-    date_str = request.args.get('date', default='', type=str)
 
     try:
-        if keyword:
+        if not keyword and not city_id:
+            # If keyword is not provided, fetch data from the specified API endpoint
+            api_url = 'https://api.myquran.com/v2/sholat/kota/cari/kota'
+        elif keyword and not city_id:
             # API request for keyword only
             api_url = f'https://api.myquran.com/v2/sholat/kota/cari/{keyword}'
-        elif city_id and date_str:
-            # Convert date string to datetime object for formatting
-            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else datetime.now().date()
+        elif keyword and city_id:
+            # Get today's date
+            today_date = datetime.now().date()
 
-            # API request for city, id, and date
-            api_url = f'https://api.myquran.com/v2/sholat/jadwal/{city_id}/{date_obj.year}/{date_obj.month}/{date_obj.day}'
+            # API request for city, id, and today's date
+            api_url = f'https://api.myquran.com/v2/sholat/jadwal/{city_id}/{today_date.year}/{today_date.month}/{today_date.day}'
         else:
             return jsonify({'status': False, 'error': 'Invalid parameters'})
 
