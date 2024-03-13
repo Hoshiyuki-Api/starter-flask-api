@@ -187,7 +187,7 @@ def get_prayer_times():
         if not keyword:
             # If keyword is not provided, fetch data from the specified API endpoint
             api_url = 'https://api.myquran.com/v2/sholat/kota/cari/kota'
-            get_api = requests.get(api_url).json
+            get_api = requests.get(api_url).json()
             return jsonify(get_api)
         elif keyword and not city_id:
             # API request for keyword only
