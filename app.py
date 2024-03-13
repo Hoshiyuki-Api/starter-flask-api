@@ -189,14 +189,8 @@ def get_prayer_times():
             api_url = 'https://api.myquran.com/v2/sholat/kota/cari/kota'
         elif keyword and not city_id:
             # API request for keyword only
-            keyword_response = requests.get(f'https://api.myquran.com/v2/sholat/kota/cari/{keyword}')
-            keyword_data = keyword_response.json()
-
-            if 'id' in keyword_data:
-                city_id = keyword_data['id']
-                api_url = f'https://api.myquran.com/v2/sholat/kota/cari/{city_id}'
-            else:
-                return jsonify({'status': False, 'error': 'Invalid city name'})
+            api_url= requests.get(f'https://api.myquran.com/v2/sholat/kota/cari/{keyword}')
+            #ke = keyword_response.json()
         elif keyword and city_id:
             # Get today's date
             today_date = datetime.now().date()
