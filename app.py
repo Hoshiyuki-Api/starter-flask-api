@@ -857,26 +857,27 @@ def download_igdl():
             "message": "Masukkan parameter URL"
         })
     if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+        return jsonify({"error": "Kunci API tidak valid atau kedaluwarsa, silakan unduh kunci API baru"}), 401
 
     api_response = requests.get(f"https://aemt.me/download/igdl?url={url}").json()
     if 'result' in api_response:
-        result_data = api_response['result'][0]  # Ambil data dari indeks pertama dalam list result
+        slides_data = api_response['result']  # Ekstrak daftar data slide
+        
+        # Buat daftar untuk menyimpan informasi setiap slide
+        result_list = []
+        for slide in slides_data:
+            result_list.append({
+                "thumbnail": slide.get('thumbnail', ''),
+                "url": slide.get('url', '')
+            })
 
         return jsonify({
-            "code": api_response.get('code', ''),  # Menggunakan get() untuk menghindari KeyError
-            "creator": "AmmarBN",
-            "result": [
-                {
-                    "wm": result_data.get('wm', ''),
-                    "thumbnail": result_data.get('thumbnail', ''),
-                    "url": result_data.get('url', '')
-                }
-            ],
+            "code": api_response.get('code', ''),
+            "Author": "AmmarBN",
+            "result": result_list,  # Gunakan daftar informasi slide
             "status": "success"
         }), 200, {'Content-Type': 'application/json; charset=utf-8'}
     else:
-        # Jika kunci 'result' tidak ada, sesuaikan respons sesuai kebutuhan
         return jsonify({
             "message": "Format respons API tidak valid",
             "status": "error"
