@@ -1,270 +1,539 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Ammar Burhanuddin Nafis</title>
-    <link rel="icon" href="https://telegra.ph/file/dae98a2c0fc23c24c944c.jpg" type="image/jpg" sizes="16x16">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #f8f8f8;
-            color: #333;
-        }
+  <meta charset="UTF-8">
+  <title>Yuki</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500|Jost:400,500,600&display=swap");
 
-        header {
-            background-color: #3f51b5;
-            color: white;
-            text-align: center;
-            padding: 1em 0;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        img {
-            width: 100px;
-            border-radius: 50%;
-        }
+    body {
+      color: #2b2c48;
+      font-family: "Jost", sans-serif;
+      background-image: url("https://telegra.ph/file/92ef76067cd94493745b1.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+    }
 
-        h1 {
-            color: white;
-        }
+    .card {
+      max-width: 340px;
+      margin: auto;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+      overflow-x: hidden;
+      background-color: white;
+      display: flex;
+      transition: 0.3s;
+      flex-direction: column;
+      border-radius: 10px;
+      box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2);
+    }
 
-        section {
-            max-width: 800px;
-            margin: 2em auto;
-            padding: 1em;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
+    .card[data-state="#about"] {
+      height: 450px;
+    }
 
-        h2,
-        h3 {
-            color: #3f51b5;
-            text-align: center;
-        }
+    .card[data-state="#about"] .card-main {
+      padding-top: 0;
+    }
 
-        p {
-            line-height: 1.6;
-            color: #555;
-        }
+    .card[data-state="#contact"] {
+      height: 430px;
+    }
 
-        a {
-            color: #2196f3;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+    .card[data-state="#experience"] {
+      height: 550px;
+    }
 
-        a:hover {
-            color: #1976d2;
-        }
+    .card.is-active .card-header {
+      height: 80px;
+    }
 
-        .project {
-            margin-bottom: 1em;
-            background-color: #e3f2fd;
-            padding: 1em;
-            border-radius: 8px;
-        }
+    .card.is-active .card-cover {
+      height: 100px;
+      top: -50px;
+    }
 
-        button {
-            display: block;
-            margin-top: 1em;
-            padding: 0.5em 1em;
-            background-color: #2196f3;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    .card.is-active .card-avatar {
+      transform: none;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      bottom: 10px;
+    }
 
-        button:hover {
-            background-color: #1976d2;
-        }
+    .card.is-active .card-fullname,
+    .card.is-active .card-jobtitle {
+      left: 86px;
+      transform: none;
+    }
 
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-        }
+    .card.is-active .card-fullname {
+      bottom: 18px;
+      font-size: 19px;
+    }
 
-        .contact-info p {
-            margin: 0;
-        }
+    .card.is-active .card-jobtitle {
+      bottom: 16px;
+      letter-spacing: 1px;
+      font-size: 10px;
+    }
 
-        .contact-info i {
-            margin-right: 0.5em;
-        }
+    .card-header {
+      position: relative;
+      display: flex;
+      height: 200px;
+      flex-shrink: 0;
+      width: 100%;
+      transition: 0.3s;
+    }
 
-        .skills {
-            display: flex;
-            justify-content: center;
-            margin-top: 1em;
-        }
+    .card-header * {
+      transition: 0.3s;
+    }
 
-        .skills i {
-            font-size: 2em;
-            margin: 0 0.5em;
-        }
+    .card-cover {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      height: 160px;
+      top: -20%;
+      left: 0;
+      will-change: top;
+      background-size: cover;
+      background-position: center;
+      filter: blur(30px);
+      transform: scale(1.2);
+      transition: 0.5s;
+    }
 
-        .snowflakes {
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 0.5;
-        }
+    .card-avatar {
+      width: 100px;
+      height: 100px;
+      box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 50%;
+      -o-object-position: center;
+      object-position: center;
+      -o-object-fit: cover;
+      object-fit: cover;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-64px);
+    }
 
-        .snowflake {
-            position: absolute;
-            display: block;
-            width: 10px;
-            height: 10px;
-            background: #fff;
-            opacity: 0.8;
-            animation: falling linear infinite;
-            transform-origin: 50% 50%;
-            border-radius: 50%;
-        }
+    .card-fullname {
+      position: absolute;
+      bottom: 0;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      transform: translateY(-10px) translateX(-50%);
+      left: 50%;
+    }
 
-        .carbon-code {
-            background-color: black;
-            color: white;
-            padding: 1em;
-            border-radius: 8px;
-            margin-top: 1em;
-            overflow-x: auto;
-        }
+    .card-jobtitle {
+      position: absolute;
+      bottom: 0;
+      font-size: 11px;
+      white-space: nowrap;
+      font-weight: 500;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-7px);
+    }
 
-        @keyframes falling {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-            }
+    .card-main {
+      position: relative;
+      flex: 1;
+      display: flex;
+      padding-top: 10px;
+      flex-direction: column;
+    }
 
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-            }
-        }
-    </style>
+    .card-subtitle {
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-desc {
+      line-height: 1.6;
+      color: #636b6f;
+      font-size: 14px;
+      margin: 0;
+      font-weight: 400;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .card-social {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      margin-bottom: 30px;
+    }
+
+    .card-social svg {
+      fill: #a5b5ce;
+      width: 16px;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .card-social a {
+      color: #8797a1;
+      height: 32px;
+      width: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+      background-color: rgba(93, 133, 193, 0.05);
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .card-social a:hover svg {
+      fill: #637faa;
+    }
+
+    .card-social a:last-child {
+      margin-right: 0;
+    }
+
+    .card-buttons {
+      display: flex;
+      background-color: #fff;
+      margin-top: auto;
+      position: -webkit-sticky;
+      position: sticky;
+      bottom: 0;
+      left: 0;
+    }
+
+    .card-buttons button {
+      flex: 1 1 auto;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      background: 0;
+      font-size: 13px;
+      border: 0;
+      padding: 15px 5px;
+      cursor: pointer;
+      color: #5c5c6d;
+      transition: 0.3s;
+      font-family: "Jost", sans-serif;
+      font-weight: 500;
+      outline: 0;
+      border-bottom: 3px solid transparent;
+    }
+
+    .card-buttons button.is-active,
+    .card-buttons button:hover {
+      color: #2b2c48;
+      border-bottom: 3px solid #8a84ff;
+      background: linear-gradient(to bottom, rgba(127, 199, 231, 0) 0%, rgba(207, 204, 255, 0.2) 44%, rgba(211, 226, 255, 0.4) 100%);
+    }
+
+    .card-section {
+      display: none;
+    }
+
+    .card-section.is-active {
+      display: block;
+      -webkit-animation: fadeIn 0.6s both;
+      animation: fadeIn 0.6s both;
+    }
+
+    @-webkit-keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translatey(40px);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: translatey(40px);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .card-timeline {
+      margin-top: 30px;
+      position: relative;
+    }
+
+    .card-timeline:after {
+      background: linear-gradient(to top, rgba(134, 214, 243, 0) 0%, #516acc 100%);
+      content: "";
+      left: 42px;
+      width: 2px;
+      top: 0;
+      height: 100%;
+      position: absolute;
+      content: "";
+    }
+
+    .card-item {
+      position: relative;
+      padding-left: 60px;
+      padding-right: 20px;
+      padding-bottom: 30px;
+      z-index: 1;
+    }
+
+    .card-item:last-child {
+      padding-bottom: 5px;
+    }
+
+    .card-item:after {
+      content: attr(data-year);
+      width: 10px;
+      position: absolute;
+      top: 0;
+      left: 37px;
+      width: 8px;
+      height: 8px;
+      line-height: 0.6;
+      border: 2px solid #fff;
+      font-size: 11px;
+      text-indent: -35px;
+      border-radius: 50%;
+      color: rgba(134, 134, 134, 0.7);
+      background: linear-gradient(to bottom, #a0aee3 0%, #516acc 100%);
+    }
+
+    .card-item-title {
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .card-item-desc {
+      font-size: 13px;
+      color: #6f6f7b;
+      line-height: 1.5;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .card-contact-wrapper {
+      margin-top: 20px;
+    }
+
+    .card-contact {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      color: #6f6f7b;
+      font-family: "DM Sans", sans-serif;
+      line-height: 1.6;
+      cursor: pointer;
+    }
+
+    .card-contact+.card-contact {
+      margin-top: 16px;
+    }
+
+    .card-contact svg {
+      flex-shrink: 0;
+      width: 30px;
+      min-height: 34px;
+      margin-right: 12px;
+      transition: 0.3s;
+      padding-right: 12px;
+      border-right: 1px solid #dfe2ec;
+    }
+
+    .contact-me {
+      border: 0;
+      outline: none;
+      background: linear-gradient(to right, rgba(83, 200, 239, 0.8) 0%, rgba(81, 106, 204, 0.8) 96%);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      color: #fff;
+      padding: 12px 16px;
+      width: 100%;
+      border-radius: 5px;
+      margin-top: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: "Jost", sans-serif;
+      transition: 0.3s;
+    }
+
+    .svg-icon {
+      width: 1em;
+      height: 1em;
+    }
+
+    .svg-icon path,
+    .svg-icon polygon,
+    .svg-icon rect {
+      fill: #4691f6;
+    }
+
+    .svg-icon circle {
+      stroke: #4691f6;
+      stroke-width: 1;
+    }
+
+    .footer {
+      width: 100%;
+      height: 50px;
+      padding-left: 10px;
+      line-height: 50px;
+      color: #fff;
+    }
+  </style>
 </head>
 
+<audio autoplay="true" src="https://uploader.caliph.my.id/file/BfzNCKigX2.mp3"></audio>
+
 <body>
-
-    <header>
-        <img src="https://telegra.ph/file/dae98a2c0fc23c24c944c.jpg" alt="Ammar's Photo">
-        <h1>My Portfolio</h1>
-    </header>
-
-    <section>
-        <div>
-            <h2 style="color: #3f51b5;">Profil</h2>
-            <p>Nama: Ammar Burhanuddin Nafis<br>Kelas: 10 SMA</p>
-            <button onclick="toggleVisibility('profilDetails')">Lihat Detail</button>
-            <p id="profilDetails" style="display:none; color: #555;">Halo, saya Ammar. Seorang Backend Developer yang sedang belajar pemrograman. Saya bercita-cita menjadi Web Developer/Game Developer dan terus belajar hingga menguasainya. Saya berimpian menjadi web developer/game developer. Program yang saya kuasai:</p>
-            <div class="skills">
-                <i class="fab fa-html5" title="HTML" style="color: #e44d26;"></i>
-                <i class="fab fa-css3-alt" title="CSS" style="color: #264de4;"></i>
-                <i class="fab fa-js" title="JavaScript" style="color: #f0db4f;"></i>
-                <i class="fab fa-python" title="Python" style="color: #306998;"></i>
-            </div>
-        </div>
-
-        <div>
-            <h2 style="color: #3f51b5;">Proyek</h2>
-            <div class="project">
-                <h3>Telegram Bot</h3>
-                <p>Ini adalah Source Code Telegram Bot, Yaitu Code untuk membuat robot Telegram, BOT ini menggunakan language JavaScript klik 'Detail Proyek' untuk menampilkan code.</p>
-                <button onclick="toggleVisibility('carbonContainer1')">Detail Proyek</button>
-                <button onclick="copyCode('carbonContainer1')">Copy Code</button>
-                <div id="carbonContainer1" style="display: none;">
-                    <h3>index.js</h3>
-                    <div class="carbon-code">
-                        <!-- Add your JavaScript code here -->
-                        <pre>
-Hello World, Saya Ammar Ini first My Portfolio :D
-                        </pre>
-                    </div>
-                </div>
-            </div>
-
-            <div class="project">
-                <h3>Proyek 2</h3>
-                <p>Deskripsi proyek 2.</p>
-                <button onclick="toggleVisibility('carbonContainer2')">Detail Proyek</button>
-                <button onclick="copyCode('carbonContainer2')">Copy Code</button>
-                <div id="carbonContainer2" style="display: none;">
-                    <h3>Project Name</h3>
-                    <div class="carbon-code">
-                        <!-- Add your JavaScript code here -->
-                        <pre>
-Hello World
-                        </pre>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <h2 style="color: #3f51b5;">Kontak</h2>
-        <div class="contact-info">
-            <p><i class="fas fa-envelope"></i>Email: <a href="mailto:ammarexecuted@gmail.com" style="color: #2196f3;">ammarexecuted@gmail.com</a></p>
-            <p><i class="fab fa-instagram"></i>Instagram: <a href="https://instagram.com/ammarbn27" target="_blank" style="color: #2196f3;">Instagram.com/ammarbn27</a></p>
-            <p><i class="fab fa-github"></i>GitHub: <a href="https://github.com/AmmarrBN" target="_blank" style="color: #2196f3;">github.com/AmmarrBN</a></p>
-        </div>
-    </section>
-
-    <div class="snowflakes" aria-hidden="true">
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❅</div>
-        <!-- Add more snowflakes as needed -->
+  <!-- partial:index.partial.html -->
+  <div class="card" data-state="#about">
+    <div class="card-header">
+      <div class="card-cover" style="background-image: url('https://i.ibb.co/8d33grw/tumblr-ppaq0f-Dy-B41ugxywdo1-1280.jpg')"></div>
+      <img class="card-avatar" src="https://telegra.ph/file/16b75e2bb3ab3d101a452.jpg" alt="avatar" />
+      <h1 class="card-fullname">AmmarBN</h1>
+      <h2 class="card-jobtitle">Newbie Programer</h2>
     </div>
-
-    <script>
-    function toggleVisibility(elementId) {
-        var element = document.getElementById(elementId);
-        element.style.display = (element.style.display === "none") ? "block" : "none";
-    }
-
-    function copyCode(elementId) {
-        var codeContainer = document.getElementById(elementId).getElementsByClassName('carbon-code')[0];
-        var code = codeContainer.textContent || codeContainer.innerText;
-
-        // Buat elemen textarea untuk menyalin teks
-        var textArea = document.createElement("textarea");
-        textArea.value = code;
-        document.body.appendChild(textArea);
-
-        // Pilih dan salin teks dari textarea
-        textArea.select();
-        document.execCommand('copy');
-
-        // Hapus elemen textarea yang tidak diperlukan
-        document.body.removeChild(textArea);
-
-        alert('Code copied to clipboard!');
-    }
-
-    const snowflakesContainer = document.querySelector('.snowflakes');
-
-    for (let i = 0; i < 50; i++) {
-        const snowflake = document.createElement('div');
-        snowflake.className = 'snowflake';
-        snowflake.innerHTML = '❅';
-        snowflake.style.left = `${Math.random() * 100}vw`;
-        snowflake.style.animationDuration = `${Math.random() * 2 + 1}s`;
-        snowflakesContainer.appendChild(snowflake);
-    }
-    </script>
-
+    <div class="card-main">
+      <div class="card-section is-active" id="about">
+        <div class="card-content">
+          <div class="card-subtitle">@AmmarBN</div>
+          <p class="card-text">
+            "Dunia ini pahit, makanya tuhan ciptain <a href="https://telegra.ph/file/1c466b04a883b2c24672a.jpg">kamu</a> biar ada manis nya :v"
+          </p>
+          <p class="card-text">
+            Aslinya cuma wibu Nolep
+          </p>
+        </div>
+        <div class="card-social">
+          <a href="https://wa.me/6288229683561"><i class="fab fa-whatsapp"></i></a>
+          <a href="https://www.instagram.com/@ammarbn27"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div class="card-section" id="experience">
+        <div class="card-content">
+          <div class="card-subtitle">Terkendala Device :')</div>
+          <div class="card-timeline">
+            <div class="card-item" data-year="2017">
+              <div class="card-item-title"> Menemukan Hoby Baru</span></div>
+              <div class="card-item-desc">Mulai terobsesi dengan teknologi</div>
+            </div>
+            <div class="card-item" data-year="2019">
+              <div class="card-item-title">Sedikit Mempelajari Pemrograman</span></div>
+              <div class="card-item-desc">Terkendala oleh device</div>
+            </div>
+            <div class="card-item" data-year="2020">
+              <div class="card-item-title">Mencoba Membuat WhatsApp Bot</div>
+              <div class="card-item-desc">Belajar dari youtube</div>
+            </div>
+            <div class="card-item" data-year="2021">
+              <div class="card-item-title">Mendalami Dunia Programing</span></div>
+              <div class="card-item-desc">Membuat WhatsApp bot</div>
+            </div>
+            <div class="card-item" data-year="2022">
+              <div class="card-item-title">Lebih Serius Dengan Pemrograman</span></div>
+              <div class="card-item-desc">Belajar html, css, python dan Javascript</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-section" id="contact">
+        <div class="card-content">
+          <div class="card-subtitle">CONTACT</div>
+          <div class="card-contact-wrapper">
+            <div class="card-contact">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              Semarang, Jawa Tengah, Indonesia
+            </div>
+            <div class="card-contact" href="mailto:margeng84@gmail.com">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <path d="M22 6l-10 7L2 6" />
+              </svg>
+              margeng84@gmail.com
+            </div>
+            <a href="https://github.com/AmmarrBN"><button class="contact-me">Github</button></a>
+          </div>
+        </div>
+      </div>
+      <div class="card-buttons">
+        <button data-section="#about" class="is-active">HOME</button>
+        <button data-section="#experience">PROGRESS</button>
+        <button data-section="#contact">CONTACT</button>
+      </div>
+    </div>
+  </div>
+  <!-- partial -->
+  <script>
+    const buttons = document.querySelectorAll(".card-buttons button");
+    const sections = document.querySelectorAll(".card-section");
+    const card = document.querySelector(".card");
+    const handleButtonClick = e => {
+      const targetSection = e.target.getAttribute("data-section");
+      const section = document.querySelector(targetSection);
+      targetSection !== "#about" ?
+        card.classList.add("is-active") :
+        card.classList.remove("is-active");
+      card.setAttribute("data-state", targetSection);
+      sections.forEach(s => s.classList.remove("is-active"));
+      buttons.forEach(b => b.classList.remove("is-active"));
+      e.target.classList.add("is-active");
+      section.classList.add("is-active");
+    };
+    buttons.forEach(btn => {
+      btn.addEventListener("click", handleButtonClick);
+    });
+  </script>
+  <script src="https://cdn.jsdelivr.net/gh/scottschiller/Snowstorm/snowstorm.js" type="text/javascript"></script>
+  <script src="https://cdn.rawgit.com/bungfrangki/efeksalju/2a7805c7/efek-salju.js" type="text/javascript"></script>
+  <div class="footer">
+    <p style="text-align: center;color: white;">
+      Ammar Dev • Yuki (GF) :D.
+    </p>
+  </div>
 </body>
 
-</html>
+	</html>
+	
