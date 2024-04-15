@@ -229,7 +229,7 @@ def get_transactions():
         'accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
     
-    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).text
+    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
     response_data = json.loads(api2)
     transactions = response_data['data']['transactions']
     
