@@ -230,7 +230,10 @@ def get_transactions():
     }
     
     api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    response_data = json.loads(api2)
+    if api2.status_code != 200:
+        return jsonify({"error": "Failed to fetch transactions data"}), api2.status_code
+
+    response_data = api2.json()
     transactions = response_data['data']['transactions']
     
     formatted_transactions = []
@@ -251,7 +254,6 @@ def get_transactions():
         formatted_transactions.append(formatted_transaction)
 
     return jsonify(formatted_transactions)
-
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
