@@ -230,31 +230,31 @@ def get_transactions():
     }
     
     api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    
-    try:
-        response_data = api2.json()
-        transactions = response_data['data']['transactions']
+    if api2.status_code == 200:
+        try:
+            response_data = api2.json()
+            transactions = response_data['data']['transactions']
         
-        formatted_transactions = []
-        for transaction in transactions:
-            amount = transaction['amount']
-            donator_name = transaction['donator_name']
-            created_at = transaction['created_at']
-            donator_email = transaction['donator_email']
-            masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
-            message = transaction['message']
-            formatted_transaction = {
+            formatted_transactions = []
+            for transaction in transactions:
+                amount = transaction['amount']
+                donator_name = transaction['donator_name']
+                created_at = transaction['created_at']
+                donator_email = transaction['donator_email']
+                masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
+                message = transaction['message']
+                formatted_transaction = {
                 "donator_name": donator_name,
                 "donator_email": masked_email,
                 "message": message,
                 "amount": amount,
                 "created_at": created_at
-            }
-            formatted_transactions.append(formatted_transaction)
+                }
+                formatted_transactions.append(formatted_transaction)
 
-        return jsonify(formatted_transactions)
-    except json.JSONDecodeError:
-        return jsonify({"error": "Failed to parse JSON response"}), 500
+            return jsonify(formatted_transactions)
+        except json.JSONDecodeError:
+            return jsonify({"error": "Failed to parse JSON response"}), 500
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
