@@ -222,29 +222,8 @@ def get_transactions():
         'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
 
-    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    response_data = api2.json()
-    transactions = response_data['data']['transactions']
-    
-    result = []
-    for transaction in transactions:
-        amount = transaction['amount']
-        donator_name = transaction['donator_name']
-        created_at = transaction['created_at']
-        donator_email = transaction['donator_email']
-        masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
-        message = transaction['message']
-        
-        transaction_info = {
-            "Donator": donator_name,
-            "Email": masked_email,
-            "Message": message,
-            "Total Donation": amount,
-            "Date": created_at
-        }
-        result.append(transaction_info)
-    
-    return jsonify(result)
+    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).json()
+    return (api2)
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
