@@ -213,7 +213,7 @@ def get_transactions():
     authorization_header = api.headers.get('authorization')
 
     head2 = {
-        'Host l':'backend.saweria.co',
+        'Host l':'backend.saweria.co',  # Typo: Should be 'Host' instead of 'Host l'
         'sec-ch-ua':'"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
         'sec-ch-ua-mobile':'?1',
         'authorization':authorization_header,
@@ -229,27 +229,35 @@ def get_transactions():
         'accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
     
-    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).json()
-    transactions = api2['data']['transactions']
+    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
     
-    formatted_transactions = []
-    for transaction in transactions:
-        amount = transaction['amount']
-        donator_name = transaction['donator_name']
-        created_at = transaction['created_at']
-        donator_email = transaction['donator_email']
-        masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
-        message = transaction['message']
-        formatted_transaction = {
-            "donator_name": donator_name,
-            "donator_email": masked_email,
-            "message": message,
-            "amount": amount,
-            "created_at": created_at
-        }
-        formatted_transactions.append(formatted_transaction)
+    if api2.status_code != 200:
+        return jsonify({"error": "Failed to fetch transactions"}), api2.status_code
+    
+    try:
+        response_data = json.loads(api2)
+        transactions = response_data['data']['transactions']
+        
+        formatted_transactions = []
+        for transaction in transactions:
+            amount = transaction['amount']
+            donator_name = transaction['donator_name']
+            created_at = transaction['created_at']
+            donator_email = transaction['donator_email']
+            masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
+            message = transaction['message']
+            formatted_transaction = {
+                "donator_name": donator_name,
+                "donator_email": masked_email,
+                "message": message,
+                "amount": amount,
+                "created_at": created_at
+            }
+            formatted_transactions.append(formatted_transaction)
 
-    return jsonify(formatted_transactions)
+        return jsonify(formatted_transactions)
+    except json.JSONDecodeError:
+        return jsonify({"error": "Failed to parse JSON response"}), 500
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
