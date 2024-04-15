@@ -184,7 +184,7 @@ def get_transactions():
     password = request.args.get('password')
 
     if not email or not password:
-        return jsonify({"error": "Email and password parameters are required."}), 400
+        return jsonify({"error": "Parameter email dan password diperlukan."}), 400
 
     head = {
         'Host': 'backend.saweria.co',
@@ -208,12 +208,12 @@ def get_transactions():
     api = requests.post("https://backend.saweria.co/auth/login", headers=head, data=jsondat)
 
     if api.status_code == 401:
-        return jsonify({"code": 401, "message": "Failed, Make sure email & password are correct"}), 401
+        return jsonify({"code": 401, "message": "Gagal, Pastikan email & password benar"}), 401
 
     authorization_header = api.headers.get('authorization')
 
     head2 = {
-        'Host':'backend.saweria.co',  # Typo: Should be 'Host' instead of 'Host l'
+        'Host':'backend.saweria.co',  # Typo: Seharusnya 'Host' bukan 'Host l'
         'sec-ch-ua':'"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
         'sec-ch-ua-mobile':'?1',
         'authorization':authorization_header,
@@ -254,7 +254,9 @@ def get_transactions():
 
             return jsonify(formatted_transactions)
         except json.JSONDecodeError:
-            return jsonify({"error": "Failed to parse JSON response"}), 500
+            return jsonify({"error": "Gagal menguraikan respons JSON"}), 500
+    else:
+        return jsonify({"error": "Gagal mengambil transaksi"}), api2.status_code
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
