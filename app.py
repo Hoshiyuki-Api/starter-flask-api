@@ -213,7 +213,7 @@ def get_transactions():
     authorization_header = api.headers.get('authorization')
 
     head2 = {
-        'Host l':'backend.saweria.co',  # Typo: Should be 'Host' instead of 'Host l'
+        'Host':'backend.saweria.co',  # Typo: Should be 'Host' instead of 'Host l'
         'sec-ch-ua':'"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
         'sec-ch-ua-mobile':'?1',
         'authorization':authorization_header,
