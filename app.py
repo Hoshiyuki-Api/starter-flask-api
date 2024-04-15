@@ -223,7 +223,7 @@ def get_transactions():
     }
 
     api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    response_data = json.loads(api2)
+    response_data = api2.json()
     transactions = response_data['data']['transactions']
     
     result = []
