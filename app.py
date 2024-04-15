@@ -231,9 +231,6 @@ def get_transactions():
     
     api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
     
-    if api2.status_code != 200:
-        return jsonify({"error": "Failed to fetch transactions"}), api2.status_code
-    
     try:
         response_data = json.loads(api2)
         transactions = response_data['data']['transactions']
