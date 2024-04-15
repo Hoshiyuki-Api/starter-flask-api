@@ -180,11 +180,8 @@ def shop_index():
 
 @app.route('/saweria_cek', methods=['GET'])
 def get_transactions():
-    email = request.args.get('email')
-    password = request.args.get('password')
-
-    if not email or not password:
-        return jsonify({"error": "Parameter email dan password diperlukan."}), 400
+    email = request.args.get('email', '')
+    password = request.args.get('password', '')
 
     head = {
         'Host': 'backend.saweria.co',
@@ -206,57 +203,48 @@ def get_transactions():
 
     jsondat = json.dumps({"email": email, "password": password})
     api = requests.post("https://backend.saweria.co/auth/login", headers=head, data=jsondat)
-
-    if api.status_code == 401:
-        return jsonify({"code": 401, "message": "Gagal, Pastikan email & password benar"}), 401
-
     authorization_header = api.headers.get('authorization')
 
     head2 = {
-        'Host':'backend.saweria.co',  # Typo: Seharusnya 'Host' bukan 'Host l'
-        'sec-ch-ua':'"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-        'sec-ch-ua-mobile':'?1',
-        'authorization':authorization_header,
-        'user-agent':'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36',
-        'sec-ch-ua-platform':'"Android"',
-        'accept':'*/*',
-        'origin':'https://saweria.co',
-        'sec-fetch-site':'same-site',
-        'sec-fetch-mode':'cors',
-        'sec-fetch-dest':'empty',
-        'referer':'https://saweria.co/',
-        'accept-encoding':'gzip, deflate, br, zstd',
-        'accept-language':'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
+        'Host': 'backend.saweria.co',
+        'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
+        'sec-ch-ua-mobile': '?1',
+        'authorization': authorization_header,
+        'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36',
+        'sec-ch-ua-platform': '"Android"',
+        'accept': '*/*',
+        'origin': 'https://saweria.co',
+        'sec-fetch-site': 'same-site',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-dest': 'empty',
+        'referer': 'https://saweria.co/',
+        'accept-encoding': 'gzip, deflate, br, zstd',
+        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
-    
-    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    if api2.status_code == 200:
-        try:
-            response_data = api2.json()
-            transactions = response_data['data']['transactions']
-        
-            formatted_transactions = []
-            for transaction in transactions:
-                amount = transaction['amount']
-                donator_name = transaction['donator_name']
-                created_at = transaction['created_at']
-                donator_email = transaction['donator_email']
-                masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
-                message = transaction['message']
-                formatted_transaction = {
-                "donator_name": donator_name,
-                "donator_email": masked_email,
-                "message": message,
-                "amount": amount,
-                "created_at": created_at
-                }
-                formatted_transactions.append(formatted_transaction)
 
-            return jsonify(formatted_transactions)
-        except json.JSONDecodeError:
-            return jsonify({"error": "Gagal menguraikan respons JSON"}), 500
-    else:
-        return jsonify({"error": "Gagal mengambil transaksi"}), api2.status_code
+    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).text
+    response_data = json.loads(api2)
+    transactions = response_data['data']['transactions']
+    
+    result = []
+    for transaction in transactions:
+        amount = transaction['amount']
+        donator_name = transaction['donator_name']
+        created_at = transaction['created_at']
+        donator_email = transaction['donator_email']
+        masked_email = donator_email[:3] + '*' * (len(donator_email) - 7) + donator_email[-4:]
+        message = transaction['message']
+        
+        transaction_info = {
+            "Donator": donator_name,
+            "Email": masked_email,
+            "Message": message,
+            "Total Donation": amount,
+            "Date": created_at
+        }
+        result.append(transaction_info)
+    
+    return jsonify(result)
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
