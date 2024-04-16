@@ -180,6 +180,7 @@ def shop_index():
 
 @app.route('/saweria_cek', methods=['GET'])
 def get_transactions():
+    ses = requests.Session()
     email = request.args.get('email', '')
     password = request.args.get('password', '')
 
@@ -202,7 +203,7 @@ def get_transactions():
     }
 
     jsondat = json.dumps({"email": email, "password": password})
-    api = requests.post("https://backend.saweria.co/auth/login", headers=head, data=jsondat)
+    api = ses.post("https://backend.saweria.co/auth/login", headers=head, data=jsondat)
     authorization_header = api.headers.get('authorization')
 
     head2 = {
@@ -222,7 +223,7 @@ def get_transactions():
         'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
 
-    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).json()
+    api2 = ses.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).json()
     return (api2)
 
 @app.route('/jadwalsholat', methods=['GET'])
