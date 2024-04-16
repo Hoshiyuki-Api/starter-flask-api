@@ -223,7 +223,7 @@ def get_transactions():
         'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
     }
 
-    api2 = ses.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2).json()
+    api2 = ses.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
     return (api2)
 
 @app.route('/jadwalsholat', methods=['GET'])
