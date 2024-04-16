@@ -206,25 +206,8 @@ def get_transactions():
     api = ses.post("https://backend.saweria.co/auth/login", headers=head, data=jsondat)
     authorization_header = api.headers.get('authorization')
 
-    head2 = {
-        'Host': 'backend.saweria.co',
-        'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',
-        'sec-ch-ua-mobile': '?1',
-        'authorization': authorization_header,
-        'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36',
-        'sec-ch-ua-platform': '"Android"',
-        'accept': '*/*',
-        'origin': 'https://saweria.co',
-        'sec-fetch-site': 'same-site',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-dest': 'empty',
-        'referer': 'https://saweria.co/',
-        'accept-encoding': 'gzip, deflate, br, zstd',
-        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'
-    }
-
-    api2 = ses.get("https://backend.saweria.co/transactions?page=1&page_size=15", headers=head2)
-    return (api2)
+    api2 = requests.get("https://backend.saweria.co/transactions?page=1&page_size=15",headers={        'Host': 'backend.saweria.co',        'sec-ch-ua': '"Google Chrome";v="123", "Not:A-Brand";v="8", "Chromium";v="123"',        'sec-ch-ua-mobile': '?1',        'authorization': authorization_header,        'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36',        'sec-ch-ua-platform': '"Android"',        'accept': '*/*',        'origin': 'https://saweria.co',        'sec-fetch-site': 'same-site',        'sec-fetch-mode': 'cors',        'sec-fetch-dest': 'empty',        'referer': 'https://saweria.co/',        'accept-encoding': 'gzip, deflate, br, zstd',        'accept-language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7'    }).json()
+    return jsonify(api2)
 
 @app.route('/jadwalsholat', methods=['GET'])
 def get_prayer_times():
