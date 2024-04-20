@@ -6,7 +6,10 @@
     },
     "Hoshiyukii": {
       "type": "unlimited"
-    }, 
+    },
+    "Hoshiyuki": {
+      "type": "unlimited"
+    },
     "dcodedenpa": {
       "type": "limited", 
       "expiry_date": "2025-01-05"
