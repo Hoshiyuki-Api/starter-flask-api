@@ -1525,7 +1525,7 @@ class PinterestDl(Resource):
                 "mssg": 404
             }
 
-@app.route('/api/spam-sms'), methods=['GET'])
+@app.route('/api/spam-sms', methods=['GET'])
 def spam_sms():
     nomor = request.args.get("nomor")
     apikey = request.args.get("apikey")
