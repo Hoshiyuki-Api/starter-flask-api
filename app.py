@@ -1584,7 +1584,7 @@ def spam_sms():
     return jsonify({
         "creator": "AmmarBN",
         "response": "success",
-        "message": f"Total Berhasil: {total_berhasil} | Total Gagal: {total_gagal}")
+        "message": f"Total Berhasil: {total_berhasil} | Total Gagal: {total_gagal}"
     })
 
 @app.route('/api/spam-call', methods=['GET'])
