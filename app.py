@@ -930,7 +930,8 @@ def download_tiktok():
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
-    response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url}).json()
+    api_response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url})
+    response = api_response.json()
     username = response['author_name']
     desc = response['desc']
     create_up = response['create_time']
