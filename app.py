@@ -928,22 +928,28 @@ def download_tiktok():
         })
 
     if not apikey or not is_apikey_valid(apikey):
-        return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
+        return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
 
-    api_response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url})
-    response = api_response.json()
-    username = response['author_name']
-    desc = response['desc']
-    create_up = response['create_time']
-    return jsonify(
-	    {
-		    "username": username,
-		    "description": desc,
-		    "created_at": create_up,
-		    "result": f"https://pride.nowmvideo.com/download/{response['token']}/{response['id']}.mp4"
-		    
-	    }
-    )
+    try:
+        api_response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url})
+        api_response.raise_for_status()
+        response = api_response.json()
+        username = response.get('author_name', '')
+        desc = response.get('desc', '')
+        create_up = response.get('create_time', '')
+        result_url = f"https://pride.nowmvideo.com/download/{response['token']}/{response['id']}.mp4"
+        return jsonify(
+            {
+                "username": username,
+                "description": desc,
+                "created_at": create_up,
+                "result": result_url
+            }
+        )
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": "Gagal terhubung dengan server Tikmate"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/nsfw/nsfwml', methods=["GET"])
 def show_random_image():
