@@ -931,7 +931,7 @@ def download_tiktok():
         return jsonify({"error": "Kunci API tidak valid atau sudah kedaluwarsa, silakan unduh kunci API baru"}), 401
 
     try:
-        api_response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url})
+        api_response = requests.post('https://api.tikmate.app/api/lookup', data=json.dumps({'url': url}))
         api_response.raise_for_status()
         response = api_response.json()
         username = response.get('author_name', '')
