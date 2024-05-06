@@ -930,35 +930,19 @@ def download_tiktok():
     if not apikey or not is_apikey_valid(apikey):
         return jsonify({"error": "Invalid or expired API key, plese download new apikey"}), 401
 
-    api_response = requests.get(f"https://aemt.me/download/tikdl?url={url}").json()
-
-    if api_response.get('status') and api_response.get('code') == 200:
-        result_data = api_response['result']
-        video_info = result_data['info_video']
-        author_info = result_data['author_info']
-        url_info = result_data['url']
-
-        json_data = {
-            "code": 200,
-            "creator": "AmmarBN",
-            "status": "success",
-            "data": {
-                "url": {
-                    "nowm": url_info['nowm'],
-                    "wm": url_info['wm'],
-                    "audio": url_info['audio']
-                }
-            }
-        }
-
-        return jsonify(json_data)
-    else:
-        return jsonify({
-            "error": {
-                "code": 500,
-                "message": "Format respons API tidak valid"
-            }
-        }), 500, {'Content-Type': 'application/json; charset=utf-8'}
+    api_response = requests.post('https://api.tikmate.app/api/lookup', data={'url': url}).json()
+    username = response['author_name']
+    desc = response['desc']
+    create_up = response['create_time']
+    return jsonify(
+	    {
+		    "username": username,
+		    "description": desc,
+		    "created_at": create_up,
+		    "result": f"https://pride.nowmvideo.com/download/{response['token']}/{response['id']}.mp4"
+		    
+	    }
+    )
 
 @app.route('/nsfw/nsfwml', methods=["GET"])
 def show_random_image():
