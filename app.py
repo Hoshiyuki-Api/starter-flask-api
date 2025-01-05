@@ -339,6 +339,198 @@ def bing_image_api():
             'Result': 'Failed to fetch image from external server'
         })
 
+@app.route('/sniff', methods=['GET'])
+def sniff_phone():
+    # Ambil nomor telepon dari query parameter
+    phone_number = request.args.get('phone')
+    
+    if not phone_number:
+        return jsonify({"error": "Phone number is required"}), 400
+
+    # Daftar URL untuk layanan yang akan diperiksa
+    urls = {
+        "dana": "https://checker.orderkuota.com/api/checkname/produk/c54990b330/03/1897292/dana",
+        "shopeepay": "https://checker.orderkuota.com/api/checkname/produk/c54990b330/03/1897292/shopeepay",
+        "gopay": "https://checker.orderkuota.com/api/checkname/produk/c54990b330/03/1897292/gopay",
+        "ovo": "https://checker.orderkuota.com/api/checkname/produk/c54990b330/03/1897292/ovo",
+        "gopay_driver": "https://checker.orderkuota.com/api/checkname/produk/c54990b330/03/1897292/gopay_driver",
+        "ruparupa": "https://wapi.ruparupa.com/klk/check-membership",
+        "tokopedia": "https://gql.tokopedia.com/graphql/checkAccount",
+        "mister_aladin": "https://m.misteraladin.com/api/members/v2/auth/login-phone-number-check"
+    }
+
+    # Nama layanan yang digunakan untuk keperluan tampilan
+    app_names = {
+        "dana": "DANA",
+        "shopeepay": "ShopeePay",
+        "gopay": "GoPay",
+        "ovo": "OVO",
+        "gopay_driver": "GoPay Driver",
+        "ruparupa": "Rupa Rupa",
+        "tokopedia": "Tokopedia",
+        "mister_aladin": "Mister Aladin"
+    }
+
+    # Menyimpan hasil pengecekan
+    results = []
+
+    # Cek nomor telepon di Tokopedia
+    headers_tokopedia = {
+        "Host": "gql.tokopedia.com",
+        "content-length": "203",
+        "sec-ch-ua-platform": "\"Linux\"",
+        "x-version": "e7959d2",
+        "sec-ch-ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?0",
+        "x-source": "tokopedia-lite",
+        "x-tkpd-akamai": "rgsc",
+        "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+        "accept": "/",
+        "content-type": "application/json",
+        "x-tkpd-lite-service": "oauth",
+        "origin": "https://www.tokopedia.com",
+        "sec-fetch-site": "same-site",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-dest": "empty",
+        "referer": "https://www.tokopedia.com/login",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,ms;q=0.6",
+    }
+
+    data_tokopedia = [
+        {
+            "operationName": "checkAccount",
+            "variables": {"id": phone_number.lstrip("+")},  # Hapus tanda '+' jika ada
+            "query": """mutation checkAccount($id: String!) {
+                registerCheck(id: $id) {
+                    isExist
+                    errors
+                    uh
+                    __typename
+                }
+            }"""
+        }
+    ]
+    response_tokopedia = requests.post(urls['tokopedia'], headers=headers_tokopedia, json=data_tokopedia)
+    if response_tokopedia.status_code == 200:
+        data = response_tokopedia.text
+        if '"isExist":true' in data:
+            results.append({"service": "Tokopedia", "phone": phone_number, "registered": "YES"})
+        else:
+            results.append({"service": "Tokopedia", "phone": phone_number, "registered": "NO"})
+    else:
+        results.append({"service": "Tokopedia", "phone": phone_number, "registered": f"Error: {response_tokopedia.status_code}"})
+
+    # Cek nomor telepon di Mister Aladin
+    headers_mister_aladin = {
+        "Host": "m.misteraladin.com",
+        "content-length": "63",
+        "x-platform": "mobile-web",
+        "authorization": "",
+        "sec-ch-ua-platform": "\"Android\"",
+        "accept-language": "id",
+        "sec-ch-ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?1",
+        "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36",
+        "accept": "application/json, text/plain, /",
+        "content-type": "application/json;charset=UTF-8",
+        "origin": "https://m.misteraladin.com",
+        "sec-fetch-site": "same-origin",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-dest": "empty",
+        "referer": "https://m.misteraladin.com/account",
+        "accept-encoding": "gzip, deflate, br, zstd",
+    }
+
+    data_mister_aladin = {
+        "phone_number_country_code": "62",
+        "phone_number": phone_number.lstrip("0")  # Hapus '0' di awal nomor jika ada
+    }
+    response_mister_aladin = requests.post(urls['mister_aladin'], headers=headers_mister_aladin, json=data_mister_aladin)
+    if response_mister_aladin.status_code == 422:
+        data = response_mister_aladin.text
+        if "Nomor telepon yang kamu masukkan belum terdaftar." in data:
+            results.append({"service": "Mister Aladin", "phone": phone_number, "registered": "NO"})
+        else:
+            results.append({"service": "Mister Aladin", "phone": phone_number, "registered": "YES"})
+    else:
+        results.append({"service": "Mister Aladin", "phone": phone_number, "registered": f"Error: {response_mister_aladin.status_code}"})
+
+    # Cek nomor telepon di Rupa Rupa
+    headers_ruparupa = {
+        "Host": "wapi.ruparupa.com",
+        "x-frontend-type": "mobile",
+        "sec-ch-ua-platform": "\"Android\"",
+        "sec-ch-ua": "\"Google Chrome\";v=\"131\", \"Chromium\";v=\"131\", \"Not_A Brand\";v=\"24\"",
+        "sec-ch-ua-mobile": "?1",
+        "user-platform": "mobile",
+        "rr-sid": "H7YBz1735571031gPVrUhjUNK",
+        "accept": "application/json",
+        "b2b-type": "non-b2b",
+        "x-company-name": "ruparupa",
+        "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36",
+        "origin": "https://www.ruparupa.com",
+        "sec-fetch-site": "same-site",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-dest": "empty",
+        "referer": "https://www.ruparupa.com/auth/register?action=register&component=tnc",
+        "accept-encoding": "gzip, deflate, br, zstd",
+        "accept-language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7,ms;q=0.6",
+        "priority": "u=1, i"
+    }
+
+    data_ruparupa = {
+        "user": phone_number.lstrip("0")  # Hapus '0' jika ada
+    }
+
+    response_ruparupa = requests.get(urls['ruparupa'], headers=headers_ruparupa, params=data_ruparupa)
+    if response_ruparupa.status_code == 200:
+        dat = response_ruparupa.json()
+        if dat["data"]["next_action"] == "login":
+            results.append({"service": "Rupa Rupa", "phone": phone_number, "registered": "YES"})
+        else:
+            results.append({"service": "Rupa Rupa", "phone": phone_number, "registered": "NO"})
+    else:
+        results.append({"service": "Rupa Rupa", "phone": phone_number, "registered": f"Error: {response_ruparupa.status_code}"})
+
+    # Periksa layanan lainnya
+    for id_name, url in urls.items():
+        if id_name not in ["tokopedia", "mister_aladin", "ruparupa"]:
+            headers = {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Host": "checker.orderkuota.com",
+                "Connection": "Keep-Alive",
+                "Accept-Encoding": "gzip",
+                "User-Agent": "okhttp/4.12.0",
+            }
+            data = {
+                "phoneNumber": phone_number,
+                "app_reg_id": "fhdH0F-8Rrmt02q3H31coo:APA91bGs6KaglRvhPVMA9LK3aMs4iDBHnXaGX-MucQZ7-o1s1KMkOgdZA9Qm9zcX19qInYGBu0gmnPVFWG7eRJ-h05qe6e9u-ruCtSQYMhPyHpY5ExLauBp_ejOS-pJQB9EiyL9HeamO",
+                "phone_android_version": "14",
+                "app_version_code": "241212",
+                "phone_uuid": "fhdH0F-8Rrmt02q3H31coo",
+                "auth_username": "ammarbn",
+                "customerId": "",
+                "auth_token": "1897292:TsEZ8fI2JGykpA3SO5dv6j4Wul1CbUPY",
+                "app_version_name": "24.12.12",
+                "phone_model": "23021RAA2Y",
+            }
+
+            response = requests.post(url, headers=headers, data=data)
+            response_text = response.text
+            response_dict = json.loads(response.text)
+            response_true = response_dict["message"]
+
+            if "TIDAK TERDAFTAR" in response_text:
+                registered = "NO"
+            else:
+                registered = f"{response_true} (YES)"
+
+            app_name = app_names.get(id_name, "Unknown App")
+            results.append({"service": app_name, "phone": phone_number, "registered": registered})
+
+    return jsonify(results)
+
 @app.route('/toanime', methods=['GET'])
 def toanime():
     BASE_URL = 'https://tools.betabotz.org'
